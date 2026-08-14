@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beclaude - FM 2045/46 Premier League</title>
+  <title>Beclaude - FM Career Universe</title>
   
   <!-- Dinamik SVG Favicon (D° Logo) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%2300a8ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='24' y='24' width='464' height='464' rx='120' fill='%230f1419' stroke='%230f1419' stroke-width='24'/%3E%3Crect x='56' y='56' width='400' height='400' rx='96' fill='url(%23bgGrad)'/%3E%3Ccircle cx='376' cy='136' r='24' fill='%23e0f2fe'/%3E%3Cpath d='M170 170 h75 c60 0 100 35 100 86 s-40 86 -100 86 h-75 Z m60 44 v88 h15 c30 0 48 -16 48 -44 s-18 -44 -48 -44 Z' fill='%23ffffff'/%3E%3C/svg%3E">
@@ -95,7 +95,7 @@
         </div>
       </div>
       <h2 id="auth-title" class="text-2xl font-bold mb-1 text-center tracking-tight">Beclaude FM</h2>
-      <p class="text-xs text-gray-400 text-center mb-6">Premier League 2045/46 Kariyer Ağı (Gözlemci Modu)</p>
+      <p id="auth-season-badge" class="text-xs text-emerald-400 text-center font-semibold mb-6">Premier League Kariyer Ağı</p>
       
       <form id="auth-form" class="space-y-4">
         <div id="register-fields" class="space-y-4 hidden">
@@ -143,7 +143,7 @@
         <nav class="space-y-1">
           <button id="nav-btn-feed" onclick="switchView('feed')" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-white">
             <i class="fa-solid fa-house text-lg"></i>
-            <span class="hidden xl:inline text-base font-normal">Anasayfa (Akış)</span>
+            <span class="hidden xl:inline text-base font-normal">Anasayfa</span>
           </button>
 
           <button id="nav-btn-standings" onclick="switchView('standings')" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-gray-400 hover:text-white">
@@ -169,10 +169,16 @@
             <span class="hidden xl:inline text-base font-normal">Yer İşaretleri</span>
           </button>
 
-          <!-- FM 45/46 MAÇ PANEL BUTONU -->
+          <!-- FM MAÇ PANEL BUTONU -->
           <button onclick="openFmPanelModal()" class="btn-smooth flex items-center gap-4 w-full p-3 bg-gradient-to-r from-emerald-600/20 to-teal-500/20 border border-emerald-500/40 rounded-full text-xl font-bold text-emerald-400 hover:bg-emerald-500/30 mt-2">
             <i class="fa-solid fa-futbol text-lg animate-pulse"></i>
-            <span class="hidden xl:inline text-base">FM 45/46 Panel</span>
+            <span class="hidden xl:inline text-base">FM Maç Paneli</span>
+          </button>
+
+          <!-- SEZONU BİTİR VE YENİ SEZONA GEÇ BUTONU -->
+          <button onclick="openSeasonModal()" class="btn-smooth flex items-center gap-4 w-full p-3 bg-gradient-to-r from-indigo-600/20 to-purple-500/20 border border-indigo-500/40 rounded-full text-xl font-bold text-indigo-300 hover:bg-indigo-500/30">
+            <i class="fa-solid fa-forward-step text-lg"></i>
+            <span class="hidden xl:inline text-base">Yeni Sezona Geç</span>
           </button>
         </nav>
       </div>
@@ -200,10 +206,10 @@
         <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-4 z-10 flex justify-between items-center">
           <div>
             <h1 class="text-xl font-bold tracking-tight">Premier League Akışı</h1>
-            <p class="text-[11px] text-gray-400">Yalnızca 2045/46 Kulüp Botları ve Flaş Haberler</p>
+            <p id="feed-season-text" class="text-[11px] text-gray-400">Sezon Canlı Maç ve Kulüp Bildirimleri</p>
           </div>
-          <span class="text-xs font-semibold px-3 py-1 bg-gradient-to-r from-emerald-500/20 to-sky-500/20 text-emerald-400 rounded-full border border-emerald-500/30 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Canlı Ağ
+          <span id="feed-season-tag" class="text-xs font-semibold px-3 py-1 bg-gradient-to-r from-emerald-500/20 to-sky-500/20 text-emerald-400 rounded-full border border-emerald-500/30 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> 2045/46
           </span>
         </div>
 
@@ -225,9 +231,12 @@
         <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-4 z-10 flex justify-between items-center">
           <div>
             <h1 class="text-xl font-bold tracking-tight">Premier League Tablosu</h1>
-            <p class="text-[11px] text-gray-400">Sezon 2045/46 · Takımlara tıklayarak profillerine gidebilirsiniz</p>
+            <p id="standings-season-sub" class="text-[11px] text-gray-400">Takımlara tıklayarak profillerine gidebilirsiniz</p>
           </div>
-          <button onclick="resetStandingsToDefault()" class="btn-smooth text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-full hover:bg-red-500/30">Tabloyu Sıfırla</button>
+          <div class="flex items-center gap-2">
+            <button onclick="openSeasonModal()" class="btn-smooth text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-3 py-1.5 rounded-full font-semibold hover:bg-indigo-500/30">Yeni Sezona Geç ⏩</button>
+            <button onclick="resetStandingsToDefault()" class="btn-smooth text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-full hover:bg-red-500/30">Sıfırla</button>
+          </div>
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scroll p-2">
@@ -251,12 +260,12 @@
             </table>
           </div>
 
-          <!-- Güncellenmiş Avrupa Kontenjanları Açıklaması -->
+          <!-- Güncellenmiş Avrupa Kontenjanları Açıklaması (Mavi, Sarı, Yeşil) -->
           <div class="mt-4 p-3 bg-[#121417] rounded-xl border border-theme text-[11px] text-gray-400 space-y-1.5">
-            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-emerald-500"></span> <span>1-4: UEFA Şampiyonlar Ligi</span></div>
-            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-sky-500"></span> <span>5-6: UEFA Avrupa Ligi</span></div>
-            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-amber-500"></span> <span>7: UEFA Konferans Ligi Play-off</span></div>
-            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-red-500"></span> <span>18-20: Championship'e Düşme Hattı</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-sky-400"></span> <span>1-4: UEFA Şampiyonlar Ligi (Mavi)</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-amber-400"></span> <span>5-6: UEFA Avrupa Ligi (Sarı)</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-emerald-500"></span> <span>7: UEFA Konferans Ligi Play-off (Yeşil)</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-red-500"></span> <span>18-20: Championship'e Düşme Hattı (Kırmızı)</span></div>
           </div>
         </div>
       </div>
@@ -272,13 +281,13 @@
 
         <div class="flex-1 overflow-y-auto custom-scroll">
           <div class="p-4 border-b border-theme bg-gradient-to-r from-emerald-950/40 via-indigo-950/30 to-black">
-            <span class="text-xs text-emerald-400 font-semibold tracking-wider uppercase">Premier League 2045/46 Zirve Yarışı</span>
-            <h2 class="text-2xl font-bold text-white mt-1">#DerbyCounty3rd</h2>
-            <p class="text-xs text-gray-400 mt-1">Derby County rüzgarı esiyor! 194.2 B gönderi</p>
+            <span class="text-xs text-emerald-400 font-semibold tracking-wider uppercase">Premier League Sezon Gündemi</span>
+            <h2 id="explore-headline" class="text-2xl font-bold text-white mt-1">#PremierLeagueRace</h2>
+            <p class="text-xs text-gray-400 mt-1">Ligde tansiyon yükseliyor! 280.4 B gönderi</p>
           </div>
 
           <div class="p-4 border-b border-theme">
-            <h3 class="font-bold text-lg mb-3">2045/46 Sezonu Trendleri</h3>
+            <h3 class="font-bold text-lg mb-3">Günün Trendleri</h3>
             <div id="explore-trends-container" class="space-y-3"></div>
           </div>
 
@@ -342,7 +351,7 @@
               </div>
               <div class="flex items-center gap-1">
                 <i class="fa-regular fa-calendar"></i>
-                <span>Katıldı: Sezon 2045/46</span>
+                <span id="page-joined-date">Premier League Kulübü</span>
               </div>
             </div>
 
@@ -369,11 +378,11 @@
 
       <!-- Kimi Takip Etmeli -->
       <div class="bg-[#16181c] rounded-2xl border border-theme p-4">
-        <h2 class="font-bold text-lg mb-3">Premier League Kulüpleri</h2>
+        <h2 class="font-bold text-lg mb-3">Lig Kulüpleri</h2>
         <div id="follow-suggestions" class="space-y-3"></div>
       </div>
 
-      <!-- Mini Puan Durumu Önizleme -->
+      <!-- Mini Puan Durumu Önizleme (Mavi, Sarı, Yeşil Renkler Dahil) -->
       <div class="bg-[#16181c] rounded-2xl border border-theme p-4 space-y-3">
         <div class="flex justify-between items-center">
           <h2 class="font-bold text-base">Zirve Yarışı</h2>
@@ -385,13 +394,13 @@
 
   </div>
 
-  <!-- ================= FM 45/46 MAÇ PANEL MODALI ================= -->
+  <!-- ================= FM MAÇ PANEL MODALI ================= -->
   <div id="fm-panel-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="w-full max-w-lg bg-[#16181c] border border-emerald-500/40 rounded-3xl p-6 modal-animate shadow-2xl">
       <div class="flex items-center justify-between mb-4 border-b border-theme pb-3">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-futbol text-emerald-400 text-xl"></i>
-          <h3 class="font-bold text-lg text-white">FM 2045/46 Maç Simülatörü</h3>
+          <h3 class="font-bold text-lg text-white">FM Maç Simülatörü</h3>
         </div>
         <button onclick="closeFmPanelModal()" class="btn-smooth text-gray-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
@@ -447,6 +456,72 @@
     </div>
   </div>
 
+  <!-- ================= YENİ SEZONA GEÇİŞ MODALI ================= -->
+  <div id="season-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-lg bg-[#16181c] border border-indigo-500/50 rounded-3xl p-6 modal-animate shadow-2xl">
+      <div class="flex items-center justify-between mb-4 border-b border-theme pb-3">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-trophy text-amber-400 text-xl"></i>
+          <h3 class="font-bold text-lg text-white">Yeni Sezona Geçiş Paneli</h3>
+        </div>
+        <button onclick="closeSeasonModal()" class="btn-smooth text-gray-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <form id="season-transition-form" class="space-y-4">
+        <div>
+          <label class="text-xs text-gray-400 block mb-1">Bir Sonraki Sezon</label>
+          <input id="next-season-input" type="text" required class="w-full bg-black border border-theme rounded-xl px-3 py-2 text-sm text-indigo-400 font-bold focus:border-indigo-500 focus:outline-none">
+        </div>
+
+        <div class="p-3 bg-red-950/20 border border-red-500/30 rounded-xl space-y-1">
+          <p class="text-xs font-bold text-red-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-down"></i> Otomatik Küme Düşen 3 Takım (Tablo Sonu):
+          </p>
+          <p id="relegated-teams-preview" class="text-xs text-gray-300"></p>
+        </div>
+
+        <div class="space-y-3">
+          <p class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-up"></i> Championship'ten Yükselen 3 Yeni Takımı Seç / Yaz:
+          </p>
+          
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="text-[11px] text-gray-400 block mb-1">1. Yükselen</label>
+              <input id="promo-team-1" list="championship-teams" required placeholder="Örn: Leeds" class="w-full bg-black border border-theme rounded-xl px-2.5 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="text-[11px] text-gray-400 block mb-1">2. Yükselen</label>
+              <input id="promo-team-2" list="championship-teams" required placeholder="Örn: Leicester" class="w-full bg-black border border-theme rounded-xl px-2.5 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="text-[11px] text-gray-400 block mb-1">3. Yükselen (PO)</label>
+              <input id="promo-team-3" list="championship-teams" required placeholder="Örn: Watford" class="w-full bg-black border border-theme rounded-xl px-2.5 py-2 text-xs text-white focus:border-emerald-500 focus:outline-none">
+            </div>
+          </div>
+
+          <datalist id="championship-teams">
+            <option value="Leeds United">
+            <option value="Leicester City">
+            <option value="Watford">
+            <option value="Middlesbrough">
+            <option value="Blackburn Rovers">
+            <option value="Sheffield United">
+            <option value="West Bromwich">
+            <option value="Stoke City">
+            <option value="Swansea City">
+            <option value="Hull City">
+            <option value="Coventry City">
+            <option value="Bristol City">
+            <option value="Ipswich Town">
+          </datalist>
+        </div>
+
+        <button type="submit" class="btn-smooth w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 rounded-full mt-2">Sezonu Resmen Başlat 🏁</button>
+      </form>
+    </div>
+  </div>
+
   <!-- ================= TARAFTAR YORUMLARI MODALI (REPLIES) ================= -->
   <div id="replies-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="w-full max-w-lg bg-[#16181c] border border-theme rounded-3xl p-6 modal-animate shadow-2xl max-h-[85vh] flex flex-col">
@@ -466,30 +541,30 @@
 
   <!-- ================= JAVASCRIPT MOTORU ================= -->
   <script>
-    const FM_CLUBS = [
-      { id: 'c_ars', username: 'Arsenal', name: 'Arsenal', logo: 'https://resources.premierleague.com/premierleague/badges/50/t3.png', stadium: 'Emirates Stadium', tag: 'COYG' },
-      { id: 'c_whu', username: 'WestHam', name: 'West Ham United', logo: 'https://resources.premierleague.com/premierleague/badges/50/t21.png', stadium: 'London Stadium', tag: 'COYI' },
-      { id: 'c_der', username: 'dcfcofficial', name: 'Derby County', logo: 'https://media.api-sports.io/football/teams/67.png', stadium: 'Pride Park Stadium', tag: 'DCFC' },
-      { id: 'c_bha', username: 'OfficialBHAFC', name: 'Brighton & Hove Albion', logo: 'https://resources.premierleague.com/premierleague/badges/50/t36.png', stadium: 'Amex Stadium', tag: 'BHAFC' },
-      { id: 'c_tot', username: 'SpursOfficial', name: 'Tottenham Hotspur', logo: 'https://resources.premierleague.com/premierleague/badges/50/t6.png', stadium: 'Tottenham Hotspur Stadium', tag: 'COYS' },
-      { id: 'c_liv', username: 'LFC', name: 'Liverpool FC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t14.png', stadium: 'Anfield', tag: 'YNWA' },
-      { id: 'c_mci', username: 'ManCity', name: 'Manchester City', logo: 'https://resources.premierleague.com/premierleague/badges/50/t43.png', stadium: 'Etihad Stadium', tag: 'ManCity' },
-      { id: 'c_bre', username: 'BrentfordFC', name: 'Brentford FC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t94.png', stadium: 'Gtech Community Stadium', tag: 'BrentfordFC' },
-      { id: 'c_nor', username: 'NorwichCityFC', name: 'Norwich City', logo: 'https://resources.premierleague.com/premierleague/badges/50/t45.png', stadium: 'Carrow Road', tag: 'NCFC' },
-      { id: 'c_new', username: 'NUFC', name: 'Newcastle United', logo: 'https://resources.premierleague.com/premierleague/badges/50/t4.png', stadium: "St. James' Park", tag: 'NUFC' },
-      { id: 'c_bou', username: 'afcbournemouth', name: 'AFC Bournemouth', logo: 'https://resources.premierleague.com/premierleague/badges/50/t91.png', stadium: 'Vitality Stadium', tag: 'AFCB' },
-      { id: 'c_eve', username: 'Everton', name: 'Everton', logo: 'https://resources.premierleague.com/premierleague/badges/50/t11.png', stadium: 'Goodison Park', tag: 'EFC' },
-      { id: 'c_che', username: 'ChelseaFC', name: 'Chelsea FC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t8.png', stadium: 'Stamford Bridge', tag: 'CFC' },
-      { id: 'c_wol', username: 'Wolves', name: 'Wolverhampton Wanderers', logo: 'https://resources.premierleague.com/premierleague/badges/50/t39.png', stadium: 'Molineux Stadium', tag: 'WWFC' },
-      { id: 'c_mun', username: 'ManUtd', name: 'Manchester United', logo: 'https://resources.premierleague.com/premierleague/badges/50/t1.png', stadium: 'Old Trafford', tag: 'MUFC' },
-      { id: 'c_ful', username: 'FulhamFC', name: 'Fulham FC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t54.png', stadium: 'Craven Cottage', tag: 'FFC' },
-      { id: 'c_sou', username: 'SouthamptonFC', name: 'Southampton FC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t20.png', stadium: "St Mary's Stadium", tag: 'SaintsFC' },
-      { id: 'c_nfo', username: 'NFFC', name: 'Nottingham Forest', logo: 'https://resources.premierleague.com/premierleague/badges/50/t17.png', stadium: 'City Ground', tag: 'NFFC' },
-      { id: 'c_sun', username: 'SunderlandAFC', name: 'Sunderland AFC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t56.png', stadium: 'Stadium of Light', tag: 'SAFC' },
-      { id: 'c_bol', username: 'OfficialBWFC', name: 'Bolton Wanderers', logo: 'https://media.api-sports.io/football/teams/68.png', stadium: 'Toughsheet Community Stadium', tag: 'BWFC' }
+    const DEFAULT_CLUBS = [
+      { id: 'c_ars', username: 'Arsenal', name: 'Arsenal', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9825.png', stadium: 'Emirates Stadium', tag: 'COYG' },
+      { id: 'c_whu', username: 'WestHam', name: 'West Ham United', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8654.png', stadium: 'London Stadium', tag: 'COYI' },
+      { id: 'c_der', username: 'dcfcofficial', name: 'Derby County', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9796.png', stadium: 'Pride Park Stadium', tag: 'DCFC' },
+      { id: 'c_bha', username: 'OfficialBHAFC', name: 'Brighton & Hove Albion', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10204.png', stadium: 'Amex Stadium', tag: 'BHAFC' },
+      { id: 'c_tot', username: 'SpursOfficial', name: 'Tottenham Hotspur', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8586.png', stadium: 'Tottenham Hotspur Stadium', tag: 'COYS' },
+      { id: 'c_liv', username: 'LFC', name: 'Liverpool FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8650.png', stadium: 'Anfield', tag: 'YNWA' },
+      { id: 'c_mci', username: 'ManCity', name: 'Manchester City', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8456.png', stadium: 'Etihad Stadium', tag: 'ManCity' },
+      { id: 'c_bre', username: 'BrentfordFC', name: 'Brentford FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9937.png', stadium: 'Gtech Community Stadium', tag: 'BrentfordFC' },
+      { id: 'c_nor', username: 'NorwichCityFC', name: 'Norwich City', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9850.png', stadium: 'Carrow Road', tag: 'NCFC' },
+      { id: 'c_new', username: 'NUFC', name: 'Newcastle United', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10261.png', stadium: "St. James' Park", tag: 'NUFC' },
+      { id: 'c_bou', username: 'afcbournemouth', name: 'AFC Bournemouth', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8678.png', stadium: 'Vitality Stadium', tag: 'AFCB' },
+      { id: 'c_eve', username: 'Everton', name: 'Everton', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8668.png', stadium: 'Goodison Park', tag: 'EFC' },
+      { id: 'c_che', username: 'ChelseaFC', name: 'Chelsea FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8455.png', stadium: 'Stamford Bridge', tag: 'CFC' },
+      { id: 'c_wol', username: 'Wolves', name: 'Wolverhampton Wanderers', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8602.png', stadium: 'Molineux Stadium', tag: 'WWFC' },
+      { id: 'c_mun', username: 'ManUtd', name: 'Manchester United', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10260.png', stadium: 'Old Trafford', tag: 'MUFC' },
+      { id: 'c_ful', username: 'FulhamFC', name: 'Fulham FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9879.png', stadium: 'Craven Cottage', tag: 'FFC' },
+      { id: 'c_sou', username: 'SouthamptonFC', name: 'Southampton FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8466.png', stadium: "St Mary's Stadium", tag: 'SaintsFC' },
+      { id: 'c_nfo', username: 'NFFC', name: 'Nottingham Forest', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10203.png', stadium: 'City Ground', tag: 'NFFC' },
+      { id: 'c_sun', username: 'SunderlandAFC', name: 'Sunderland AFC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8472.png', stadium: 'Stadium of Light', tag: 'SAFC' },
+      { id: 'c_bol', username: 'OfficialBWFC', name: 'Bolton Wanderers', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8559.png', stadium: 'Toughsheet Community Stadium', tag: 'BWFC' }
     ];
 
-    const INITIAL_STANDINGS = [
+    const DEFAULT_STANDINGS = [
       { id: 'c_ars', name: 'Arsenal', pld: 5, w: 5, d: 0, l: 0, gf: 15, ga: 4, gd: 11, pts: 15 },
       { id: 'c_whu', name: 'West Ham', pld: 5, w: 5, d: 0, l: 0, gf: 9, ga: 1, gd: 8, pts: 15 },
       { id: 'c_der', name: 'Derby County', pld: 5, w: 4, d: 1, l: 0, gf: 10, ga: 5, gd: 5, pts: 13 },
@@ -518,41 +593,42 @@
       name: 'Fabrizio Romano',
       avatar: 'https://pbs.twimg.com/profile_images/1741753635158024192/j0m8Ucvv_400x400.jpg',
       banner: '',
-      bio: 'Here we go! 🚨 Official Football Journalist covering verified transfer news & breaking FM 2045/46 stories.',
+      bio: 'Here we go! 🚨 Official Football Journalist covering verified transfer news & breaking FM stories.',
       location: 'Milan, Italy',
       badge: true,
       following: []
     };
 
-    function generateClubUsers() {
-      return FM_CLUBS.map(c => ({
-        id: c.id,
-        username: c.username,
-        name: c.name,
-        avatar: c.logo,
-        banner: '',
-        bio: `Official X account of ${c.name}. Premier League 2045/46 Campaign. #${c.tag}`,
-        location: c.stadium,
-        badge: true,
-        following: []
-      }));
-    }
-
     const DB = {
+      getClubs: () => JSON.parse(localStorage.getItem('bc_fm_clubs_v7')) || DEFAULT_CLUBS,
+      saveClubs: (data) => localStorage.setItem('bc_fm_clubs_v7', JSON.stringify(data)),
+      getSeason: () => localStorage.getItem('bc_fm_season_v7') || '2045/46',
+      saveSeason: (val) => localStorage.setItem('bc_fm_season_v7', val),
       getUsers: () => {
-        let users = JSON.parse(localStorage.getItem('bc_users_v4'));
-        if (!users || users.length <= 2) {
+        let users = JSON.parse(localStorage.getItem('bc_users_v7'));
+        if (!users) {
+          const clubs = DB.getClubs().map(c => ({
+            id: c.id,
+            username: c.username,
+            name: c.name,
+            avatar: c.logo,
+            banner: '',
+            bio: `Official X account of ${c.name}. Premier League ${DB.getSeason()} Campaign. #${c.tag}`,
+            location: c.stadium,
+            badge: true,
+            following: []
+          }));
           users = [
             BOT_ROMANO,
-            ...generateClubUsers(),
-            { id: 'user_default', username: 'fm_observer', name: 'FM Observer', password: '123', bio: '2045/46 Premier League Gözlemcisi 🧠⚽', location: 'London, UK', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=fm_observer', banner: '', following: [] }
+            ...clubs,
+            { id: 'user_default', username: 'fm_observer', name: 'FM Observer', password: '123', bio: `Premier League Gözlemcisi 🧠⚽`, location: 'London, UK', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=fm_observer', banner: '', following: [] }
           ];
-          localStorage.setItem('bc_users_v4', JSON.stringify(users));
+          localStorage.setItem('bc_users_v7', JSON.stringify(users));
         }
         return users;
       },
-      saveUsers: (data) => localStorage.setItem('bc_users_v4', JSON.stringify(data)),
-      getTweets: () => JSON.parse(localStorage.getItem('bc_tweets_v4')) || [
+      saveUsers: (data) => localStorage.setItem('bc_users_v7', JSON.stringify(data)),
+      getTweets: () => JSON.parse(localStorage.getItem('bc_tweets_v7')) || [
         { 
           id: 'fm_init_1', 
           userId: 'c_der', 
@@ -567,9 +643,9 @@
           timestamp: Date.now() - 7200000 
         }
       ],
-      saveTweets: (data) => localStorage.setItem('bc_tweets_v4', JSON.stringify(data)),
-      getStandings: () => JSON.parse(localStorage.getItem('bc_standings_v4')) || INITIAL_STANDINGS,
-      saveStandings: (data) => localStorage.setItem('bc_standings_v4', JSON.stringify(data)),
+      saveTweets: (data) => localStorage.setItem('bc_tweets_v7', JSON.stringify(data)),
+      getStandings: () => JSON.parse(localStorage.getItem('bc_standings_v7')) || DEFAULT_STANDINGS,
+      saveStandings: (data) => localStorage.setItem('bc_standings_v7', JSON.stringify(data)),
       getBookmarks: () => JSON.parse(localStorage.getItem('bc_bookmarks')) || [],
       saveBookmarks: (data) => localStorage.setItem('bc_bookmarks', JSON.stringify(data)),
       getNotifications: () => JSON.parse(localStorage.getItem('bc_notifications')) || [],
@@ -584,14 +660,6 @@
     let viewingUserId = null;
     let exploreFilterQuery = '';
 
-    const TREND_LIST = [
-      { tag: '#DerbyCounty3rd', category: 'FM 2045/46 · Trend', count: '194.2 B' },
-      { tag: '#SackTheManager', category: 'Kriz · Gündemde', count: '112.8 B' },
-      { tag: '#HereWeGo', category: 'Fabrizio Romano · Flaş', count: '320.1 B' },
-      { tag: '#ArsenalTitleRace', category: 'Zirve · Popüler', count: '185.4 B' },
-      { tag: '#PremierLeague4546', category: 'Lig Gündemi', count: '450.0 B' }
-    ];
-
     const fileToBase64 = (file) => new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -601,8 +669,8 @@
 
     window.onload = () => {
       DB.getUsers();
-      if (!localStorage.getItem('bc_tweets_v4')) DB.saveTweets(DB.getTweets());
-      if (!localStorage.getItem('bc_standings_v4')) DB.saveStandings(INITIAL_STANDINGS);
+      if (!localStorage.getItem('bc_tweets_v7')) DB.saveTweets(DB.getTweets());
+      if (!localStorage.getItem('bc_standings_v7')) DB.saveStandings(DEFAULT_STANDINGS);
       
       const session = DB.getSession();
       if (session) {
@@ -611,7 +679,21 @@
       }
       populateFmSelects();
       renderStandings();
+      updateSeasonUI();
     };
+
+    function updateSeasonUI() {
+      const curSeason = DB.getSeason();
+      const tag = document.getElementById('feed-season-tag');
+      const authBadge = document.getElementById('auth-season-badge');
+      const feedSub = document.getElementById('feed-season-text');
+      const standSub = document.getElementById('standings-season-sub');
+      
+      if (tag) tag.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Sezon ${curSeason}`;
+      if (authBadge) authBadge.innerText = `Premier League ${curSeason} Kariyer Ağı`;
+      if (feedSub) feedSub.innerText = `Sezon ${curSeason} · Canlı Maç ve Kulüp Bildirimleri`;
+      if (standSub) standSub.innerText = `Sezon ${curSeason} · Takımlara tıklayarak profillerine gidebilirsiniz`;
+    }
 
     // --- AUTH ---
     const switchBtn = document.getElementById('auth-switch-btn');
@@ -642,7 +724,7 @@
           return;
         }
 
-        const newUser = { id: 'usr_' + Date.now(), username: uName, name, password: pass, avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${uName}`, banner: '', bio: 'FM 2045/46 Gözlemcisi', location: 'Premier League', following: [] };
+        const newUser = { id: 'usr_' + Date.now(), username: uName, name, password: pass, avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${uName}`, banner: '', bio: 'FM Gözlemcisi', location: 'Premier League', following: [] };
         users.push(newUser);
         DB.saveUsers(users);
         DB.setSession(newUser);
@@ -680,6 +762,7 @@
       renderExploreTrends();
       renderStandings();
       checkUnreadNotifications();
+      updateSeasonUI();
     }
 
     // --- VIEW YÖNETİMİ ---
@@ -877,7 +960,7 @@
       const myReplyBox = document.createElement('div');
       myReplyBox.className = 'pt-3 border-t border-theme flex gap-2';
       myReplyBox.innerHTML = `
-        <input id="new-reply-input" type="text" placeholder="Menajer / Gözlemci olarak yanıtla..." class="flex-1 bg-black border border-theme rounded-full px-4 py-2 text-xs text-white focus:border-sky-500 focus:outline-none">
+        <input id="new-reply-input" type="text" placeholder="Gözlemci olarak yanıtla..." class="flex-1 bg-black border border-theme rounded-full px-4 py-2 text-xs text-white focus:border-sky-500 focus:outline-none">
         <button onclick="submitManagerReply('${tweet.id}')" class="btn-smooth bg-sky-500 text-white font-bold text-xs px-4 py-2 rounded-full">Yanıtla</button>
       `;
       container.appendChild(myReplyBox);
@@ -907,7 +990,7 @@
       document.getElementById('replies-modal').classList.add('hidden');
     }
 
-    // --- PUAN TABLOSU VE SIRALAMA MOTORU (YENİ KONTENJAN DÜZENİ) ---
+    // --- PUAN TABLOSU VE SIRALAMA MOTORU (MAVİ, SARI, YEŞİL) ---
     function sortStandings(list) {
       return list.sort((a, b) => {
         if (b.pts !== a.pts) return b.pts - a.pts;
@@ -929,22 +1012,22 @@
           let rankColor = 'text-gray-400';
           let borderIndicator = 'border-transparent';
 
-          // 1-4: Şampiyonlar Ligi (Yeşil)
+          // 1-4: UEFA Şampiyonlar Ligi (Mavi)
           if (rank <= 4) { 
-            rankColor = 'text-emerald-400 font-bold'; 
-            borderIndicator = 'border-l-4 border-emerald-500'; 
-          }
-          // 5-6: Avrupa Ligi (Mavi)
-          else if (rank === 5 || rank === 6) { 
             rankColor = 'text-sky-400 font-bold'; 
             borderIndicator = 'border-l-4 border-sky-500'; 
           }
-          // 7: Konferans Ligi Play-off (Turuncu/Amber)
-          else if (rank === 7) { 
+          // 5-6: UEFA Avrupa Ligi (Sarı/Amber)
+          else if (rank === 5 || rank === 6) { 
             rankColor = 'text-amber-400 font-bold'; 
-            borderIndicator = 'border-l-4 border-amber-500'; 
+            borderIndicator = 'border-l-4 border-amber-400'; 
           }
-          // 18-20: Düşme Hattı (Kırmızı)
+          // 7: UEFA Konferans Ligi Play-off (Yeşil)
+          else if (rank === 7) { 
+            rankColor = 'text-emerald-400 font-bold'; 
+            borderIndicator = 'border-l-4 border-emerald-500'; 
+          }
+          // 18-20: Küme Düşme Hattı (Kırmızı)
           else if (rank >= 18) { 
             rankColor = 'text-red-400 font-bold'; 
             borderIndicator = 'border-l-4 border-red-500'; 
@@ -982,13 +1065,16 @@
         standings.slice(0, 5).forEach((team, index) => {
           const clubUser = users.find(u => u.id === team.id);
           const avatarUrl = clubUser?.avatar || `https://api.dicebear.com/7.x/identicon/svg?seed=${team.name}`;
+          const rank = index + 1;
+          let rankColor = 'text-sky-400';
+          if (rank === 5) rankColor = 'text-amber-400';
 
           const div = document.createElement('div');
           div.className = 'btn-smooth flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-white/10 cursor-pointer group';
           div.onclick = () => openUserProfile(team.id);
           div.innerHTML = `
             <div class="flex items-center gap-2">
-              <span class="font-bold w-4 text-emerald-400">${index+1}</span>
+              <span class="font-bold w-4 ${rankColor}">${rank}</span>
               <img src="${avatarUrl}" class="w-4 h-4 object-contain" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${team.name}'">
               <span class="text-white group-hover:text-emerald-400 group-hover:underline truncate">${team.name}</span>
             </div>
@@ -1003,25 +1089,142 @@
     }
 
     function resetStandingsToDefault() {
-      if (confirm("Puan durumunu kariyer başlangıcındaki orijinal 5. hafta haline döndürmek istediğine emin misin?")) {
-        DB.saveStandings(INITIAL_STANDINGS);
-        renderStandings();
-        alert("Puan durumu başarıyla sıfırlandı!");
+      if (confirm("Puan durumunu kariyer başlangıcındaki 2045/46 5. hafta haline döndürmek istediğine emin misin?")) {
+        DB.saveStandings(DEFAULT_STANDINGS);
+        DB.saveClubs(DEFAULT_CLUBS);
+        DB.saveSeason('2045/46');
+        localStorage.removeItem('bc_users_v7');
+        localStorage.removeItem('bc_tweets_v7');
+        location.reload();
       }
     }
 
-    // --- FM 45/46 MAÇ PANELİ & PUAN GÜNCELLEME SİSTEMİ ---
+    // --- SEZON GEÇİŞ SİSTEMİ ---
+    function getNextSeasonString(curSeason) {
+      const parts = curSeason.split('/');
+      if (parts.length === 2) {
+        const y1 = parseInt(parts[0]) || 2045;
+        const y2 = parseInt(parts[1]) || 46;
+        return `${y1 + 1}/${y2 + 1}`;
+      }
+      return '2046/47';
+    }
+
+    function openSeasonModal() {
+      const curSeason = DB.getSeason();
+      const standings = sortStandings(DB.getStandings());
+      
+      const nextSeason = getNextSeasonString(curSeason);
+      document.getElementById('next-season-input').value = nextSeason;
+
+      const relegated = standings.slice(-3);
+      document.getElementById('relegated-teams-preview').innerText = relegated.map(r => r.name).join(', ') || 'Belirlenemedi';
+
+      document.getElementById('season-modal').classList.remove('hidden');
+    }
+
+    function closeSeasonModal() {
+      document.getElementById('season-modal').classList.add('hidden');
+    }
+
+    document.getElementById('season-transition-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nextSeason = document.getElementById('next-season-input').value.trim();
+      const promo1 = document.getElementById('promo-team-1').value.trim();
+      const promo2 = document.getElementById('promo-team-2').value.trim();
+      const promo3 = document.getElementById('promo-team-3').value.trim();
+
+      if (!promo1 || !promo2 || !promo3) return alert('Lütfen yükselen 3 takımı da girin!');
+      if (promo1 === promo2 || promo1 === promo3 || promo2 === promo3) return alert('Yükselen takımlar birbirinden farklı olmalıdır!');
+
+      let standings = sortStandings(DB.getStandings());
+      let clubs = DB.getClubs();
+      let users = DB.getUsers();
+
+      const relegated = standings.slice(-3);
+      const champion = standings[0];
+      const relegatedIds = relegated.map(r => r.id);
+
+      const promotedTeamsInput = [promo1, promo2, promo3];
+      const newPromotedClubs = promotedTeamsInput.map((teamName, i) => {
+        const cleanName = teamName.replace(/[^a-zA-Z0-9]/g, '');
+        return {
+          id: 'c_promo_' + Date.now() + '_' + i,
+          username: cleanName + 'FC',
+          name: teamName,
+          logo: `https://api.dicebear.com/7.x/identicon/svg?seed=${cleanName}&backgroundColor=0f1419`,
+          stadium: `${teamName} Stadium`,
+          tag: cleanName.toUpperCase().slice(0, 4)
+        };
+      });
+
+      const updatedClubs = clubs.filter(c => !relegatedIds.includes(c.id)).concat(newPromotedClubs);
+      DB.saveClubs(updatedClubs);
+
+      const newStandings = updatedClubs.map(c => ({
+        id: c.id,
+        name: c.name,
+        pld: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0
+      }));
+      DB.saveStandings(newStandings);
+
+      const newClubUsers = newPromotedClubs.map(c => ({
+        id: c.id,
+        username: c.username,
+        name: c.name,
+        avatar: c.logo,
+        banner: '',
+        bio: `Official X account of ${c.name}. Premier League ${nextSeason} Campaign. #${c.tag}`,
+        location: c.stadium,
+        badge: true,
+        following: []
+      }));
+
+      users = users.filter(u => !relegatedIds.includes(u.id)).concat(newClubUsers);
+      DB.saveUsers(users);
+
+      DB.saveSeason(nextSeason);
+
+      const tweets = DB.getTweets();
+      const now = Date.now();
+
+      const romanoPost = {
+        id: 'tw_season_rom_' + now,
+        userId: BOT_ROMANO.id,
+        text: `🚨 OFFICIAL: Welcome to Premier League ${nextSeason} season! 🏴󠁧󠁢󠁥󠁮󠁧󠁿🔥\n\n🏆 Defending Champions: ${champion.name}\n⬇️ Relegated: ${relegated.map(r => r.name).join(', ')}\n⬆️ Promoted: ${promo1}, ${promo2}, ${promo3}\n\nFixtures released soon. Here we go! #PremierLeague #${nextSeason.replace('/','')}`,
+        image: '',
+        likes: [],
+        retweets: [],
+        replies: [
+          { author: `${promo1}Fan`, text: 'WE ARE BACK IN THE BIG LEAGUE! 🚀' },
+          { author: `${champion.name}Fan`, text: 'Ready to defend our title!' }
+        ],
+        timestamp: now
+      };
+      tweets.unshift(romanoPost);
+      DB.saveTweets(tweets);
+
+      closeSeasonModal();
+      populateFmSelects();
+      renderStandings();
+      updateSeasonUI();
+      switchView('feed');
+      alert(`Tebrikler! ${nextSeason} sezonu resmen başladı!`);
+    });
+
+    // --- FM MAÇ PANELİ & PUAN GÜNCELLEME SİSTEMİ ---
     function populateFmSelects() {
       const homeSel = document.getElementById('fm-home-team');
       const awaySel = document.getElementById('fm-away-team');
+      const clubs = DB.getClubs();
       if (!homeSel || !awaySel) return;
 
       homeSel.innerHTML = '';
       awaySel.innerHTML = '';
 
-      FM_CLUBS.forEach((c, i) => {
+      clubs.forEach((c, i) => {
         homeSel.innerHTML += `<option value="${c.id}" ${i === 0 ? 'selected' : ''}>${c.name}</option>`;
-        awaySel.innerHTML += `<option value="${c.id}" ${i === 12 ? 'selected' : ''}>${c.name}</option>`;
+        awaySel.innerHTML += `<option value="${c.id}" ${i === 1 ? 'selected' : ''}>${c.name}</option>`;
       });
     }
 
@@ -1051,17 +1254,19 @@
 
       if (homeId === awayId) return alert('Ev sahibi ve deplasman takımı aynı olamaz!');
 
-      const homeClub = FM_CLUBS.find(c => c.id === homeId);
-      const awayClub = FM_CLUBS.find(c => c.id === awayId);
+      const clubs = DB.getClubs();
+      const homeClub = clubs.find(c => c.id === homeId);
+      const awayClub = clubs.find(c => c.id === awayId);
       const tweets = DB.getTweets();
       const now = Date.now();
+      const curSeason = DB.getSeason();
       const hashtag = `#${homeClub.name.replace(/\s+/g,'')}${awayClub.name.replace(/\s+/g,'')}`;
 
       if (stage === 'matchday') {
         const homeTweet = {
           id: 'tw_fm_' + now,
           userId: homeClub.id,
-          text: `🔴 MATCHDAY IN THE PREMIER LEAGUE!\n\n🆚 @${awayClub.username}\n🏆 Season 2045/46\n📍 ${homeClub.stadium}\n\nLet's get the 3 points! 👊 ${hashtag} #${homeClub.tag}`,
+          text: `🔴 MATCHDAY IN THE PREMIER LEAGUE!\n\n🆚 @${awayClub.username}\n🏆 Season ${curSeason}\n📍 ${homeClub.stadium}\n\nLet's get the 3 points! 👊 ${hashtag} #${homeClub.tag}`,
           image: imgBase64,
           likes: [],
           retweets: [],
@@ -1116,8 +1321,8 @@
 
         if (homeScore > awayScore) {
           homeReplies = [
-            { author: `${homeClub.name}TrueFan`, text: 'ABSOLUTE MASTERCLASS! 2045/46 is our season! 🔥' },
-            { author: 'TacticalGenius_FM', text: 'Top 4 race is officially alive. What a performance!' }
+            { author: `${homeClub.name}TrueFan`, text: 'ABSOLUTE MASTERCLASS! What a performance! 🔥' },
+            { author: 'TacticalGenius_FM', text: 'Crucial 3 points in the bag.' }
           ];
           awayReplies = [
             { author: `${awayClub.name}Crisis`, text: 'HOCA İSTİFA! Sack the manager tonight.' },
@@ -1166,10 +1371,10 @@
         tweets.unshift(awayPost);
 
         if (enableRomano) {
-          let romanoText = `🚨 BREAKING: Full-time in Premier League 2045/46!\n\n${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}. `;
+          let romanoText = `🚨 BREAKING: Full-time in Premier League ${curSeason}!\n\n${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}. `;
           if (homeScore !== awayScore) {
             const loser = homeScore > awayScore ? awayClub : homeClub;
-            romanoText += `Pressure mounting on @${loser.username} board. Standings updated after this massive result! #HereWeGo #PremierLeague`;
+            romanoText += `Pressure mounting on @${loser.username} board. Standings updated after this result! #HereWeGo #PremierLeague`;
           } else {
             romanoText += `Intense game finished in a draw. Both teams take 1 point! #HereWeGo`;
           }
@@ -1181,7 +1386,7 @@
             image: '',
             likes: [homeClub.id, awayClub.id],
             retweets: [homeClub.id],
-            replies: [{ author: 'FootballFanatic', text: 'Table is getting crazy this season! 📈' }],
+            replies: [{ author: 'FootballFanatic', text: 'Table is getting crazy! 📈' }],
             timestamp: now + 500
           };
           tweets.unshift(romanoPost);
@@ -1196,8 +1401,17 @@
     // --- KEŞFET (EXPLORE) ---
     function renderExploreTrends() {
       const container = document.getElementById('explore-trends-container');
+      const curSeason = DB.getSeason();
       container.innerHTML = '';
-      TREND_LIST.forEach(trend => {
+      
+      const seasonalTrends = [
+        { tag: `#PremierLeague${curSeason.replace('/','')}`, category: 'Lig Gündemi', count: '420.5 B' },
+        { tag: '#DerbyCountyEurope', category: 'Zirve Yarışı', count: '184.2 B' },
+        { tag: '#SackTheManager', category: 'Kriz', count: '112.8 B' },
+        { tag: '#HereWeGo', category: 'Fabrizio Romano', count: '320.1 B' }
+      ];
+
+      seasonalTrends.forEach(trend => {
         const div = document.createElement('div');
         div.className = 'btn-smooth flex justify-between items-center cursor-pointer hover:bg-white/5 p-2 rounded-xl';
         div.onclick = () => filterByTag(trend.tag.replace('#', ''));
@@ -1342,7 +1556,7 @@
       document.getElementById('page-name').innerText = user.name;
       document.getElementById('page-username').innerText = `@${user.username}`;
       document.getElementById('page-avatar').src = user.avatar;
-      document.getElementById('page-bio').innerText = user.bio || 'FM 2045/46 Kariyer Profili';
+      document.getElementById('page-bio').innerText = user.bio || `Premier League ${DB.getSeason()} Kulübü`;
       
       const badge = document.getElementById('page-badge');
       if (user.badge) badge.classList.remove('hidden');
