@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>𝕏 (goygoy sürümü)</title>
+
+<!-- Firebase SDK Bağlantıları -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
 <style>
   :root{
     --bg:#000000;
@@ -85,15 +90,6 @@
   .nav-item:hover{background:var(--hover);}
   .nav-item.active{font-weight:800;}
   .nav-item .icon{width:26px;text-align:center;font-size:22px;flex-shrink:0;}
-  .nav-item .badge-dot{
-    background:var(--blue);
-    color:#fff;
-    font-size:11px;
-    font-weight:700;
-    border-radius:999px;
-    padding:0 6px;
-    margin-left:4px;
-  }
   .nav-post-btn{
     background:var(--blue);
     color:#fff;
@@ -134,6 +130,19 @@
   .user-card .uc-name-wrap{flex:1;min-width:0;}
   .user-card .uc-name{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:3px;}
   .user-card .uc-handle{font-size:13px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .logout-btn-mini{
+    background:transparent;
+    border:none;
+    color:var(--dim);
+    font-size:16px;
+    cursor:pointer;
+    padding:6px;
+    border-radius:50%;
+  }
+  .logout-btn-mini:hover{
+    color:var(--red);
+    background:var(--hover);
+  }
 
   /* ================= CENTER COLUMN ================= */
   .main-col{
@@ -228,7 +237,6 @@
   .tweet{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);animation:fadein 0.25s ease;}
   @keyframes fadein{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
   .tweet-body{flex:1;min-width:0;}
-  .retweet-tag{font-size:13px;color:var(--dim);font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
   .tweet-head{display:flex;align-items:center;gap:6px;font-size:15px;flex-wrap:wrap;}
   .tweet-name{font-weight:700;cursor:pointer;display:flex;align-items:center;gap:3px;}
   .tweet-name:hover{text-decoration:underline;}
@@ -296,7 +304,6 @@
   .btn-solid:hover{opacity:0.9;}
   .btn-following{background:transparent;color:var(--text);border:1px solid #536471;}
   .btn-following:hover{background:rgba(249,24,128,0.1);color:var(--red);border-color:var(--red);}
-  .btn-following:hover::after{content:' bırak';}
   .profile-info{padding:2px 0 12px 0;}
   .profile-info .pname{font-size:20px;font-weight:800;display:flex;align-items:center;gap:4px;}
   .profile-info .phandle{color:var(--dim);font-size:15px;margin-top:1px;}
@@ -355,8 +362,8 @@
   .follow-btn-small:hover{opacity:0.9;}
   .follow-btn-small.following{background:transparent;border:1px solid #536471;color:var(--text);}
 
-  /* ---- Modal (shared) ---- */
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(91,112,131,0.4);z-index:100;align-items:center;justify-content:center;}
+  /* ---- Modals ---- */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(91,112,131,0.6);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
   .modal-overlay.open{display:flex;}
   .modal{background:var(--bg);border:1px solid var(--border);border-radius:16px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;margin:16px;}
   .modal-header{display:flex;align-items:center;gap:20px;padding:12px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);}
@@ -381,7 +388,7 @@
   .field label{display:block;font-size:13px;color:var(--dim);margin-bottom:4px;}
   .field input, .field textarea{
     width:100%;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text);
-    font-size:16px;font-family:inherit;padding:10px 10px 20px 10px;outline:none;
+    font-size:16px;font-family:inherit;padding:10px;outline:none;
   }
   .field input:focus, .field textarea:focus{border-color:var(--blue);}
   .field textarea{resize:none;min-height:70px;}
@@ -389,7 +396,7 @@
   .checkbox-field{display:flex;align-items:center;gap:8px;font-size:15px;}
 
   /* ---- Reply modal ---- */
-  .reply-parent{display:flex;gap:12px;padding:0 16px;}
+  .reply-parent{display:flex;gap:12px;padding:12px 16px;}
   .reply-parent-line{width:44px;display:flex;justify-content:center;}
   .reply-parent-line .line{width:2px;flex:1;background:var(--border);margin-top:6px;}
   .reply-parent-body{padding-bottom:10px;font-size:15px;}
@@ -426,6 +433,32 @@
 </style>
 </head>
 <body>
+
+<!-- ======= FIREBASE AUTH (GİRİŞ / KAYIT) MODAL ======= -->
+<div class="modal-overlay" id="auth-modal-overlay">
+  <div class="modal" style="max-width:420px; padding:24px; text-align:center;">
+    <div style="font-size:36px; margin-bottom:12px;">𝕏</div>
+    <h2 id="auth-title" style="font-size:22px; margin-bottom:20px;">Giriş Yap</h2>
+    
+    <div class="field" style="text-align:left; margin-bottom:12px;">
+      <label for="auth-email">E-posta Adresi</label>
+      <input type="email" id="auth-email" placeholder="ornek@mail.com">
+    </div>
+    <div class="field" style="text-align:left; margin-bottom:16px;">
+      <label for="auth-pass">Şifre</label>
+      <input type="password" id="auth-pass" placeholder="En az 6 karakter">
+    </div>
+
+    <div id="auth-error" style="color:var(--red); font-size:13px; margin-bottom:14px; display:none; text-align:left;"></div>
+
+    <button id="auth-submit-btn" style="width:100%; background:var(--blue); color:#fff; border:none; font-weight:700; padding:12px 0; border-radius:999px; cursor:pointer; font-size:16px; margin-bottom:16px;">Giriş Yap</button>
+
+    <div style="font-size:14px; color:var(--dim);">
+      <span id="auth-toggle-text">Hesabın yok mu?</span>
+      <a href="#" id="auth-toggle-link" style="color:var(--blue); font-weight:700; margin-left:4px;">Kayıt Ol</a>
+    </div>
+  </div>
+</div>
 
 <!-- ======= EDIT PROFILE MODAL ======= -->
 <div class="modal-overlay" id="modal-overlay">
@@ -503,17 +536,18 @@
       <div class="nav-item" id="nav-explore" onclick="goToExplore()"><span class="icon">🔍</span><span class="label">Keşfet</span></div>
       <div class="nav-item" id="nav-notifications" onclick="goToNotifications()"><span class="icon">🔔</span><span class="label">Bildirimler</span></div>
       <div class="nav-item" id="nav-bookmarks" onclick="goToBookmarks()"><span class="icon">🔖</span><span class="label">Yer İşaretleri</span></div>
-      <div class="nav-item" id="nav-profile" onclick="goToProfile('@ben')"><span class="icon">👤</span><span class="label">Profil</span></div>
+      <div class="nav-item" id="nav-profile" onclick="goToProfile(currentProfileHandle)"><span class="icon">👤</span><span class="label">Profil</span></div>
     </div>
     <button class="nav-post-btn" onclick="goHome();focusComposer();"><span class="full-label">Gönder</span><span style="display:none;">✏️</span></button>
     <div class="sidebar-bottom">
       <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()"><span id="theme-icon">☀️</span><span class="label">Aydınlık mod</span></button>
-      <div class="user-card" onclick="goToProfile('@ben')">
+      <div class="user-card" onclick="goToProfile(myHandle)">
         <div class="avatar" id="sidebar-avatar" style="cursor:default;"></div>
         <div class="uc-name-wrap">
           <div class="uc-name" id="sidebar-uc-name"></div>
           <div class="uc-handle" id="sidebar-uc-handle"></div>
         </div>
+        <button class="logout-btn-mini" onclick="event.stopPropagation(); logoutUser();" title="Çıkış Yap">🚪</button>
       </div>
     </div>
   </nav>
@@ -614,22 +648,122 @@
 </div>
 
 <script>
-/* ================= STATE ================= */
+/* ================= FIREBASE AUTH KURULUMU ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyAMUC3hHqUjc3KPS-oa7-sRJeIpi3PYHqo",
+  authDomain: "beclaude-5b7e5.firebaseapp.com",
+  projectId: "beclaude-5b7e5",
+  storageBucket: "beclaude-5b7e5.firebasestorage.app",
+  messagingSenderId: "781354248856",
+  appId: "1:781354248856:web:08eb90de502655edcb7eed",
+  measurementId: "G-TLVT7J4ELN"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+let authMode = 'login';
+let myHandle = '@ben';
+
+const authModalOverlay = document.getElementById('auth-modal-overlay');
+const authTitle = document.getElementById('auth-title');
+const authEmail = document.getElementById('auth-email');
+const authPass = document.getElementById('auth-pass');
+const authError = document.getElementById('auth-error');
+const authSubmitBtn = document.getElementById('auth-submit-btn');
+const authToggleText = document.getElementById('auth-toggle-text');
+const authToggleLink = document.getElementById('auth-toggle-link');
+
+authToggleLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  authError.style.display = 'none';
+  if(authMode === 'login'){
+    authMode = 'register';
+    authTitle.textContent = 'Hesap Oluştur';
+    authSubmitBtn.textContent = 'Kayıt Ol';
+    authToggleText.textContent = 'Zaten hesabın var mı?';
+    authToggleLink.textContent = 'Giriş Yap';
+  } else {
+    authMode = 'login';
+    authTitle.textContent = 'Giriş Yap';
+    authSubmitBtn.textContent = 'Giriş Yap';
+    authToggleText.textContent = 'Hesabın yok mu?';
+    authToggleLink.textContent = 'Kayıt Ol';
+  }
+});
+
+authSubmitBtn.addEventListener('click', () => {
+  const email = authEmail.value.trim();
+  const pass = authPass.value.trim();
+  authError.style.display = 'none';
+
+  if(!email || !pass){
+    authError.textContent = 'Lütfen tüm alanları doldurun.';
+    authError.style.display = 'block';
+    return;
+  }
+
+  if(authMode === 'register'){
+    auth.createUserWithEmailAndPassword(email, pass)
+      .then((userCredential) => {
+        authModalOverlay.classList.remove('open');
+      })
+      .catch((err) => {
+        authError.textContent = 'Kayıt Hatası: ' + err.message;
+        authError.style.display = 'block';
+      });
+  } else {
+    auth.signInWithEmailAndPassword(email, pass)
+      .then((userCredential) => {
+        authModalOverlay.classList.remove('open');
+      })
+      .catch((err) => {
+        authError.textContent = 'Giriş Hatası: ' + err.message;
+        authError.style.display = 'block';
+      });
+  }
+});
+
+function logoutUser(){
+  if(confirm('Çıkış yapmak istediğine emin misin?')){
+    auth.signOut().then(() => {
+      location.reload();
+    });
+  }
+}
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    authModalOverlay.classList.remove('open');
+    const uName = user.email.split('@')[0];
+    myHandle = '@' + uName;
+    if(!profiles[myHandle]){
+      profiles[myHandle] = {
+        handle: myHandle, name: uName, bio:'', avatarImg:null, bannerImg:null,
+        avatarColor:'linear-gradient(135deg,#7856ff,#1d9bf0)', editable:true, verified:false,
+        following:['@krallikayip'], followers:['@amcatarzi']
+      };
+    }
+    currentProfileHandle = myHandle;
+    updateMyAvatarComposer();
+    updateSidebarUserCard();
+    renderAll();
+  } else {
+    authModalOverlay.classList.add('open');
+  }
+});
+
+/* ================= APP STATE ================= */
 let profiles = {
-  '@ben': {
-    handle:'@ben', name:'Sen', bio:'', avatarImg:null, bannerImg:null,
-    avatarColor:'linear-gradient(135deg,#7856ff,#1d9bf0)', editable:true, verified:false,
-    following:['@krallikayip'], followers:['@amcatarzi']
-  },
   '@krallikayip': {
     handle:'@krallikayip', name:'Kral Kayıp', bio:'Sabah 6da uyanıp öğlene kadar yatakta disiplin gösteren adam.',
     avatarImg:null, bannerImg:null, avatarColor:'linear-gradient(135deg,#f91880,#ffad1f)', editable:false, verified:true,
-    following:['@amcatarzi'], followers:['@ben','@dramkralicesi']
+    following:['@amcatarzi'], followers:['@amcatarzi']
   },
   '@amcatarzi': {
     handle:'@amcatarzi', name:'Amca Tarzı', bio:'Kahvesiz konuşulmaz. Kahve de yapılmaz.',
     avatarImg:null, bannerImg:null, avatarColor:'linear-gradient(135deg,#00ba7c,#1d9bf0)', editable:false, verified:false,
-    following:['@ben'], followers:['@krallikayip']
+    following:[], followers:['@krallikayip']
   },
   '@dramkralicesi': {
     handle:'@dramkralicesi', name:'Dram Kraliçesi', bio:'Her şey bir dizi sahnesi gibi olmalı, yoksa yaşamıyorum sayılır.',
@@ -657,7 +791,7 @@ let pendingImage = null;
 
 let currentView = 'home';
 let currentHomeTab = 'foryou';
-let currentProfileHandle = '@ben';
+let currentProfileHandle = myHandle;
 let currentReplyTweetId = null;
 let searchQuery = '';
 let expandedReplies = new Set();
@@ -760,25 +894,27 @@ function escapeHtml(str){
   return div.innerHTML;
 }
 function avatarStyle(profile){
+  if(!profile) return `background:linear-gradient(135deg,#7856ff,#1d9bf0);`;
   if(profile.avatarImg) return `background-image:url('${profile.avatarImg}');`;
   return `background:${profile.avatarColor};`;
 }
 function verifiedBadge(profile){
-  return profile.verified ? '<span class="verified-badge" title="Onaylı hesap (goygoy)">✔️</span>' : '';
+  return (profile && profile.verified) ? '<span class="verified-badge" title="Onaylı hesap (goygoy)">✔️</span>' : '';
 }
 function isFollowing(handle){
-  return profiles['@ben'].following.includes(handle);
+  const me = profiles[myHandle];
+  return me && me.following ? me.following.includes(handle) : false;
 }
 function toggleFollow(handle){
-  const me = profiles['@ben'];
+  const me = profiles[myHandle];
   const target = profiles[handle];
-  if(!target) return;
+  if(!me || !target) return;
   if(me.following.includes(handle)){
     me.following = me.following.filter(h => h !== handle);
-    target.followers = target.followers.filter(h => h !== '@ben');
+    target.followers = target.followers.filter(h => h !== myHandle);
   } else {
     me.following.push(handle);
-    target.followers.push('@ben');
+    target.followers.push(myHandle);
   }
   renderAll();
 }
@@ -811,12 +947,12 @@ function goHome(){
 function focusComposer(){ setTimeout(()=>input.focus(), 50); }
 
 function goToProfile(handle){
-  currentView='profile'; currentProfileHandle=handle;
+  currentView='profile'; currentProfileHandle=handle || myHandle;
   viewHome.style.display='none'; viewProfile.style.display='block';
   viewExplore.style.display='none'; viewNotifications.style.display='none'; viewBookmarks.style.display='none';
   backBtn.style.display='flex'; backBtn.style.alignItems='center'; backBtn.style.justifyContent='center';
   headerSub.style.display='block';
-  clearNavActive(); if(handle==='@ben') navProfile.classList.add('active');
+  clearNavActive(); if(handle===myHandle) navProfile.classList.add('active');
   renderProfile();
 }
 
@@ -856,7 +992,7 @@ function goToBookmarks(){
 }
 
 backBtn.addEventListener('click', () => {
-  if(currentView === 'profile' && currentProfileHandle !== '@ben'){ goToExplore(); }
+  if(currentView === 'profile' && currentProfileHandle !== myHandle){ goToExplore(); }
   else goHome();
 });
 
@@ -864,8 +1000,7 @@ tabForYou.addEventListener('click', () => { currentHomeTab='foryou'; tabForYou.c
 tabFollowing.addEventListener('click', () => { currentHomeTab='following'; tabFollowing.classList.add('active'); tabForYou.classList.remove('active'); renderFeed(); });
 
 /* ================= RENDER: FEED ================= */
-function renderTweetHtml(t, opts){
-  opts = opts || {};
+function renderTweetHtml(t){
   const p = profiles[t.author] || { name:t.author, handle:t.author, avatarColor:'linear-gradient(135deg,#888,#555)', avatarImg:null, verified:false };
   const expanded = expandedReplies.has(t.id);
   const replyCount = t.replies.length;
@@ -886,7 +1021,7 @@ function renderTweetHtml(t, opts){
           <button class="action ${t.liked ? 'liked' : ''}" onclick="toggleLike(${t.id})">${t.liked ? '❤️' : '🤍'} ${t.likes}</button>
           <button class="action bookmark ${t.bookmarked ? 'active' : ''}" onclick="toggleBookmark(${t.id})">${t.bookmarked ? '🔖' : '🏷️'}</button>
           <button class="action" onclick="shareTweet(${t.id})">📤</button>
-          ${t.author === '@ben' ? `<button class="action del" onclick="deleteTweet(${t.id})">🗑️</button>` : ''}
+          ${t.author === myHandle ? `<button class="action del" onclick="deleteTweet(${t.id})">🗑️</button>` : ''}
         </div>
         ${replyCount > 0 ? `<div style="margin-top:6px;"><span style="color:var(--blue);font-size:13px;cursor:pointer;" onclick="toggleExpandReplies(${t.id})">${expanded ? 'Yanıtları gizle' : replyCount + ' yanıtı gör'}</span></div>` : ''}
         ${expanded ? `<div class="reply-thread">${t.replies.map(r => renderReplyHtml(r)).join('')}</div>` : ''}
@@ -910,8 +1045,9 @@ function renderReplyHtml(r){
 function renderFeed(){
   let list = tweets;
   if(currentHomeTab === 'following'){
-    const following = profiles['@ben'].following;
-    list = tweets.filter(t => following.includes(t.author) || t.author === '@ben');
+    const me = profiles[myHandle];
+    const following = me ? me.following : [];
+    list = tweets.filter(t => following.includes(t.author) || t.author === myHandle);
   }
   if(list.length === 0){
     feedEl.innerHTML = currentHomeTab === 'following'
@@ -929,14 +1065,13 @@ function toggleExpandReplies(id){
 
 /* ================= RENDER: PROFILE ================= */
 function renderProfile(){
-  const p = profiles[currentProfileHandle];
+  const p = profiles[currentProfileHandle] || { name:'Kullanıcı', handle:currentProfileHandle, bio:'', followers:[], following:[] };
   headerTitle.innerHTML = escapeHtml(p.name) + ' ' + verifiedBadge(p);
   const count = tweets.filter(t => t.author === currentProfileHandle).length;
   headerSub.textContent = count + ' Tweet';
 
   if(p.bannerImg){
     profileBanner.style.backgroundImage = `url('${p.bannerImg}')`;
-    profileBanner.style.background = '';
   } else {
     profileBanner.style.backgroundImage = '';
     profileBanner.style.background = 'linear-gradient(135deg,#3a3f44,#16181c)';
@@ -956,10 +1091,10 @@ function renderProfile(){
   }
 
   statTweets.textContent = count;
-  statFollowing.textContent = p.following.length;
-  statFollowers.textContent = p.followers.length;
+  statFollowing.textContent = p.following ? p.following.length : 0;
+  statFollowers.textContent = p.followers ? p.followers.length : 0;
 
-  if(p.editable){
+  if(p.editable || p.handle === myHandle){
     profileActions.innerHTML = `<button class="btn-outline" onclick="openEditModal()">Profili düzenle</button>`;
     profileBanner.classList.add('editable');
     profileAvatarWrap.classList.add('editable');
@@ -975,8 +1110,8 @@ function renderProfile(){
     '<div class="empty"><span>🕊️</span>Bu kullanıcı henüz tweet atmamış.</div>';
 }
 
-profileBanner.addEventListener('click', () => { if(profiles[currentProfileHandle].editable) openEditModal(); });
-profileAvatarWrap.addEventListener('click', () => { if(profiles[currentProfileHandle].editable) openEditModal(); });
+profileBanner.addEventListener('click', () => { if(profiles[currentProfileHandle] && profiles[currentProfileHandle].editable) openEditModal(); });
+profileAvatarWrap.addEventListener('click', () => { if(profiles[currentProfileHandle] && profiles[currentProfileHandle].editable) openEditModal(); });
 
 /* ================= RENDER: EXPLORE ================= */
 function renderExplore(){
@@ -990,12 +1125,12 @@ function renderExplore(){
         <div class="trend-count">${escapeHtml(tr.count)}</div>
       </div>`).join('')}
       <div class="section-label">Kimi takip etmeli</div>
-      ${Object.values(profiles).filter(p => p.handle !== '@ben').map(p => renderUserRow(p)).join('')}
+      ${Object.values(profiles).filter(p => p.handle !== myHandle).map(p => renderUserRow(p)).join('')}
     `;
     return;
   }
   const matchedUsers = Object.values(profiles).filter(p =>
-    p.handle !== '@ben' && (p.name.toLowerCase().includes(q) || p.handle.toLowerCase().includes(q))
+    p.handle !== myHandle && (p.name.toLowerCase().includes(q) || p.handle.toLowerCase().includes(q))
   );
   const matchedTweets = tweets.filter(t => t.text.toLowerCase().includes(q));
   let html = '';
@@ -1064,7 +1199,7 @@ function renderRightSidebar(){
     </div>`).join('');
 
   const suggWidget = document.getElementById('widget-suggestions');
-  const suggestions = Object.values(profiles).filter(p => p.handle !== '@ben' && !isFollowing(p.handle)).slice(0,3);
+  const suggestions = Object.values(profiles).filter(p => p.handle !== myHandle && !isFollowing(p.handle)).slice(0,3);
   suggWidget.innerHTML = `<div class="widget-title">Kimi takip etmeli</div>` +
     (suggestions.length ? suggestions.map(p => renderUserRow(p)).join('') : '<div style="padding:16px;color:var(--dim);font-size:14px;">Herkesi zaten takip ediyorsun 🎉</div>');
 }
@@ -1090,7 +1225,7 @@ function deleteTweet(id){
   rerenderCurrent();
 }
 function shareTweet(id){
-  alert('Bağlantı kopyalandı! (goygoy demo — gerçek bir link yok 😄)');
+  alert('Bağlantı kopyalandı!');
 }
 function rerenderCurrent(){
   if(currentView === 'home') renderFeed();
@@ -1117,9 +1252,9 @@ function openReplyModal(tweetId){
       <div class="rp-to">Yanıt veriliyor: <span style="color:var(--blue);">${escapeHtml(p.handle)}</span></div>
     </div>
   `;
-  const me = profiles['@ben'];
+  const me = profiles[myHandle];
   replyAvatar.style.cssText = avatarStyle(me);
-  replyAvatar.textContent = me.avatarImg ? '' : (me.name ? me.name[0].toUpperCase() : 'B');
+  replyAvatar.textContent = (me && me.avatarImg) ? '' : ((me && me.name) ? me.name[0].toUpperCase() : 'B');
   replyInput.value = '';
   submitReplyBtn.disabled = true;
   replyModalOverlay.classList.add('open');
@@ -1134,7 +1269,7 @@ submitReplyBtn.addEventListener('click', () => {
   if(!text || currentReplyTweetId === null) return;
   const t = tweets.find(x => x.id === currentReplyTweetId);
   if(!t) return;
-  t.replies.push({id: replyIdCounter++, author:'@ben', text, time:'şimdi'});
+  t.replies.push({id: replyIdCounter++, author:myHandle, text, time:'şimdi'});
   expandedReplies.add(t.id);
   closeReplyModal();
   rerenderCurrent();
@@ -1142,7 +1277,8 @@ submitReplyBtn.addEventListener('click', () => {
 
 /* ================= EDIT PROFILE MODAL ================= */
 function openEditModal(){
-  const p = profiles['@ben'];
+  const p = profiles[myHandle];
+  if(!p) return;
   modalTemp = { name:p.name, handle:p.handle, bio:p.bio, avatarImg:p.avatarImg, bannerImg:p.bannerImg, verified:p.verified };
   editName.value = p.name;
   editHandle.value = p.handle.replace('@','');
@@ -1168,7 +1304,7 @@ function renderModalPreview(){
     modalAvatar.querySelector('.avatar-edit-overlay').style.opacity = '0';
   } else {
     modalAvatar.style.backgroundImage = '';
-    modalAvatar.style.background = profiles['@ben'].avatarColor;
+    modalAvatar.style.background = profiles[myHandle] ? profiles[myHandle].avatarColor : 'linear-gradient(135deg,#7856ff,#1d9bf0)';
     modalAvatar.querySelector('.avatar-edit-overlay').style.opacity = '1';
   }
 }
@@ -1192,7 +1328,8 @@ modalAvatarInput.addEventListener('change', (e) => {
 editBio.addEventListener('input', () => { bioCount.textContent = editBio.value.length + ' / 160'; });
 
 saveProfileBtn.addEventListener('click', () => {
-  const p = profiles['@ben'];
+  const p = profiles[myHandle];
+  if(!p) return;
   const newName = editName.value.trim() || 'Sen';
   let newHandleRaw = editHandle.value.trim().replace(/^@/,'').replace(/\s+/g,'');
   if(!newHandleRaw) newHandleRaw = 'ben';
@@ -1201,12 +1338,13 @@ saveProfileBtn.addEventListener('click', () => {
   if(newHandle !== p.handle && !profiles[newHandle]){
     tweets.forEach(t => { if(t.author === p.handle) t.author = newHandle; t.replies.forEach(r => { if(r.author === p.handle) r.author = newHandle; }); });
     Object.values(profiles).forEach(other => {
-      other.following = other.following.map(h => h === p.handle ? newHandle : h);
-      other.followers = other.followers.map(h => h === p.handle ? newHandle : h);
+      if(other.following) other.following = other.following.map(h => h === p.handle ? newHandle : h);
+      if(other.followers) other.followers = other.followers.map(h => h === p.handle ? newHandle : h);
     });
     delete profiles[p.handle];
     p.handle = newHandle;
     profiles[newHandle] = p;
+    myHandle = newHandle;
     currentProfileHandle = newHandle;
   }
 
@@ -1224,14 +1362,15 @@ saveProfileBtn.addEventListener('click', () => {
 
 /* ================= SIDEBAR / COMPOSER MINI-STATE ================= */
 function updateMyAvatarComposer(){
-  const p = profiles['@ben'];
+  const p = profiles[myHandle];
   myAvatarComposer.style.cssText = avatarStyle(p);
-  myAvatarComposer.textContent = p.avatarImg ? '' : (p.name ? p.name[0].toUpperCase() : 'B');
+  myAvatarComposer.textContent = (p && p.avatarImg) ? '' : ((p && p.name) ? p.name[0].toUpperCase() : 'B');
 }
-myAvatarComposer.addEventListener('click', () => goToProfile('@ben'));
+myAvatarComposer.addEventListener('click', () => goToProfile(myHandle));
 
 function updateSidebarUserCard(){
-  const p = profiles['@ben'];
+  const p = profiles[myHandle];
+  if(!p) return;
   sidebarAvatar.style.cssText = avatarStyle(p);
   sidebarAvatar.textContent = p.avatarImg ? '' : (p.name ? p.name[0].toUpperCase() : 'B');
   sidebarUcName.innerHTML = escapeHtml(p.name) + ' ' + verifiedBadge(p);
@@ -1261,7 +1400,7 @@ removeImgBtn.addEventListener('click', () => { pendingImage=null; previewWrap.st
 postBtn.addEventListener('click', () => {
   const text = input.value.trim();
   if((!text && !pendingImage) || text.length > 280) return;
-  tweets.unshift({ id: idCounter++, author:'@ben', time:'şimdi', text, image:pendingImage, likes:0, liked:false, rts:0, rted:false, bookmarked:false, replies:[] });
+  tweets.unshift({ id: idCounter++, author:myHandle, time:'şimdi', text, image:pendingImage, likes:0, liked:false, rts:0, rted:false, bookmarked:false, replies:[] });
   input.value=''; pendingImage=null; previewWrap.style.display='none'; fileInput.value='';
   updatePostBtn();
   renderFeed();
