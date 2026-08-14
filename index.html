@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beclaude</title>
+  <title>Beclaude - FM 2045/46 Premier League</title>
   
   <!-- Dinamik SVG Favicon (D° Logo) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%2300a8ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='24' y='24' width='464' height='464' rx='120' fill='%230f1419' stroke='%230f1419' stroke-width='24'/%3E%3Crect x='56' y='56' width='400' height='400' rx='96' fill='url(%23bgGrad)'/%3E%3Ccircle cx='376' cy='136' r='24' fill='%23e0f2fe'/%3E%3Cpath d='M170 170 h75 c60 0 100 35 100 86 s-40 86 -100 86 h-75 Z m60 44 v88 h15 c30 0 48 -16 48 -44 s-18 -44 -48 -44 Z' fill='%23ffffff'/%3E%3C/svg%3E">
@@ -21,10 +21,7 @@
     .border-theme { border-color: #2f3336; }
     * { -webkit-tap-highlight-color: transparent; }
     
-    /* Yumuşak Buton & Geçiş Kuralları */
-    .smooth-transition {
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+    .smooth-transition { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
     .btn-smooth {
       transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
                   transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), 
@@ -46,9 +43,7 @@
       transform: scale(1.08) rotate(5deg);
       filter: drop-shadow(0 0 24px rgba(0, 168, 255, 0.9));
     }
-    .logo-animated:active { transform: scale(0.92) rotate(-5deg); }
 
-    /* Mikro Etkileşimler */
     @keyframes tweetEnter {
       0% { opacity: 0; transform: translateY(-12px) scale(0.98); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -99,15 +94,12 @@
           </svg>
         </div>
       </div>
-      <h2 id="auth-title" class="text-2xl font-bold mb-6 text-center tracking-tight">Beclaude'a Giriş Yap</h2>
+      <h2 id="auth-title" class="text-2xl font-bold mb-1 text-center tracking-tight">Beclaude FM</h2>
+      <p class="text-xs text-gray-400 text-center mb-6">Premier League 2045/46 Kariyer Ağı (Gözlemci Modu)</p>
       
       <form id="auth-form" class="space-y-4">
         <div id="register-fields" class="space-y-4 hidden">
-          <input id="auth-name" type="text" placeholder="Ad Soyad" class="w-full bg-transparent border border-theme rounded-xl px-4 py-3 focus:border-sky-500 focus:outline-none text-white smooth-transition">
-          <div>
-            <label class="text-xs text-gray-400 block mb-1">Profil Fotoğrafı Seç (Dosya)</label>
-            <input id="auth-avatar-file" type="file" accept="image/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-sky-500/20 file:text-sky-400 hover:file:bg-sky-500/30 cursor-pointer smooth-transition">
-          </div>
+          <input id="auth-name" type="text" placeholder="Menajer / Gözlemci Adı" class="w-full bg-transparent border border-theme rounded-xl px-4 py-3 focus:border-sky-500 focus:outline-none text-white smooth-transition">
         </div>
         <div>
           <input id="auth-username" type="text" placeholder="Kullanıcı Adı (@ olmadan)" required class="w-full bg-transparent border border-theme rounded-xl px-4 py-3 focus:border-sky-500 focus:outline-none text-white smooth-transition">
@@ -151,7 +143,12 @@
         <nav class="space-y-1">
           <button id="nav-btn-feed" onclick="switchView('feed')" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-white">
             <i class="fa-solid fa-house text-lg"></i>
-            <span class="hidden xl:inline text-base font-normal">Anasayfa</span>
+            <span class="hidden xl:inline text-base font-normal">Anasayfa (Akış)</span>
+          </button>
+
+          <button id="nav-btn-standings" onclick="switchView('standings')" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-gray-400 hover:text-white">
+            <i class="fa-solid fa-ranking-star text-lg"></i>
+            <span class="hidden xl:inline text-base font-normal">Puan Durumu</span>
           </button>
           
           <button id="nav-btn-explore" onclick="switchView('explore')" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-gray-400 hover:text-white">
@@ -172,18 +169,19 @@
             <span class="hidden xl:inline text-base font-normal">Yer İşaretleri</span>
           </button>
 
-          <button id="nav-btn-profile" onclick="openUserProfile(DB.getSession().id)" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-gray-400 hover:text-white">
-            <i class="fa-regular fa-user text-lg"></i>
-            <span class="hidden xl:inline text-base font-normal">Profil</span>
+          <!-- FM 45/46 MAÇ PANEL BUTONU -->
+          <button onclick="openFmPanelModal()" class="btn-smooth flex items-center gap-4 w-full p-3 bg-gradient-to-r from-emerald-600/20 to-teal-500/20 border border-emerald-500/40 rounded-full text-xl font-bold text-emerald-400 hover:bg-emerald-500/30 mt-2">
+            <i class="fa-solid fa-futbol text-lg animate-pulse"></i>
+            <span class="hidden xl:inline text-base">FM 45/46 Panel</span>
           </button>
         </nav>
       </div>
 
-      <!-- Kullanıcı Kartı & Çıkış -->
+      <!-- Kullanıcı Kartı -->
       <div class="relative">
         <div onclick="logout()" class="btn-smooth flex items-center gap-3 p-2 hover:bg-[#181818] rounded-full cursor-pointer justify-between group">
           <div class="flex items-center gap-2 overflow-hidden">
-            <img id="nav-avatar" src="" class="w-10 h-10 rounded-full object-cover bg-gray-700 smooth-transition group-hover:ring-2 group-hover:ring-sky-500">
+            <img id="nav-avatar" src="" class="w-10 h-10 rounded-full object-cover bg-gray-700 smooth-transition group-hover:ring-2 group-hover:ring-emerald-500">
             <div class="hidden xl:block leading-tight truncate">
               <p id="nav-name" class="font-bold text-sm truncate smooth-transition"></p>
               <p id="nav-username" class="text-gray-500 text-xs truncate"></p>
@@ -194,75 +192,102 @@
       </div>
     </aside>
 
-    <!-- ORTA ALAN (GÖRÜNÜMLER) -->
-    <main class="flex-1 max-w-[600px] h-full border-r border-theme flex flex-col overflow-hidden">
+    <!-- ORTA AKIŞ (FEED) -->
+    <main class="flex-1 max-w-[640px] h-full border-r border-theme flex flex-col overflow-hidden">
       
-      <!-- 1. ANASAYFA (FEED) -->
+      <!-- 1. ANASAYFA (BOT AKIŞI) -->
       <div id="view-feed" class="view-panel flex flex-col h-full overflow-hidden">
         <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-4 z-10 flex justify-between items-center">
-          <h1 class="text-xl font-bold tracking-tight">Anasayfa</h1>
-          <span class="text-xs font-semibold px-3 py-1 bg-gradient-to-r from-indigo-500/20 to-sky-500/20 text-sky-400 rounded-full border border-sky-500/30">Beclaude Feed</span>
+          <div>
+            <h1 class="text-xl font-bold tracking-tight">Premier League Akışı</h1>
+            <p class="text-[11px] text-gray-400">Yalnızca 2045/46 Kulüp Botları ve Flaş Haberler</p>
+          </div>
+          <span class="text-xs font-semibold px-3 py-1 bg-gradient-to-r from-emerald-500/20 to-sky-500/20 text-emerald-400 rounded-full border border-emerald-500/30 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Canlı Ağ
+          </span>
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scroll">
-          <!-- Tweet Gönderim Kutusu -->
-          <div class="p-4 border-b border-theme flex gap-3">
-            <img id="tweetbox-avatar" src="" class="btn-smooth w-10 h-10 rounded-full object-cover bg-gray-700 flex-shrink-0 cursor-pointer hover:opacity-80" onclick="openUserProfile(DB.getSession().id)">
-            <div class="flex-1">
-              <textarea id="tweet-input" placeholder="Neler düşünüyorsun?" rows="3" maxlength="280" class="w-full bg-transparent border-none outline-none resize-none text-lg placeholder-gray-500 text-white smooth-transition"></textarea>
-              
-              <!-- Tam Boyut Görsel Önizleme -->
-              <div id="image-preview-container" class="hidden relative mb-2 rounded-2xl overflow-hidden border border-theme bg-[#050505] p-1 flex justify-center smooth-transition">
-                <img id="image-preview" src="" class="max-h-72 w-full object-contain rounded-xl">
-                <button onclick="removeTweetImage()" class="btn-smooth absolute top-3 right-3 bg-black/80 hover:bg-black rounded-full w-8 h-8 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
-              </div>
-
-              <div class="flex items-center justify-between pt-2 border-t border-theme">
-                <div class="flex items-center gap-2 text-sky-500 text-lg">
-                  <label class="btn-smooth cursor-pointer hover:bg-sky-500/10 p-2 rounded-full" title="Fotoğraf Yükle (Tam Çözünürlük)">
-                    <i class="fa-regular fa-image"></i>
-                    <input type="file" id="tweet-file-input" accept="image/*" class="hidden" onchange="handleTweetFileUpload(this)">
-                  </label>
-                </div>
-                <div class="flex items-center gap-3">
-                  <span id="char-count" class="text-xs text-gray-500 smooth-transition">280</span>
-                  <button id="tweet-btn" onclick="createTweet()" class="btn-smooth bg-sky-500 hover:bg-sky-600 font-bold px-4 py-2 rounded-full text-white text-sm opacity-50 cursor-not-allowed" disabled>Paylaş</button>
-                </div>
-              </div>
+          <div class="p-3 bg-gradient-to-r from-emerald-950/20 via-black to-black border-b border-theme flex items-center justify-between">
+            <div class="flex items-center gap-2 text-xs text-gray-400">
+              <i class="fa-solid fa-circle-info text-emerald-400"></i>
+              <span>Akış kulüpler ve muhabirler tarafından otomatik beslenir.</span>
             </div>
+            <button onclick="openFmPanelModal()" class="btn-smooth text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-semibold hover:bg-emerald-500/30">Maç Gir</button>
           </div>
 
           <div id="tweet-list" class="divide-y divide-theme"></div>
         </div>
       </div>
 
-      <!-- 2. KEŞFET (EXPLORE) -->
+      <!-- 2. PUAN DURUMU (STANDINGS) -->
+      <div id="view-standings" class="view-panel flex flex-col h-full overflow-hidden hidden">
+        <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-4 z-10 flex justify-between items-center">
+          <div>
+            <h1 class="text-xl font-bold tracking-tight">Premier League Tablosu</h1>
+            <p class="text-[11px] text-gray-400">Sezon 2045/46 · Takımlara tıklayarak profillerine gidebilirsiniz</p>
+          </div>
+          <button onclick="resetStandingsToDefault()" class="btn-smooth text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-full hover:bg-red-500/30">Tabloyu Sıfırla</button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scroll p-2">
+          <div class="bg-[#121417] border border-theme rounded-2xl overflow-hidden shadow-lg">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="border-b border-theme text-gray-400 bg-black/40">
+                  <th class="py-2.5 px-3 w-8 text-center">#</th>
+                  <th class="py-2.5 px-2">Kulüp</th>
+                  <th class="py-2.5 px-1.5 text-center">O</th>
+                  <th class="py-2.5 px-1.5 text-center">G</th>
+                  <th class="py-2.5 px-1.5 text-center">B</th>
+                  <th class="py-2.5 px-1.5 text-center">M</th>
+                  <th class="py-2.5 px-1.5 text-center">A</th>
+                  <th class="py-2.5 px-1.5 text-center">Y</th>
+                  <th class="py-2.5 px-2 text-center">AV</th>
+                  <th class="py-2.5 px-3 text-center font-bold text-white">P</th>
+                </tr>
+              </thead>
+              <tbody id="standings-table-body" class="divide-y divide-[#202327]"></tbody>
+            </table>
+          </div>
+
+          <!-- Güncellenmiş Avrupa Kontenjanları Açıklaması -->
+          <div class="mt-4 p-3 bg-[#121417] rounded-xl border border-theme text-[11px] text-gray-400 space-y-1.5">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-emerald-500"></span> <span>1-4: UEFA Şampiyonlar Ligi</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-sky-500"></span> <span>5-6: UEFA Avrupa Ligi</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-amber-500"></span> <span>7: UEFA Konferans Ligi Play-off</span></div>
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-red-500"></span> <span>18-20: Championship'e Düşme Hattı</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. KEŞFET (EXPLORE) -->
       <div id="view-explore" class="view-panel flex flex-col h-full overflow-hidden hidden">
         <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-3 z-10">
           <div class="flex items-center gap-3 bg-[#202327] rounded-full px-4 py-2 text-gray-400 focus-within:text-sky-500 focus-within:bg-black focus-within:ring-1 focus-within:ring-sky-500 smooth-transition">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input id="explore-search-input" type="text" oninput="handleExploreSearch(this.value)" placeholder="Beclaude'da Ara..." class="bg-transparent border-none outline-none text-white w-full text-sm">
+            <input id="explore-search-input" type="text" oninput="handleExploreSearch(this.value)" placeholder="Takım veya etiket ara..." class="bg-transparent border-none outline-none text-white w-full text-sm">
           </div>
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scroll">
-          <div class="p-4 border-b border-theme bg-gradient-to-r from-indigo-950/40 via-sky-950/30 to-black">
-            <span class="text-xs text-sky-400 font-semibold tracking-wider uppercase">Gündemde Neler Var?</span>
-            <h2 class="text-2xl font-bold text-white mt-1">#BeclaudePro</h2>
-            <p class="text-xs text-gray-400 mt-1">Türkiye genelinde 284.1 B gönderi</p>
+          <div class="p-4 border-b border-theme bg-gradient-to-r from-emerald-950/40 via-indigo-950/30 to-black">
+            <span class="text-xs text-emerald-400 font-semibold tracking-wider uppercase">Premier League 2045/46 Zirve Yarışı</span>
+            <h2 class="text-2xl font-bold text-white mt-1">#DerbyCounty3rd</h2>
+            <p class="text-xs text-gray-400 mt-1">Derby County rüzgarı esiyor! 194.2 B gönderi</p>
           </div>
 
           <div class="p-4 border-b border-theme">
-            <h3 class="font-bold text-lg mb-3">Senin için Trendler</h3>
+            <h3 class="font-bold text-lg mb-3">2045/46 Sezonu Trendleri</h3>
             <div id="explore-trends-container" class="space-y-3"></div>
           </div>
 
-          <div id="explore-tweets-header" class="px-4 py-3 text-sm font-bold text-gray-400 border-b border-theme bg-[#080808]">İlgili Gönderiler</div>
+          <div class="px-4 py-3 text-sm font-bold text-gray-400 border-b border-theme bg-[#080808]">İlgili Gönderiler</div>
           <div id="explore-tweet-list" class="divide-y divide-theme"></div>
         </div>
       </div>
 
-      <!-- 3. BİLDİRİMLER -->
+      <!-- 4. BİLDİRİMLER -->
       <div id="view-notifications" class="view-panel flex flex-col h-full overflow-hidden hidden">
         <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-4 z-10 flex justify-between items-center">
           <h1 class="text-xl font-bold tracking-tight">Bildirimler</h1>
@@ -271,7 +296,7 @@
         <div class="flex-1 overflow-y-auto custom-scroll divide-y divide-theme" id="notifications-list"></div>
       </div>
 
-      <!-- 4. YER İŞARETLERİ -->
+      <!-- 5. YER İŞARETLERİ -->
       <div id="view-bookmarks" class="view-panel flex flex-col h-full overflow-hidden hidden">
         <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-4 z-10">
           <h1 class="text-xl font-bold tracking-tight">Yer İşaretleri</h1>
@@ -280,7 +305,7 @@
         <div class="flex-1 overflow-y-auto custom-scroll divide-y divide-theme" id="bookmarks-tweet-list"></div>
       </div>
 
-      <!-- 5. PROFİL SAYFASI -->
+      <!-- 6. PROFİL SAYFASI -->
       <div id="view-profile" class="view-panel flex flex-col h-full overflow-hidden hidden">
         <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-3 z-10 flex items-center gap-6">
           <button onclick="switchView('feed')" class="btn-smooth w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center">
@@ -293,15 +318,20 @@
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scroll">
-          <div id="page-banner" class="h-44 bg-gradient-to-r from-indigo-900 via-sky-900 to-slate-900 bg-cover bg-center smooth-transition"></div>
+          <div id="page-banner" class="h-44 bg-gradient-to-r from-emerald-900 via-sky-900 to-slate-900 bg-cover bg-center smooth-transition"></div>
           
           <div class="px-4 pb-4 border-b border-theme">
             <div class="flex justify-between items-end -mt-16 mb-3">
-              <img id="page-avatar" src="" class="w-32 h-32 rounded-full border-4 border-black object-cover bg-gray-700 shadow-lg smooth-transition">
+              <div class="w-32 h-32 rounded-full border-4 border-black bg-[#121417] p-2 shadow-lg flex items-center justify-center overflow-hidden">
+                <img id="page-avatar" src="" class="w-full h-full object-contain smooth-transition" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=fallback'">
+              </div>
               <div id="profile-action-btn-container"></div>
             </div>
 
-            <h2 id="page-name" class="font-bold text-xl leading-tight"></h2>
+            <div class="flex items-center gap-2">
+              <h2 id="page-name" class="font-bold text-xl leading-tight"></h2>
+              <span id="page-badge" class="text-sky-400 hidden"><i class="fa-solid fa-circle-check"></i></span>
+            </div>
             <p id="page-username" class="text-gray-500 text-sm mb-3"></p>
             <p id="page-bio" class="text-sm text-gray-200 mb-3 whitespace-pre-line"></p>
 
@@ -312,7 +342,7 @@
               </div>
               <div class="flex items-center gap-1">
                 <i class="fa-regular fa-calendar"></i>
-                <span>Katıldı: Ağustos 2026</span>
+                <span>Katıldı: Sezon 2045/46</span>
               </div>
             </div>
 
@@ -333,77 +363,102 @@
       <div class="sticky top-0 bg-black pb-2">
         <div class="flex items-center gap-3 bg-[#202327] rounded-full px-4 py-2.5 text-gray-400 focus-within:text-sky-500 focus-within:bg-black focus-within:ring-1 focus-within:ring-sky-500 smooth-transition">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input id="search-input" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Gönderi veya kişi ara..." class="bg-transparent border-none outline-none text-white w-full text-sm">
+          <input id="search-input" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Kulüp veya tweet ara..." class="bg-transparent border-none outline-none text-white w-full text-sm">
         </div>
       </div>
 
       <!-- Kimi Takip Etmeli -->
       <div class="bg-[#16181c] rounded-2xl border border-theme p-4">
-        <h2 class="font-bold text-lg mb-3">Kimi takip etmeli</h2>
+        <h2 class="font-bold text-lg mb-3">Premier League Kulüpleri</h2>
         <div id="follow-suggestions" class="space-y-3"></div>
       </div>
 
-      <!-- Trendler -->
+      <!-- Mini Puan Durumu Önizleme -->
       <div class="bg-[#16181c] rounded-2xl border border-theme p-4 space-y-3">
-        <h2 class="font-bold text-lg">Beclaude Gündemi</h2>
-        <div onclick="filterByTag('BeclaudePro')" class="btn-smooth cursor-pointer hover:bg-white/5 p-2 rounded-xl">
-          <span class="text-xs text-gray-500">Platform · Popüler</span>
-          <p class="font-bold text-sm">#BeclaudePro</p>
-          <span class="text-xs text-gray-500">284.1 B Gönderi</span>
+        <div class="flex justify-between items-center">
+          <h2 class="font-bold text-base">Zirve Yarışı</h2>
+          <button onclick="switchView('standings')" class="text-xs text-sky-400 hover:underline">Tam Tablo</button>
         </div>
-        <div onclick="filterByTag('JavaScript')" class="btn-smooth cursor-pointer hover:bg-white/5 p-2 rounded-xl">
-          <span class="text-xs text-gray-500">Yazılım · Trend</span>
-          <p class="font-bold text-sm">#JavaScript</p>
-          <span class="text-xs text-gray-500">54.2 B Gönderi</span>
-        </div>
-        <div onclick="filterByTag('WebDev')" class="btn-smooth cursor-pointer hover:bg-white/5 p-2 rounded-xl">
-          <span class="text-xs text-gray-500">Geliştirici · Gündemde</span>
-          <p class="font-bold text-sm">#WebDev</p>
-          <span class="text-xs text-gray-500">32.8 B Gönderi</span>
-        </div>
+        <div id="mini-standings-container" class="space-y-2 text-xs"></div>
       </div>
     </aside>
 
   </div>
 
-  <!-- ================= PROFİL DÜZENLEME MODALI ================= -->
-  <div id="edit-profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-[#16181c] border border-theme rounded-2xl p-6 modal-animate shadow-2xl">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="font-bold text-lg">Profili Düzenle</h3>
-        <button onclick="closeEditProfileModal()" class="btn-smooth text-gray-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+  <!-- ================= FM 45/46 MAÇ PANEL MODALI ================= -->
+  <div id="fm-panel-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-lg bg-[#16181c] border border-emerald-500/40 rounded-3xl p-6 modal-animate shadow-2xl">
+      <div class="flex items-center justify-between mb-4 border-b border-theme pb-3">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-futbol text-emerald-400 text-xl"></i>
+          <h3 class="font-bold text-lg text-white">FM 2045/46 Maç Simülatörü</h3>
+        </div>
+        <button onclick="closeFmPanelModal()" class="btn-smooth text-gray-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
-      <form id="edit-profile-form" class="space-y-3">
-        <div>
-          <label class="text-xs text-gray-400 block mb-1">Ad Soyad</label>
-          <input id="edit-name" type="text" required class="w-full bg-black border border-theme rounded-lg px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none smooth-transition">
-        </div>
-        <div>
-          <label class="text-xs text-gray-400 block mb-1">Biyografi</label>
-          <textarea id="edit-bio" rows="2" maxlength="160" class="w-full bg-black border border-theme rounded-lg px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none resize-none smooth-transition"></textarea>
-        </div>
-        <div>
-          <label class="text-xs text-gray-400 block mb-1">Konum</label>
-          <input id="edit-location" type="text" class="w-full bg-black border border-theme rounded-lg px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none smooth-transition">
-        </div>
-        <div>
-          <label class="text-xs text-gray-400 block mb-1">Profil Fotoğrafı Yükle</label>
-          <input id="edit-avatar-file" type="file" accept="image/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-sky-500/20 file:text-sky-400 hover:file:bg-sky-500/30 cursor-pointer smooth-transition">
-        </div>
-        <div>
-          <label class="text-xs text-gray-400 block mb-1">Banner (Kapak) Fotoğrafı Yükle</label>
-          <input id="edit-banner-file" type="file" accept="image/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-sky-500/20 file:text-sky-400 hover:file:bg-sky-500/30 cursor-pointer smooth-transition">
+      <form id="fm-match-form" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">Ev Sahibi Takım</label>
+            <select id="fm-home-team" class="w-full bg-black border border-theme rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500 focus:outline-none"></select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">Deplasman Takımı</label>
+            <select id="fm-away-team" class="w-full bg-black border border-theme rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500 focus:outline-none"></select>
+          </div>
         </div>
 
-        <div class="pt-2">
-          <button type="submit" class="btn-smooth w-full bg-white text-black font-bold py-2 rounded-full hover:bg-gray-200">Değişiklikleri Kaydet</button>
+        <div>
+          <label class="text-xs text-gray-400 block mb-1">Paylaşım Aşaması</label>
+          <select id="fm-match-stage" onchange="toggleFmScoreInputs(this.value)" class="w-full bg-black border border-theme rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500 focus:outline-none">
+            <option value="fulltime">Maç Sonu (Puan Tablosunu Günceller & Full-Time)</option>
+            <option value="matchday">Maç Günü (Matchday Ön Paylaşım)</option>
+          </select>
         </div>
+
+        <div id="fm-score-fields" class="space-y-3">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">Ev Sahibi Skor</label>
+              <input id="fm-home-score" type="number" min="0" value="2" class="w-full bg-black border border-theme rounded-xl px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none">
+            </div>
+            <div>
+              <label class="text-xs text-gray-400 block mb-1">Deplasman Skor</label>
+              <input id="fm-away-score" type="number" min="0" value="1" class="w-full bg-black border border-theme rounded-xl px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none">
+            </div>
+          </div>
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">Goller & Dakikalar (Opsiyonel)</label>
+            <input id="fm-scorers" type="text" placeholder="Örn: Saka 34', Havertz 79' - Palmer 12'" class="w-full bg-black border border-theme rounded-xl px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none">
+          </div>
+          <div class="flex items-center gap-2 pt-1">
+            <input id="fm-enable-romano" type="checkbox" checked class="rounded bg-black border-theme text-emerald-500 focus:ring-0">
+            <label for="fm-enable-romano" class="text-xs text-gray-300">Fabrizio Romano flaş haber tweeti üretsin</label>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs text-gray-400 block mb-1">Maç Görseli / FM Ekran Görüntüsü (Opsiyonel)</label>
+          <input id="fm-match-image-file" type="file" accept="image/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-emerald-500/20 file:text-emerald-400 hover:file:bg-emerald-500/30 cursor-pointer">
+        </div>
+
+        <button type="submit" class="btn-smooth w-full bg-emerald-500 hover:bg-emerald-600 text-black font-bold py-3 rounded-full mt-2">Maçı Simüle Et ve Akışa Bas 🚀</button>
       </form>
     </div>
   </div>
 
-  <!-- ================= LIGHTBOX (TAM EKRAN GÖRSEL GÖRÜNTÜLEYİCİ) ================= -->
+  <!-- ================= TARAFTAR YORUMLARI MODALI (REPLIES) ================= -->
+  <div id="replies-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-lg bg-[#16181c] border border-theme rounded-3xl p-6 modal-animate shadow-2xl max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between mb-3 border-b border-theme pb-3">
+        <h3 class="font-bold text-lg text-white">Taraftar Tepkileri</h3>
+        <button onclick="closeRepliesModal()" class="btn-smooth text-gray-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div id="replies-list" class="flex-1 overflow-y-auto custom-scroll divide-y divide-theme space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- ================= LIGHTBOX (TAM EKRAN FOTO) ================= -->
   <div id="lightbox-modal" onclick="closeLightbox()" class="fixed inset-0 bg-black/95 z-50 hidden flex items-center justify-center p-4 backdrop-blur-md cursor-zoom-out">
     <button class="absolute top-4 right-4 text-white text-3xl hover:text-gray-400 p-2"><i class="fa-solid fa-xmark"></i></button>
     <img id="lightbox-img" src="" class="max-w-full max-h-[92vh] object-contain rounded-lg shadow-2xl smooth-transition" alt="Tam Boyut">
@@ -411,21 +466,113 @@
 
   <!-- ================= JAVASCRIPT MOTORU ================= -->
   <script>
+    const FM_CLUBS = [
+      { id: 'c_ars', username: 'Arsenal', name: 'Arsenal', logo: 'https://resources.premierleague.com/premierleague/badges/50/t3.png', stadium: 'Emirates Stadium', tag: 'COYG' },
+      { id: 'c_whu', username: 'WestHam', name: 'West Ham United', logo: 'https://resources.premierleague.com/premierleague/badges/50/t21.png', stadium: 'London Stadium', tag: 'COYI' },
+      { id: 'c_der', username: 'dcfcofficial', name: 'Derby County', logo: 'https://media.api-sports.io/football/teams/67.png', stadium: 'Pride Park Stadium', tag: 'DCFC' },
+      { id: 'c_bha', username: 'OfficialBHAFC', name: 'Brighton & Hove Albion', logo: 'https://resources.premierleague.com/premierleague/badges/50/t36.png', stadium: 'Amex Stadium', tag: 'BHAFC' },
+      { id: 'c_tot', username: 'SpursOfficial', name: 'Tottenham Hotspur', logo: 'https://resources.premierleague.com/premierleague/badges/50/t6.png', stadium: 'Tottenham Hotspur Stadium', tag: 'COYS' },
+      { id: 'c_liv', username: 'LFC', name: 'Liverpool FC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t14.png', stadium: 'Anfield', tag: 'YNWA' },
+      { id: 'c_mci', username: 'ManCity', name: 'Manchester City', logo: 'https://resources.premierleague.com/premierleague/badges/50/t43.png', stadium: 'Etihad Stadium', tag: 'ManCity' },
+      { id: 'c_bre', username: 'BrentfordFC', name: 'Brentford FC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t94.png', stadium: 'Gtech Community Stadium', tag: 'BrentfordFC' },
+      { id: 'c_nor', username: 'NorwichCityFC', name: 'Norwich City', logo: 'https://resources.premierleague.com/premierleague/badges/50/t45.png', stadium: 'Carrow Road', tag: 'NCFC' },
+      { id: 'c_new', username: 'NUFC', name: 'Newcastle United', logo: 'https://resources.premierleague.com/premierleague/badges/50/t4.png', stadium: "St. James' Park", tag: 'NUFC' },
+      { id: 'c_bou', username: 'afcbournemouth', name: 'AFC Bournemouth', logo: 'https://resources.premierleague.com/premierleague/badges/50/t91.png', stadium: 'Vitality Stadium', tag: 'AFCB' },
+      { id: 'c_eve', username: 'Everton', name: 'Everton', logo: 'https://resources.premierleague.com/premierleague/badges/50/t11.png', stadium: 'Goodison Park', tag: 'EFC' },
+      { id: 'c_che', username: 'ChelseaFC', name: 'Chelsea FC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t8.png', stadium: 'Stamford Bridge', tag: 'CFC' },
+      { id: 'c_wol', username: 'Wolves', name: 'Wolverhampton Wanderers', logo: 'https://resources.premierleague.com/premierleague/badges/50/t39.png', stadium: 'Molineux Stadium', tag: 'WWFC' },
+      { id: 'c_mun', username: 'ManUtd', name: 'Manchester United', logo: 'https://resources.premierleague.com/premierleague/badges/50/t1.png', stadium: 'Old Trafford', tag: 'MUFC' },
+      { id: 'c_ful', username: 'FulhamFC', name: 'Fulham FC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t54.png', stadium: 'Craven Cottage', tag: 'FFC' },
+      { id: 'c_sou', username: 'SouthamptonFC', name: 'Southampton FC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t20.png', stadium: "St Mary's Stadium", tag: 'SaintsFC' },
+      { id: 'c_nfo', username: 'NFFC', name: 'Nottingham Forest', logo: 'https://resources.premierleague.com/premierleague/badges/50/t17.png', stadium: 'City Ground', tag: 'NFFC' },
+      { id: 'c_sun', username: 'SunderlandAFC', name: 'Sunderland AFC', logo: 'https://resources.premierleague.com/premierleague/badges/50/t56.png', stadium: 'Stadium of Light', tag: 'SAFC' },
+      { id: 'c_bol', username: 'OfficialBWFC', name: 'Bolton Wanderers', logo: 'https://media.api-sports.io/football/teams/68.png', stadium: 'Toughsheet Community Stadium', tag: 'BWFC' }
+    ];
+
+    const INITIAL_STANDINGS = [
+      { id: 'c_ars', name: 'Arsenal', pld: 5, w: 5, d: 0, l: 0, gf: 15, ga: 4, gd: 11, pts: 15 },
+      { id: 'c_whu', name: 'West Ham', pld: 5, w: 5, d: 0, l: 0, gf: 9, ga: 1, gd: 8, pts: 15 },
+      { id: 'c_der', name: 'Derby County', pld: 5, w: 4, d: 1, l: 0, gf: 10, ga: 5, gd: 5, pts: 13 },
+      { id: 'c_bha', name: 'Brighton', pld: 5, w: 3, d: 2, l: 0, gf: 6, ga: 3, gd: 3, pts: 11 },
+      { id: 'c_tot', name: 'Tottenham', pld: 5, w: 3, d: 1, l: 1, gf: 9, ga: 5, gd: 4, pts: 10 },
+      { id: 'c_liv', name: 'Liverpool', pld: 5, w: 2, d: 3, l: 0, gf: 7, ga: 2, gd: 5, pts: 9 },
+      { id: 'c_mci', name: 'Man City', pld: 5, w: 3, d: 0, l: 2, gf: 8, ga: 6, gd: 2, pts: 9 },
+      { id: 'c_bre', name: 'Brentford', pld: 5, w: 2, d: 1, l: 2, gf: 3, ga: 3, gd: 0, pts: 7 },
+      { id: 'c_nor', name: 'Norwich', pld: 5, w: 2, d: 1, l: 2, gf: 5, ga: 10, gd: -5, pts: 7 },
+      { id: 'c_new', name: 'Newcastle', pld: 4, w: 1, d: 2, l: 1, gf: 8, ga: 8, gd: 0, pts: 5 },
+      { id: 'c_bou', name: 'Bournemouth', pld: 5, w: 1, d: 2, l: 2, gf: 4, ga: 6, gd: -2, pts: 5 },
+      { id: 'c_eve', name: 'Everton', pld: 5, w: 1, d: 1, l: 3, gf: 8, ga: 10, gd: -2, pts: 4 },
+      { id: 'c_che', name: 'Chelsea', pld: 5, w: 1, d: 1, l: 3, gf: 6, ga: 9, gd: -3, pts: 4 },
+      { id: 'c_wol', name: 'Wolves', pld: 5, w: 1, d: 1, l: 3, gf: 8, ga: 12, gd: -4, pts: 4 },
+      { id: 'c_mun', name: 'Man Utd', pld: 5, w: 1, d: 1, l: 3, gf: 6, ga: 10, gd: -4, pts: 4 },
+      { id: 'c_ful', name: 'Fulham', pld: 5, w: 1, d: 1, l: 3, gf: 5, ga: 9, gd: -4, pts: 4 },
+      { id: 'c_sou', name: 'Southampton', pld: 4, w: 1, d: 0, l: 3, gf: 7, ga: 9, gd: -2, pts: 3 },
+      { id: 'c_nfo', name: 'Nottm Forest', pld: 5, w: 0, d: 3, l: 2, gf: 5, ga: 7, gd: -2, pts: 3 },
+      { id: 'c_sun', name: 'Sunderland', pld: 5, w: 0, d: 2, l: 3, gf: 3, ga: 7, gd: -4, pts: 2 },
+      { id: 'c_bol', name: 'Bolton', pld: 5, w: 0, d: 1, l: 4, gf: 4, ga: 10, gd: -6, pts: 1 }
+    ];
+
+    const BOT_ROMANO = {
+      id: 'bot_romano',
+      username: 'FabrizioRomano',
+      name: 'Fabrizio Romano',
+      avatar: 'https://pbs.twimg.com/profile_images/1741753635158024192/j0m8Ucvv_400x400.jpg',
+      banner: '',
+      bio: 'Here we go! 🚨 Official Football Journalist covering verified transfer news & breaking FM 2045/46 stories.',
+      location: 'Milan, Italy',
+      badge: true,
+      following: []
+    };
+
+    function generateClubUsers() {
+      return FM_CLUBS.map(c => ({
+        id: c.id,
+        username: c.username,
+        name: c.name,
+        avatar: c.logo,
+        banner: '',
+        bio: `Official X account of ${c.name}. Premier League 2045/46 Campaign. #${c.tag}`,
+        location: c.stadium,
+        badge: true,
+        following: []
+      }));
+    }
+
     const DB = {
-      getUsers: () => JSON.parse(localStorage.getItem('bc_users')) || [
-        { id: '1', username: 'claude', name: 'Claude', password: '123', bio: 'Beclaude platformunun resmi asistanı ✨ #BeclaudePro', location: 'San Francisco, CA', avatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100', banner: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=600', following: [] },
-        { id: '2', username: 'elonmusk', name: 'Elon Musk', password: '123', bio: 'Technoking of Tesla, Chief Troll Officer', location: 'Austin, TX', avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100', banner: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600', following: [] }
+      getUsers: () => {
+        let users = JSON.parse(localStorage.getItem('bc_users_v4'));
+        if (!users || users.length <= 2) {
+          users = [
+            BOT_ROMANO,
+            ...generateClubUsers(),
+            { id: 'user_default', username: 'fm_observer', name: 'FM Observer', password: '123', bio: '2045/46 Premier League Gözlemcisi 🧠⚽', location: 'London, UK', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=fm_observer', banner: '', following: [] }
+          ];
+          localStorage.setItem('bc_users_v4', JSON.stringify(users));
+        }
+        return users;
+      },
+      saveUsers: (data) => localStorage.setItem('bc_users_v4', JSON.stringify(data)),
+      getTweets: () => JSON.parse(localStorage.getItem('bc_tweets_v4')) || [
+        { 
+          id: 'fm_init_1', 
+          userId: 'c_der', 
+          text: '🔥 UNBELIEVABLE! Full-time at Pride Park.\n\nDerby County 2-0 Chelsea\n⚽ Smith 41\', Johnson 88\'\n\nWe are 3rd in the Premier League with 13 points! 🐏🖤 #DCFC #DERCHE', 
+          image: '', 
+          likes: ['c_ars', 'user_default'], 
+          retweets: ['user_default'], 
+          replies: [
+            { author: 'DerbyFan_99', text: 'EUROPE HERE WE COME! 🖤🤍' },
+            { author: 'CFC_BlueTrue', text: 'Sack the manager tonight. Embarrassing result.' }
+          ],
+          timestamp: Date.now() - 7200000 
+        }
       ],
-      saveUsers: (data) => localStorage.setItem('bc_users', JSON.stringify(data)),
-      getTweets: () => JSON.parse(localStorage.getItem('bc_tweets')) || [
-        { id: '101', userId: '1', text: 'Beclaude (D°) resmi logosu, tekil kullanıcı adı sistemi ve tam çözünürlüklü görsel desteği yüklendi! #BeclaudePro 🚀⚡', image: '', likes: ['2'], retweets: [], timestamp: Date.now() - 3600000 }
-      ],
-      saveTweets: (data) => localStorage.setItem('bc_tweets', JSON.stringify(data)),
+      saveTweets: (data) => localStorage.setItem('bc_tweets_v4', JSON.stringify(data)),
+      getStandings: () => JSON.parse(localStorage.getItem('bc_standings_v4')) || INITIAL_STANDINGS,
+      saveStandings: (data) => localStorage.setItem('bc_standings_v4', JSON.stringify(data)),
       getBookmarks: () => JSON.parse(localStorage.getItem('bc_bookmarks')) || [],
       saveBookmarks: (data) => localStorage.setItem('bc_bookmarks', JSON.stringify(data)),
-      getNotifications: () => JSON.parse(localStorage.getItem('bc_notifications')) || [
-        { id: 'n1', toUserId: '1', fromUserId: '2', type: 'like', text: 'gönderini beğendi.', timestamp: Date.now() - 1800000 }
-      ],
+      getNotifications: () => JSON.parse(localStorage.getItem('bc_notifications')) || [],
       saveNotifications: (data) => localStorage.setItem('bc_notifications', JSON.stringify(data)),
       getSession: () => JSON.parse(localStorage.getItem('bc_session')),
       setSession: (user) => localStorage.setItem('bc_session', JSON.stringify(user)),
@@ -434,16 +581,15 @@
 
     let currentView = 'feed';
     let isRegisterMode = false;
-    let currentTweetImageBase64 = '';
     let viewingUserId = null;
     let exploreFilterQuery = '';
 
     const TREND_LIST = [
-      { tag: '#BeclaudePro', category: 'Platform · Popüler', count: '284.1 B' },
-      { tag: '#JavaScript', category: 'Teknoloji · Popüler', count: '54.2 B' },
-      { tag: '#WebDev', category: 'Geliştirici · Gündemde', count: '32.8 B' },
-      { tag: '#TailwindCSS', category: 'Tasarım · Popüler', count: '12.1 B' },
-      { tag: '#Yazılım2026', category: 'Gündemdekiler', count: '145.2 B' }
+      { tag: '#DerbyCounty3rd', category: 'FM 2045/46 · Trend', count: '194.2 B' },
+      { tag: '#SackTheManager', category: 'Kriz · Gündemde', count: '112.8 B' },
+      { tag: '#HereWeGo', category: 'Fabrizio Romano · Flaş', count: '320.1 B' },
+      { tag: '#ArsenalTitleRace', category: 'Zirve · Popüler', count: '185.4 B' },
+      { tag: '#PremierLeague4546', category: 'Lig Gündemi', count: '450.0 B' }
     ];
 
     const fileToBase64 = (file) => new Promise((resolve, reject) => {
@@ -454,33 +600,34 @@
     });
 
     window.onload = () => {
-      if (!localStorage.getItem('bc_users')) DB.saveUsers(DB.getUsers());
-      if (!localStorage.getItem('bc_tweets')) DB.saveTweets(DB.getTweets());
-      if (!localStorage.getItem('bc_bookmarks')) DB.saveBookmarks(DB.getBookmarks());
-      if (!localStorage.getItem('bc_notifications')) DB.saveNotifications(DB.getNotifications());
+      DB.getUsers();
+      if (!localStorage.getItem('bc_tweets_v4')) DB.saveTweets(DB.getTweets());
+      if (!localStorage.getItem('bc_standings_v4')) DB.saveStandings(INITIAL_STANDINGS);
       
       const session = DB.getSession();
       if (session) {
         document.getElementById('auth-screen').classList.add('hidden');
         loadApp();
       }
+      populateFmSelects();
+      renderStandings();
     };
 
-    // --- AUTH & TEKİL KULLANICI ADI KONTROLÜ ---
+    // --- AUTH ---
     const switchBtn = document.getElementById('auth-switch-btn');
     const uError = document.getElementById('username-error');
 
     switchBtn.addEventListener('click', () => {
       isRegisterMode = !isRegisterMode;
       uError.classList.add('hidden');
-      document.getElementById('auth-title').innerText = isRegisterMode ? "Beclaude'a Kaydol" : "Beclaude'a Giriş Yap";
+      document.getElementById('auth-title').innerText = isRegisterMode ? "Beclaude FM'e Kaydol" : "Beclaude FM'e Giriş Yap";
       document.getElementById('auth-submit-btn').innerText = isRegisterMode ? "Kaydol" : "Giriş Yap";
       document.getElementById('register-fields').classList.toggle('hidden', !isRegisterMode);
       document.getElementById('auth-switch-text').innerText = isRegisterMode ? "Zaten hesabın var mı?" : "Hesabın yok mu?";
       switchBtn.innerText = isRegisterMode ? "Giriş Yap" : "Kaydol";
     });
 
-    document.getElementById('auth-form').addEventListener('submit', async (e) => {
+    document.getElementById('auth-form').addEventListener('submit', (e) => {
       e.preventDefault();
       uError.classList.add('hidden');
       const uName = document.getElementById('auth-username').value.trim().toLowerCase();
@@ -488,23 +635,14 @@
       const users = DB.getUsers();
 
       if (isRegisterMode) {
-        const name = document.getElementById('auth-name').value.trim();
-        
-        // --- 1 KULLANICI ADINI SADECE 1 KİŞİ ALABİLİR ---
-        const userExists = users.some(u => u.username.toLowerCase() === uName);
-        if (userExists) {
-          uError.innerText = `@${uName} kullanıcı adı daha önce alınmış! Lütfen başka bir kullanıcı adı seç.`;
+        const name = document.getElementById('auth-name').value.trim() || 'Gözlemci';
+        if (users.some(u => u.username.toLowerCase() === uName)) {
+          uError.innerText = `@${uName} kullanıcı adı dolu! Başka bir isim seç.`;
           uError.classList.remove('hidden');
           return;
         }
 
-        const avatarFile = document.getElementById('auth-avatar-file').files[0];
-        let avatarBase64 = `https://api.dicebear.com/7.x/bottts/svg?seed=${uName}`;
-        if (avatarFile) {
-          try { avatarBase64 = await fileToBase64(avatarFile); } catch(err) { console.error(err); }
-        }
-        
-        const newUser = { id: Date.now().toString(), username: uName, name, password: pass, avatar: avatarBase64, banner: '', bio: '', location: '', following: [] };
+        const newUser = { id: 'usr_' + Date.now(), username: uName, name, password: pass, avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${uName}`, banner: '', bio: 'FM 2045/46 Gözlemcisi', location: 'Premier League', following: [] };
         users.push(newUser);
         DB.saveUsers(users);
         DB.setSession(newUser);
@@ -535,13 +673,12 @@
       document.getElementById('nav-avatar').src = currentUser.avatar || defaultImg;
       document.getElementById('nav-name').innerText = currentUser.name;
       document.getElementById('nav-username').innerText = `@${currentUser.username}`;
-      document.getElementById('tweetbox-avatar').src = currentUser.avatar || defaultImg;
       document.getElementById('bookmarks-subtitle').innerText = `@${currentUser.username}`;
 
-      setupTweetInput();
       renderTweets();
       renderSuggestions();
       renderExploreTrends();
+      renderStandings();
       checkUnreadNotifications();
     }
 
@@ -564,85 +701,13 @@
       if (activeView) activeView.classList.remove('hidden');
 
       if (viewName === 'feed') renderTweets();
+      if (viewName === 'standings') renderStandings();
       if (viewName === 'explore') renderExploreTweets();
       if (viewName === 'notifications') renderNotifications();
       if (viewName === 'bookmarks') renderBookmarks();
     }
 
-    // --- TWEET INPUT & DOSYA YÜKLEME ---
-    function setupTweetInput() {
-      const input = document.getElementById('tweet-input');
-      const btn = document.getElementById('tweet-btn');
-      const counter = document.getElementById('char-count');
-
-      input.addEventListener('input', () => {
-        const rem = 280 - input.value.length;
-        counter.innerText = rem;
-        counter.classList.toggle('text-red-500', rem < 20);
-        
-        if (input.value.trim().length > 0 || currentTweetImageBase64) {
-          btn.disabled = false;
-          btn.classList.remove('opacity-50', 'cursor-not-allowed');
-        } else {
-          btn.disabled = true;
-          btn.classList.add('opacity-50', 'cursor-not-allowed');
-        }
-      });
-    }
-
-    async function handleTweetFileUpload(input) {
-      if (input.files && input.files[0]) {
-        currentTweetImageBase64 = await fileToBase64(input.files[0]);
-        document.getElementById('image-preview').src = currentTweetImageBase64;
-        document.getElementById('image-preview-container').classList.remove('hidden');
-        
-        const btn = document.getElementById('tweet-btn');
-        btn.disabled = false;
-        btn.classList.remove('opacity-50', 'cursor-not-allowed');
-      }
-    }
-
-    function removeTweetImage() {
-      currentTweetImageBase64 = '';
-      document.getElementById('tweet-file-input').value = '';
-      document.getElementById('image-preview-container').classList.add('hidden');
-      
-      const input = document.getElementById('tweet-input');
-      if (!input.value.trim()) {
-        const btn = document.getElementById('tweet-btn');
-        btn.disabled = true;
-        btn.classList.add('opacity-50', 'cursor-not-allowed');
-      }
-    }
-
-    function createTweet() {
-      const input = document.getElementById('tweet-input');
-      const text = input.value.trim();
-      if (!text && !currentTweetImageBase64) return;
-
-      const user = DB.getSession();
-      const tweets = DB.getTweets();
-
-      const newTweet = {
-        id: Date.now().toString(),
-        userId: user.id,
-        text,
-        image: currentTweetImageBase64,
-        likes: [],
-        retweets: [],
-        timestamp: Date.now()
-      };
-
-      tweets.unshift(newTweet);
-      DB.saveTweets(tweets);
-
-      input.value = '';
-      removeTweetImage();
-      document.getElementById('char-count').innerText = 280;
-      renderTweets(true);
-    }
-
-    // --- TAM BOYUT FOTOĞRAFLI TWEET ELEMENTİ & LIGHTBOX ---
+    // --- TWEET KARTLARI & LIGHTBOX ---
     function openLightbox(src) {
       const modal = document.getElementById('lightbox-modal');
       const img = document.getElementById('lightbox-img');
@@ -658,24 +723,28 @@
       const users = DB.getUsers();
       const currentUser = DB.getSession();
       const bookmarks = DB.getBookmarks();
-      const author = users.find(u => u.id === t.userId) || { name: 'Bilinmeyen', username: 'anon', avatar: '' };
-      const isLiked = t.likes.includes(currentUser.id);
-      const isRetweeted = t.retweets.includes(currentUser.id);
-      const isBookmarked = bookmarks.some(b => b.userId === currentUser.id && b.tweetId === t.id);
-      const isOwner = t.userId === currentUser.id;
+      const author = users.find(u => u.id === t.userId) || { name: 'Bilinmeyen', username: 'anon', avatar: '', badge: false };
+      const isLiked = currentUser ? t.likes.includes(currentUser.id) : false;
+      const isRetweeted = currentUser ? t.retweets.includes(currentUser.id) : false;
+      const isBookmarked = currentUser ? bookmarks.some(b => b.userId === currentUser.id && b.tweetId === t.id) : false;
+      const replyCount = t.replies?.length || 0;
+
+      const isClub = author.id.startsWith('c_');
 
       const el = document.createElement('div');
       el.className = `p-4 hover:bg-[#080808] flex gap-3 border-b border-theme smooth-transition ${isFirstAnimated ? 'tweet-enter' : ''}`;
       el.innerHTML = `
-        <img onclick="openUserProfile('${author.id}')" src="${author.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${author.username}`}" class="btn-smooth w-10 h-10 rounded-full object-cover bg-gray-700 flex-shrink-0 cursor-pointer hover:opacity-80">
+        <div onclick="openUserProfile('${author.id}')" class="w-10 h-10 rounded-full bg-[#121417] p-1 flex-shrink-0 cursor-pointer hover:opacity-80 flex items-center justify-center border border-theme overflow-hidden">
+          <img src="${author.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${author.username}`}" class="w-full h-full ${isClub ? 'object-contain' : 'object-cover'}" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${author.username}'">
+        </div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between">
             <div onclick="openUserProfile('${author.id}')" class="flex items-center gap-1.5 truncate cursor-pointer group">
               <span class="font-bold text-sm truncate group-hover:underline">${author.name}</span>
+              ${author.badge ? '<i class="fa-solid fa-circle-check text-sky-400 text-xs"></i>' : ''}
               <span class="text-gray-500 text-xs truncate">@${author.username}</span>
               <span class="text-gray-500 text-xs">· ${timeAgo(t.timestamp)}</span>
             </div>
-            ${isOwner ? `<button onclick="deleteTweet('${t.id}')" class="btn-smooth text-gray-500 hover:text-red-500 text-xs p-1.5 rounded-full hover:bg-red-500/10"><i class="fa-regular fa-trash-can"></i></button>` : ''}
           </div>
           
           <p class="text-sm mt-1 whitespace-pre-line break-words text-gray-200 leading-relaxed">${formatTweetText(t.text)}</p>
@@ -686,7 +755,9 @@
             </div>` : ''}
 
           <div class="flex justify-between max-w-md mt-3 text-gray-500 text-xs">
-            <button class="btn-smooth hover:text-sky-500 flex items-center gap-1.5"><i class="fa-regular fa-comment"></i> 0</button>
+            <button onclick="openRepliesModal('${t.id}')" class="btn-smooth hover:text-sky-500 flex items-center gap-1.5 ${replyCount > 0 ? 'text-sky-400 font-semibold' : ''}">
+              <i class="fa-regular fa-comment"></i> <span>${replyCount}</span>
+            </button>
             <button onclick="toggleRetweet('${t.id}', this)" class="btn-smooth hover:text-green-500 flex items-center gap-1.5 ${isRetweeted ? 'text-green-500 font-bold' : ''}">
               <i class="fa-solid fa-retweet"></i> <span>${t.retweets.length}</span>
             </button>
@@ -704,7 +775,14 @@
 
     function formatTweetText(text) {
       let escaped = escapeHTML(text);
-      return escaped.replace(/#(\w+)/g, '<span onclick="filterByTag(\'$1\')" class="text-sky-400 hover:underline cursor-pointer">#$1</span>');
+      return escaped
+        .replace(/#(\w+)/g, '<span onclick="filterByTag(\'$1\')" class="text-sky-400 hover:underline cursor-pointer">#$1</span>')
+        .replace(/@(\w+)/g, '<span onclick="openUserByUsername(\'$1\')" class="text-sky-400 hover:underline cursor-pointer">@$1</span>');
+    }
+
+    function openUserByUsername(uname) {
+      const user = DB.getUsers().find(u => u.username.toLowerCase() === uname.toLowerCase());
+      if (user) openUserProfile(user.id);
     }
 
     function renderTweets(isFirstAnimated = false) {
@@ -716,7 +794,7 @@
       });
     }
 
-    // --- ETKİLEŞİMLER (LIKE, RT, BOOKMARK, DELETE) ---
+    // --- ETKİLEŞİMLER ---
     function toggleLike(tweetId, btnEl) {
       const icon = btnEl.querySelector('i');
       icon.classList.add('heart-pop');
@@ -728,14 +806,8 @@
       if (!tweet) return;
 
       const idx = tweet.likes.indexOf(currentUser.id);
-      if (idx > -1) {
-        tweet.likes.splice(idx, 1);
-      } else {
-        tweet.likes.push(currentUser.id);
-        if (tweet.userId !== currentUser.id) {
-          sendNotification(tweet.userId, currentUser.id, 'like', 'gönderini beğendi.');
-        }
-      }
+      if (idx > -1) tweet.likes.splice(idx, 1);
+      else tweet.likes.push(currentUser.id);
 
       DB.saveTweets(tweets);
       refreshActiveViews();
@@ -752,14 +824,8 @@
       if (!tweet) return;
 
       const idx = tweet.retweets.indexOf(currentUser.id);
-      if (idx > -1) {
-        tweet.retweets.splice(idx, 1);
-      } else {
-        tweet.retweets.push(currentUser.id);
-        if (tweet.userId !== currentUser.id) {
-          sendNotification(tweet.userId, currentUser.id, 'retweet', 'gönderini yeniden paylaştı.');
-        }
-      }
+      if (idx > -1) tweet.retweets.splice(idx, 1);
+      else tweet.retweets.push(currentUser.id);
 
       DB.saveTweets(tweets);
       refreshActiveViews();
@@ -770,36 +836,364 @@
       const currentUser = DB.getSession();
       const idx = bookmarks.findIndex(b => b.userId === currentUser.id && b.tweetId === tweetId);
 
-      if (idx > -1) {
-        bookmarks.splice(idx, 1);
-      } else {
-        bookmarks.push({ id: Date.now().toString(), userId: currentUser.id, tweetId });
-      }
+      if (idx > -1) bookmarks.splice(idx, 1);
+      else bookmarks.push({ id: 'bm_' + Date.now(), userId: currentUser.id, tweetId });
 
       DB.saveBookmarks(bookmarks);
-      refreshActiveViews();
-    }
-
-    function deleteTweet(tweetId) {
-      let tweets = DB.getTweets();
-      tweets = tweets.filter(t => t.id !== tweetId);
-      DB.saveTweets(tweets);
-      
-      let bookmarks = DB.getBookmarks();
-      bookmarks = bookmarks.filter(b => b.tweetId !== tweetId);
-      DB.saveBookmarks(bookmarks);
-
       refreshActiveViews();
     }
 
     function refreshActiveViews() {
       if (currentView === 'feed') renderTweets();
+      if (currentView === 'standings') renderStandings();
       if (currentView === 'explore') renderExploreTweets();
       if (currentView === 'bookmarks') renderBookmarks();
       if (currentView === 'profile' && viewingUserId) renderUserProfile(viewingUserId);
     }
 
-    // --- KEŞFET ---
+    // --- TARAFTAR YORUMLARI ---
+    function openRepliesModal(tweetId) {
+      const tweet = DB.getTweets().find(t => t.id === tweetId);
+      const container = document.getElementById('replies-list');
+      container.innerHTML = '';
+
+      if (!tweet || !tweet.replies || tweet.replies.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-gray-500 text-sm">Henüz taraftar tepkisi yok. İlk yorumu sen yaz!</div>`;
+      } else {
+        tweet.replies.forEach(r => {
+          const div = document.createElement('div');
+          div.className = 'py-3 flex gap-3 items-start';
+          div.innerHTML = `
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=${r.author}" class="w-8 h-8 rounded-full bg-gray-700">
+            <div class="flex-1">
+              <span class="font-bold text-xs text-white">${r.author}</span>
+              <p class="text-xs text-gray-300 mt-0.5">${escapeHTML(r.text)}</p>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      const myReplyBox = document.createElement('div');
+      myReplyBox.className = 'pt-3 border-t border-theme flex gap-2';
+      myReplyBox.innerHTML = `
+        <input id="new-reply-input" type="text" placeholder="Menajer / Gözlemci olarak yanıtla..." class="flex-1 bg-black border border-theme rounded-full px-4 py-2 text-xs text-white focus:border-sky-500 focus:outline-none">
+        <button onclick="submitManagerReply('${tweet.id}')" class="btn-smooth bg-sky-500 text-white font-bold text-xs px-4 py-2 rounded-full">Yanıtla</button>
+      `;
+      container.appendChild(myReplyBox);
+
+      document.getElementById('replies-modal').classList.remove('hidden');
+    }
+
+    function submitManagerReply(tweetId) {
+      const input = document.getElementById('new-reply-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const tweets = DB.getTweets();
+      const tweet = tweets.find(t => t.id === tweetId);
+      const session = DB.getSession();
+
+      tweet.replies = tweet.replies || [];
+      tweet.replies.push({ author: session.name + ` (@${session.username})`, text });
+
+      DB.saveTweets(tweets);
+      input.value = '';
+      openRepliesModal(tweetId);
+      refreshActiveViews();
+    }
+
+    function closeRepliesModal() {
+      document.getElementById('replies-modal').classList.add('hidden');
+    }
+
+    // --- PUAN TABLOSU VE SIRALAMA MOTORU (YENİ KONTENJAN DÜZENİ) ---
+    function sortStandings(list) {
+      return list.sort((a, b) => {
+        if (b.pts !== a.pts) return b.pts - a.pts;
+        if (b.gd !== a.gd) return b.gd - a.gd;
+        return b.gf - a.gf;
+      });
+    }
+
+    function renderStandings() {
+      const standings = sortStandings(DB.getStandings());
+      const users = DB.getUsers();
+      const tableBody = document.getElementById('standings-table-body');
+      const miniContainer = document.getElementById('mini-standings-container');
+      
+      if (tableBody) {
+        tableBody.innerHTML = '';
+        standings.forEach((team, index) => {
+          const rank = index + 1;
+          let rankColor = 'text-gray-400';
+          let borderIndicator = 'border-transparent';
+
+          // 1-4: Şampiyonlar Ligi (Yeşil)
+          if (rank <= 4) { 
+            rankColor = 'text-emerald-400 font-bold'; 
+            borderIndicator = 'border-l-4 border-emerald-500'; 
+          }
+          // 5-6: Avrupa Ligi (Mavi)
+          else if (rank === 5 || rank === 6) { 
+            rankColor = 'text-sky-400 font-bold'; 
+            borderIndicator = 'border-l-4 border-sky-500'; 
+          }
+          // 7: Konferans Ligi Play-off (Turuncu/Amber)
+          else if (rank === 7) { 
+            rankColor = 'text-amber-400 font-bold'; 
+            borderIndicator = 'border-l-4 border-amber-500'; 
+          }
+          // 18-20: Düşme Hattı (Kırmızı)
+          else if (rank >= 18) { 
+            rankColor = 'text-red-400 font-bold'; 
+            borderIndicator = 'border-l-4 border-red-500'; 
+          }
+
+          const clubUser = users.find(u => u.id === team.id);
+          const avatarUrl = clubUser?.avatar || `https://api.dicebear.com/7.x/identicon/svg?seed=${team.name}`;
+
+          const row = document.createElement('tr');
+          row.className = `hover:bg-white/10 transition cursor-pointer group ${borderIndicator}`;
+          row.onclick = () => openUserProfile(team.id);
+          row.innerHTML = `
+            <td class="py-2.5 px-3 text-center ${rankColor}">${rank}</td>
+            <td class="py-2.5 px-2 font-semibold text-white">
+              <div class="flex items-center gap-2">
+                <img src="${avatarUrl}" class="w-5 h-5 object-contain bg-transparent" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${team.name}'">
+                <span class="group-hover:text-emerald-400 group-hover:underline transition">${team.name}</span>
+              </div>
+            </td>
+            <td class="py-2.5 px-1.5 text-center text-gray-300">${team.pld}</td>
+            <td class="py-2.5 px-1.5 text-center text-gray-400">${team.w}</td>
+            <td class="py-2.5 px-1.5 text-center text-gray-400">${team.d}</td>
+            <td class="py-2.5 px-1.5 text-center text-gray-400">${team.l}</td>
+            <td class="py-2.5 px-1.5 text-center text-gray-400">${team.gf}</td>
+            <td class="py-2.5 px-1.5 text-center text-gray-400">${team.ga}</td>
+            <td class="py-2.5 px-2 text-center font-semibold ${team.gd > 0 ? 'text-emerald-400' : (team.gd < 0 ? 'text-red-400' : 'text-gray-400')}">${team.gd > 0 ? '+'+team.gd : team.gd}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-white text-sm bg-white/5">${team.pts}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      }
+
+      if (miniContainer) {
+        miniContainer.innerHTML = '';
+        standings.slice(0, 5).forEach((team, index) => {
+          const clubUser = users.find(u => u.id === team.id);
+          const avatarUrl = clubUser?.avatar || `https://api.dicebear.com/7.x/identicon/svg?seed=${team.name}`;
+
+          const div = document.createElement('div');
+          div.className = 'btn-smooth flex justify-between items-center py-1.5 px-2 rounded-lg hover:bg-white/10 cursor-pointer group';
+          div.onclick = () => openUserProfile(team.id);
+          div.innerHTML = `
+            <div class="flex items-center gap-2">
+              <span class="font-bold w-4 text-emerald-400">${index+1}</span>
+              <img src="${avatarUrl}" class="w-4 h-4 object-contain" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${team.name}'">
+              <span class="text-white group-hover:text-emerald-400 group-hover:underline truncate">${team.name}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-gray-400">${team.pld}m (${team.gd > 0 ? '+'+team.gd : team.gd})</span>
+              <span class="font-bold text-white bg-white/10 px-1.5 py-0.5 rounded text-[11px]">${team.pts}p</span>
+            </div>
+          `;
+          miniContainer.appendChild(div);
+        });
+      }
+    }
+
+    function resetStandingsToDefault() {
+      if (confirm("Puan durumunu kariyer başlangıcındaki orijinal 5. hafta haline döndürmek istediğine emin misin?")) {
+        DB.saveStandings(INITIAL_STANDINGS);
+        renderStandings();
+        alert("Puan durumu başarıyla sıfırlandı!");
+      }
+    }
+
+    // --- FM 45/46 MAÇ PANELİ & PUAN GÜNCELLEME SİSTEMİ ---
+    function populateFmSelects() {
+      const homeSel = document.getElementById('fm-home-team');
+      const awaySel = document.getElementById('fm-away-team');
+      if (!homeSel || !awaySel) return;
+
+      homeSel.innerHTML = '';
+      awaySel.innerHTML = '';
+
+      FM_CLUBS.forEach((c, i) => {
+        homeSel.innerHTML += `<option value="${c.id}" ${i === 0 ? 'selected' : ''}>${c.name}</option>`;
+        awaySel.innerHTML += `<option value="${c.id}" ${i === 12 ? 'selected' : ''}>${c.name}</option>`;
+      });
+    }
+
+    function openFmPanelModal() {
+      document.getElementById('fm-panel-modal').classList.remove('hidden');
+    }
+
+    function closeFmPanelModal() {
+      document.getElementById('fm-panel-modal').classList.add('hidden');
+    }
+
+    function toggleFmScoreInputs(val) {
+      document.getElementById('fm-score-fields').classList.toggle('hidden', val !== 'fulltime');
+    }
+
+    document.getElementById('fm-match-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const homeId = document.getElementById('fm-home-team').value;
+      const awayId = document.getElementById('fm-away-team').value;
+      const stage = document.getElementById('fm-match-stage').value;
+      const imgFile = document.getElementById('fm-match-image-file').files[0];
+      
+      let imgBase64 = '';
+      if (imgFile) {
+        try { imgBase64 = await fileToBase64(imgFile); } catch(err) {}
+      }
+
+      if (homeId === awayId) return alert('Ev sahibi ve deplasman takımı aynı olamaz!');
+
+      const homeClub = FM_CLUBS.find(c => c.id === homeId);
+      const awayClub = FM_CLUBS.find(c => c.id === awayId);
+      const tweets = DB.getTweets();
+      const now = Date.now();
+      const hashtag = `#${homeClub.name.replace(/\s+/g,'')}${awayClub.name.replace(/\s+/g,'')}`;
+
+      if (stage === 'matchday') {
+        const homeTweet = {
+          id: 'tw_fm_' + now,
+          userId: homeClub.id,
+          text: `🔴 MATCHDAY IN THE PREMIER LEAGUE!\n\n🆚 @${awayClub.username}\n🏆 Season 2045/46\n📍 ${homeClub.stadium}\n\nLet's get the 3 points! 👊 ${hashtag} #${homeClub.tag}`,
+          image: imgBase64,
+          likes: [],
+          retweets: [],
+          replies: [
+            { author: `${homeClub.name}Fan_01`, text: 'Big game today! We need the win!' },
+            { author: `${awayClub.name}Ultra`, text: 'Easy 3 points for us on the road.' }
+          ],
+          timestamp: now
+        };
+        tweets.unshift(homeTweet);
+      } else {
+        const homeScore = parseInt(document.getElementById('fm-home-score').value) || 0;
+        const awayScore = parseInt(document.getElementById('fm-away-score').value) || 0;
+        const scorers = document.getElementById('fm-scorers').value.trim();
+        const enableRomano = document.getElementById('fm-enable-romano').checked;
+
+        let standings = DB.getStandings();
+        let homeTeamStats = standings.find(t => t.id === homeId) || { id: homeId, name: homeClub.name, pld: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 };
+        let awayTeamStats = standings.find(t => t.id === awayId) || { id: awayId, name: awayClub.name, pld: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 };
+
+        homeTeamStats.pld += 1;
+        awayTeamStats.pld += 1;
+        homeTeamStats.gf += homeScore;
+        homeTeamStats.ga += awayScore;
+        awayTeamStats.gf += awayScore;
+        awayTeamStats.ga += homeScore;
+
+        if (homeScore > awayScore) {
+          homeTeamStats.w += 1;
+          homeTeamStats.pts += 3;
+          awayTeamStats.l += 1;
+        } else if (awayScore > homeScore) {
+          awayTeamStats.w += 1;
+          awayTeamStats.pts += 3;
+          homeTeamStats.l += 1;
+        } else {
+          homeTeamStats.d += 1;
+          homeTeamStats.pts += 1;
+          awayTeamStats.d += 1;
+          awayTeamStats.pts += 1;
+        }
+
+        homeTeamStats.gd = homeTeamStats.gf - homeTeamStats.ga;
+        awayTeamStats.gd = awayTeamStats.gf - awayTeamStats.ga;
+
+        standings = standings.map(t => t.id === homeId ? homeTeamStats : (t.id === awayId ? awayTeamStats : t));
+        DB.saveStandings(standings);
+        renderStandings();
+
+        let homeReplies = [];
+        let awayReplies = [];
+
+        if (homeScore > awayScore) {
+          homeReplies = [
+            { author: `${homeClub.name}TrueFan`, text: 'ABSOLUTE MASTERCLASS! 2045/46 is our season! 🔥' },
+            { author: 'TacticalGenius_FM', text: 'Top 4 race is officially alive. What a performance!' }
+          ];
+          awayReplies = [
+            { author: `${awayClub.name}Crisis`, text: 'HOCA İSTİFA! Sack the manager tonight.' },
+            { author: 'FM_Fanatic', text: 'Embarrassing tactical setup. Completely outplayed.' }
+          ];
+        } else if (awayScore > homeScore) {
+          homeReplies = [
+            { author: `${homeClub.name}Ultras`, text: 'Boos at the final whistle. Unacceptable home defeat.' },
+            { author: 'AngryFan_99', text: 'Tactics were completely wrong today.' }
+          ];
+          awayReplies = [
+            { author: `${awayClub.name}_AwayDays`, text: 'MASSIVE AWAY WIN! We are flying! ✈️🔥' },
+            { author: 'HappySupporter', text: '3 crucial points in the bag. Well played boys.' }
+          ];
+        } else {
+          homeReplies = [{ author: 'NeutralObserver', text: 'Fair result for both sides.' }];
+          awayReplies = [{ author: 'AwayLads', text: 'We take the point on the road.' }];
+        }
+
+        const scoreHeader = `🏁 FULL-TIME: ${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}`;
+        const scorerText = scorers ? `\n⚽ ${scorers}` : '';
+
+        const homePost = {
+          id: 'tw_fm_' + now,
+          userId: homeClub.id,
+          text: `${scoreHeader}${scorerText}\n\nPoints updated in the Premier League table! Thank you for your support at ${homeClub.stadium}! 👏 ${hashtag} #PremierLeague`,
+          image: imgBase64,
+          likes: [awayClub.id],
+          retweets: [],
+          replies: homeReplies,
+          timestamp: now
+        };
+
+        const awayPost = {
+          id: 'tw_fm_' + (now - 1000),
+          userId: awayClub.id,
+          text: `🏁 Full-time at ${homeClub.stadium}.\n\n${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}${scorerText}\n\nWe regroup and focus on the next fixture. ${hashtag}`,
+          image: '',
+          likes: [],
+          retweets: [],
+          replies: awayReplies,
+          timestamp: now - 1000
+        };
+
+        tweets.unshift(homePost);
+        tweets.unshift(awayPost);
+
+        if (enableRomano) {
+          let romanoText = `🚨 BREAKING: Full-time in Premier League 2045/46!\n\n${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}. `;
+          if (homeScore !== awayScore) {
+            const loser = homeScore > awayScore ? awayClub : homeClub;
+            romanoText += `Pressure mounting on @${loser.username} board. Standings updated after this massive result! #HereWeGo #PremierLeague`;
+          } else {
+            romanoText += `Intense game finished in a draw. Both teams take 1 point! #HereWeGo`;
+          }
+
+          const romanoPost = {
+            id: 'tw_fm_rom_' + now,
+            userId: BOT_ROMANO.id,
+            text: romanoText,
+            image: '',
+            likes: [homeClub.id, awayClub.id],
+            retweets: [homeClub.id],
+            replies: [{ author: 'FootballFanatic', text: 'Table is getting crazy this season! 📈' }],
+            timestamp: now + 500
+          };
+          tweets.unshift(romanoPost);
+        }
+      }
+
+      DB.saveTweets(tweets);
+      closeFmPanelModal();
+      switchView('standings');
+    });
+
+    // --- KEŞFET (EXPLORE) ---
     function renderExploreTrends() {
       const container = document.getElementById('explore-trends-container');
       container.innerHTML = '';
@@ -854,19 +1248,6 @@
     }
 
     // --- BİLDİRİMLER ---
-    function sendNotification(toUserId, fromUserId, type, text) {
-      let notifs = DB.getNotifications();
-      notifs.unshift({
-        id: Date.now().toString(),
-        toUserId,
-        fromUserId,
-        type,
-        text,
-        timestamp: Date.now()
-      });
-      DB.saveNotifications(notifs);
-    }
-
     function renderNotifications() {
       const notifs = DB.getNotifications();
       const users = DB.getUsers();
@@ -883,16 +1264,13 @@
 
       myNotifs.forEach(n => {
         const fromUser = users.find(u => u.id === n.fromUserId) || { id: '', name: 'Biri', avatar: '' };
-        let iconHtml = '<i class="fa-solid fa-heart text-pink-500 text-lg"></i>';
-        if (n.type === 'retweet') iconHtml = '<i class="fa-solid fa-retweet text-green-500 text-lg"></i>';
-        if (n.type === 'follow') iconHtml = '<i class="fa-solid fa-user-plus text-sky-500 text-lg"></i>';
-
+        const isClub = fromUser.id.startsWith('c_');
         const div = document.createElement('div');
         div.className = 'p-4 hover:bg-[#080808] flex gap-4 items-start smooth-transition';
         div.innerHTML = `
-          <div class="mt-1">${iconHtml}</div>
+          <div class="mt-1"><i class="fa-solid fa-bell text-sky-400"></i></div>
           <div class="flex-1">
-            <img onclick="openUserProfile('${fromUser.id}')" src="${fromUser.avatar}" class="btn-smooth w-8 h-8 rounded-full object-cover mb-2 cursor-pointer">
+            <img onclick="openUserProfile('${fromUser.id}')" src="${fromUser.avatar}" class="btn-smooth w-8 h-8 rounded-full ${isClub ? 'object-contain' : 'object-cover'} mb-2 cursor-pointer" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${fromUser.username}'">
             <p class="text-sm"><strong onclick="openUserProfile('${fromUser.id}')" class="hover:underline cursor-pointer">${fromUser.name}</strong> ${escapeHTML(n.text)}</p>
             <span class="text-xs text-gray-500">${timeAgo(n.timestamp)}</span>
           </div>
@@ -964,29 +1342,28 @@
       document.getElementById('page-name').innerText = user.name;
       document.getElementById('page-username').innerText = `@${user.username}`;
       document.getElementById('page-avatar').src = user.avatar;
-      document.getElementById('page-bio').innerText = user.bio || 'Henüz bir biyografi eklenmedi.';
+      document.getElementById('page-bio').innerText = user.bio || 'FM 2045/46 Kariyer Profili';
       
+      const badge = document.getElementById('page-badge');
+      if (user.badge) badge.classList.remove('hidden');
+      else badge.classList.add('hidden');
+
       const banner = document.getElementById('page-banner');
-      if (user.banner) {
-        banner.style.backgroundImage = `url('${user.banner}')`;
-      } else {
-        banner.style.backgroundImage = 'linear-gradient(to right, #4338ca, #0369a1, #0f172a)';
-      }
+      if (user.banner) banner.style.backgroundImage = `url('${user.banner}')`;
+      else banner.style.backgroundImage = 'linear-gradient(to right, #047857, #0284c7, #0f172a)';
 
       const locBox = document.getElementById('page-loc-box');
       if (user.location) {
         document.getElementById('page-loc').innerText = user.location;
         locBox.classList.remove('hidden');
-      } else {
-        locBox.classList.add('hidden');
-      }
+      } else locBox.classList.add('hidden');
 
       document.getElementById('page-following').innerText = user.following?.length || 0;
       document.getElementById('page-followers').innerText = followersCount;
 
       const actionContainer = document.getElementById('profile-action-btn-container');
       if (isOwner) {
-        actionContainer.innerHTML = `<button onclick="openEditProfileModal()" class="btn-smooth border border-gray-600 hover:bg-white/10 text-white font-bold px-4 py-1.5 rounded-full text-sm">Profili Düzenle</button>`;
+        actionContainer.innerHTML = `<span class="border border-emerald-500/40 text-emerald-400 font-bold px-4 py-1.5 rounded-full text-xs">Gözlemci Profilin</span>`;
       } else {
         actionContainer.innerHTML = `
           <button onclick="toggleFollow('${user.id}')" class="btn-smooth px-4 py-1.5 rounded-full text-sm font-bold ${isFollowing ? 'border border-gray-500 text-white hover:bg-red-500/10 hover:border-red-500 hover:text-red-500' : 'bg-white text-black hover:bg-gray-200'}">
@@ -1004,72 +1381,34 @@
       }
     }
 
-    // --- PROFİL DÜZENLEME MODAL ---
-    function openEditProfileModal() {
-      const user = DB.getSession();
-      document.getElementById('edit-name').value = user.name || '';
-      document.getElementById('edit-bio').value = user.bio || '';
-      document.getElementById('edit-location').value = user.location || '';
-      document.getElementById('edit-avatar-file').value = '';
-      document.getElementById('edit-banner-file').value = '';
-
-      document.getElementById('edit-profile-modal').classList.remove('hidden');
-    }
-
-    function closeEditProfileModal() {
-      document.getElementById('edit-profile-modal').classList.add('hidden');
-    }
-
-    document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      let users = DB.getUsers();
-      let currentUser = DB.getSession();
-
-      currentUser.name = document.getElementById('edit-name').value.trim();
-      currentUser.bio = document.getElementById('edit-bio').value.trim();
-      currentUser.location = document.getElementById('edit-location').value.trim();
-
-      const avatarFile = document.getElementById('edit-avatar-file').files[0];
-      if (avatarFile) {
-        try { currentUser.avatar = await fileToBase64(avatarFile); } catch(err) { console.error(err); }
-      }
-
-      const bannerFile = document.getElementById('edit-banner-file').files[0];
-      if (bannerFile) {
-        try { currentUser.banner = await fileToBase64(bannerFile); } catch(err) { console.error(err); }
-      }
-
-      users = users.map(u => u.id === currentUser.id ? currentUser : u);
-      DB.saveUsers(users);
-      DB.setSession(currentUser);
-
-      closeEditProfileModal();
-      loadApp();
-      if (viewingUserId) renderUserProfile(viewingUserId);
-    });
-
-    // --- SAĞ PANEL & ARAMA ---
+    // --- SAĞ PANEL ---
     function renderSuggestions() {
       const users = DB.getUsers();
       const currentUser = DB.getSession();
       const container = document.getElementById('follow-suggestions');
       container.innerHTML = '';
 
-      const others = users.filter(u => u.id !== currentUser.id);
-      others.slice(0, 3).forEach(u => {
+      const clubs = users.filter(u => u.badge && u.id !== currentUser.id);
+      clubs.slice(0, 4).forEach(u => {
         const isFollowing = currentUser.following?.includes(u.id);
+        const isClub = u.id.startsWith('c_');
         const div = document.createElement('div');
         div.className = 'btn-smooth flex items-center justify-between p-1 rounded-xl';
         div.innerHTML = `
           <div onclick="openUserProfile('${u.id}')" class="flex items-center gap-2 overflow-hidden cursor-pointer group">
-            <img src="${u.avatar}" class="w-9 h-9 rounded-full object-cover bg-gray-700 smooth-transition group-hover:scale-105">
+            <div class="w-9 h-9 rounded-full bg-[#121417] p-1 flex items-center justify-center border border-theme overflow-hidden">
+              <img src="${u.avatar}" class="w-full h-full ${isClub ? 'object-contain' : 'object-cover'} smooth-transition group-hover:scale-105" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${u.username}'">
+            </div>
             <div class="truncate">
-              <p class="font-bold text-sm truncate group-hover:underline">${u.name}</p>
+              <div class="flex items-center gap-1">
+                <p class="font-bold text-sm truncate group-hover:underline">${u.name}</p>
+                <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+              </div>
               <p class="text-gray-500 text-xs truncate">@${u.username}</p>
             </div>
           </div>
-          <button onclick="toggleFollow('${u.id}')" class="btn-smooth px-3.5 py-1 rounded-full text-xs font-bold ${isFollowing ? 'border border-gray-500 text-white' : 'bg-white text-black hover:bg-gray-200'}">
-            ${isFollowing ? 'Takip Ediliyor' : 'Takip Et'}
+          <button onclick="toggleFollow('${u.id}')" class="btn-smooth px-3 py-1 rounded-full text-xs font-bold ${isFollowing ? 'border border-gray-500 text-white' : 'bg-white text-black hover:bg-gray-200'}">
+            ${isFollowing ? 'Takipte' : 'Takip Et'}
           </button>
         `;
         container.appendChild(div);
@@ -1083,12 +1422,8 @@
       currentUser.following = currentUser.following || [];
       const idx = currentUser.following.indexOf(targetUserId);
 
-      if (idx > -1) {
-        currentUser.following.splice(idx, 1);
-      } else {
-        currentUser.following.push(targetUserId);
-        sendNotification(targetUserId, currentUser.id, 'follow', 'seni takip etmeye başladı.');
-      }
+      if (idx > -1) currentUser.following.splice(idx, 1);
+      else currentUser.following.push(targetUserId);
 
       users = users.map(u => u.id === currentUser.id ? currentUser : u);
       DB.saveUsers(users);
