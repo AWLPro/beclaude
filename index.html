@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beclaude - FM Career Universe</title>
+  <title>Beclaude - FM Career Universe (Txt Full Sync)</title>
   
   <!-- Dinamik SVG Favicon (D° Logo) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%2300a8ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='24' y='24' width='464' height='464' rx='120' fill='%230f1419' stroke='%230f1419' stroke-width='24'/%3E%3Crect x='56' y='56' width='400' height='400' rx='96' fill='url(%23bgGrad)'/%3E%3Ccircle cx='376' cy='136' r='24' fill='%23e0f2fe'/%3E%3Cpath d='M170 170 h75 c60 0 100 35 100 86 s-40 86 -100 86 h-75 Z m60 44 v88 h15 c30 0 48 -16 48 -44 s-18 -44 -48 -44 Z' fill='%23ffffff'/%3E%3C/svg%3E">
@@ -30,7 +30,6 @@
     }
     .btn-smooth:active { transform: scale(0.95); }
 
-    /* Logo Animasyonları */
     @keyframes logoFloat {
       0%, 100% { transform: translateY(0) rotate(0deg); filter: drop-shadow(0 0 10px rgba(0, 168, 255, 0.35)); }
       50% { transform: translateY(-4px) rotate(1deg); filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.65)); }
@@ -175,6 +174,12 @@
             <span class="hidden xl:inline text-base">FM Maç Paneli</span>
           </button>
 
+          <!-- TXT DOSYASI YÜKLEME BUTONU -->
+          <button onclick="openTxtModal()" class="btn-smooth flex items-center gap-4 w-full p-3 bg-gradient-to-r from-blue-600/20 to-sky-500/20 border border-blue-500/40 rounded-full text-xl font-bold text-blue-400 hover:bg-blue-500/30">
+            <i class="fa-solid fa-file-lines text-lg"></i>
+            <span class="hidden xl:inline text-base">Dosya ile Hafta İşle (.txt)</span>
+          </button>
+
           <!-- SEZONU BİTİR VE YENİ SEZONA GEÇ BUTONU -->
           <button onclick="openSeasonModal()" class="btn-smooth flex items-center gap-4 w-full p-3 bg-gradient-to-r from-indigo-600/20 to-purple-500/20 border border-indigo-500/40 rounded-full text-xl font-bold text-indigo-300 hover:bg-indigo-500/30">
             <i class="fa-solid fa-forward-step text-lg"></i>
@@ -214,10 +219,10 @@
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scroll">
-          <div class="p-3 bg-gradient-to-r from-emerald-950/20 via-black to-black border-b border-theme flex items-center justify-between">
-            <div class="flex items-center gap-2 text-xs text-gray-400">
-              <i class="fa-solid fa-circle-info text-emerald-400"></i>
-              <span>Akış kulüpler ve muhabirler tarafından otomatik beslenir.</span>
+          <div class="p-3 bg-gradient-to-r from-blue-950/20 via-black to-black border-b border-theme flex items-center justify-between">
+            <div class="flex items-center gap-2 text-xs text-blue-400">
+              <i class="fa-solid fa-file-lines"></i>
+              <span>Txt Veri Senkronizasyonu Aktif.</span>
             </div>
             <button onclick="openFmPanelModal()" class="btn-smooth text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-semibold hover:bg-emerald-500/30">Maç Gir</button>
           </div>
@@ -240,7 +245,7 @@
             </div>
           </div>
 
-          <!-- Alt Sekmeler: Puan Tablosu vs Gol Krallığı -->
+          <!-- Alt Sekmeler -->
           <div class="flex border-b border-theme">
             <button id="tab-btn-table" onclick="toggleStatsSubTab('table')" class="flex-1 py-2 font-bold text-xs text-white border-b-2 border-sky-500 smooth-transition">🏆 Puan Durumu</button>
             <button id="tab-btn-scorers" onclick="toggleStatsSubTab('scorers')" class="flex-1 py-2 font-semibold text-xs text-gray-400 hover:text-white border-b-2 border-transparent smooth-transition">⚽ Gol Krallığı</button>
@@ -271,7 +276,6 @@
               </table>
             </div>
 
-            <!-- Açıklama Renkleri -->
             <div class="p-3 bg-[#121417] rounded-xl border border-theme text-[11px] text-gray-400 space-y-1.5">
               <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-sky-400"></span> <span>1-4: UEFA Şampiyonlar Ligi (Mavi)</span></div>
               <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-amber-400"></span> <span>5-6: UEFA Avrupa Ligi (Sarı)</span></div>
@@ -478,7 +482,7 @@
           
           <div>
             <label class="text-xs text-gray-400 block mb-1">Ev Sahibi Golcüler (İsim ve Dakika)</label>
-            <input id="fm-home-scorers" type="text" placeholder="Örn: Stephan Rennocks 34', Stephan Rennocks 79'" class="w-full bg-black border border-theme rounded-xl px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none">
+            <input id="fm-home-scorers" type="text" placeholder="Örn: Stephan Rennocks 34', 79'" class="w-full bg-black border border-theme rounded-xl px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none">
           </div>
 
           <div>
@@ -497,8 +501,34 @@
           <input id="fm-match-image-file" type="file" accept="image/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-emerald-500/20 file:text-emerald-400 hover:file:bg-emerald-500/30 cursor-pointer">
         </div>
 
-        <button type="submit" class="btn-smooth w-full bg-emerald-500 hover:bg-emerald-600 text-black font-bold py-3 rounded-full mt-2">Maçı Simüle Et ve Akışa Bas 🚀</button>
+        <button type="submit" class="btn-smooth w-full bg-emerald-500 hover:bg-emerald-600 text-black font-bold py-3 rounded-full mt-2">Maçı Simüle Et ve Onay İste 🚀</button>
       </form>
+    </div>
+  </div>
+
+  <!-- ================= TXT DOSYASI YÜKLEME MODALI ================= -->
+  <div id="txt-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-lg bg-[#16181c] border border-blue-500/50 rounded-3xl p-6 modal-animate shadow-2xl">
+      <div class="flex items-center justify-between mb-4 border-b border-theme pb-3">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-file-lines text-blue-400 text-xl"></i>
+          <h3 class="font-bold text-lg text-white">Txt Veri Dosyası ile Hafta İşle</h3>
+        </div>
+        <button onclick="closeTxtModal()" class="btn-smooth text-gray-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="space-y-4">
+        <p class="text-xs text-gray-300">
+          Benim sana hazırlayıp verdiğim <strong>.txt</strong> formatındaki maç sonuçları dosyasını seç ve yükle. Sistem maçları, skorları ve golcüleri otomatik işlesin!
+        </p>
+
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">Veri Dosyası Seç (.txt)</label>
+          <input type="file" id="txt-file-input" accept=".txt" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-500/20 file:text-blue-400 hover:file:bg-blue-500/30 cursor-pointer">
+        </div>
+
+        <button onclick="processUploadedTxt()" class="btn-smooth w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-full">Dosyayı Oku ve İşle ⚡</button>
+      </div>
     </div>
   </div>
 
@@ -633,7 +663,71 @@
       { id: 'c_bol', name: 'Bolton', pld: 5, w: 0, d: 1, l: 4, gf: 4, ga: 10, gd: -6, pts: 1 }
     ];
 
-    // FM EKRAN GÖRÜNTÜSÜNDEKİ 2045/46 RESMİ GOL KRALLARI LİSTESİ
+    // --- TAKIM İSMİ EŞLEŞTİRME (Txt Sync için esnek isim tanıma) ---
+    // Txt dosyasındaki isim, kulüp listesindeki "name"/"username" ile birebir
+    // aynı olmayabilir (ör. "Man Utd" vs "Manchester United"). Bu yüzden
+    // kısaltma/takma ad tablosu + normalize edilmiş kısmi eşleşme kullanıyoruz.
+    const CLUB_NAME_ALIASES = {
+      c_ars: ['arsenal'],
+      c_whu: ['west ham united', 'west ham', 'westham'],
+      c_der: ['derby county', 'derby'],
+      c_bha: ['brighton & hove albion', 'brighton and hove albion', 'brighton'],
+      c_tot: ['tottenham hotspur', 'tottenham', 'spurs'],
+      c_liv: ['liverpool fc', 'liverpool'],
+      c_mci: ['manchester city', 'man city', 'mancity', 'city'],
+      c_bre: ['brentford fc', 'brentford'],
+      c_nor: ['norwich city', 'norwich'],
+      c_new: ['newcastle united', 'newcastle', 'nufc'],
+      c_bou: ['afc bournemouth', 'bournemouth'],
+      c_eve: ['everton'],
+      c_che: ['chelsea fc', 'chelsea'],
+      c_wol: ['wolverhampton wanderers', 'wolves', 'wolverhampton'],
+      c_mun: ['manchester united', 'man utd', 'man united', 'manutd', 'united'],
+      c_ful: ['fulham fc', 'fulham'],
+      c_sou: ['southampton fc', 'southampton', 'saints'],
+      c_nfo: ['nottingham forest', 'nottm forest', "nott'm forest", 'forest'],
+      c_sun: ['sunderland afc', 'sunderland'],
+      c_bol: ['bolton wanderers', 'bolton']
+    };
+
+    function normalizeTeamName(str) {
+      return (str || '')
+        .toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // aksanları temizle
+        .replace(/['’`.]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function findClubByFlexibleName(rawName, clubsList) {
+      const target = normalizeTeamName(rawName);
+      if (!target) return null;
+
+      // 1) Kulüp listesindeki "name" veya "username" ile birebir eşleşme
+      let found = clubsList.find(c =>
+        normalizeTeamName(c.name) === target || normalizeTeamName(c.username) === target
+      );
+      if (found) return found;
+
+      // 2) Kısaltma / takma ad tablosuyla eşleşme
+      found = clubsList.find(c => (CLUB_NAME_ALIASES[c.id] || []).includes(target));
+      if (found) return found;
+
+      // 3) DEFAULT_STANDINGS içindeki kısa isimlerle eşleşme (ör. "Man Utd", "Nottm Forest")
+      const standingsMatch = DEFAULT_STANDINGS.find(s => normalizeTeamName(s.name) === target);
+      if (standingsMatch) {
+        found = clubsList.find(c => c.id === standingsMatch.id);
+        if (found) return found;
+      }
+
+      // 4) Son çare: kısmi metin eşleşmesi (biri diğerini içeriyorsa)
+      found = clubsList.find(c => {
+        const n = normalizeTeamName(c.name);
+        return target.length > 2 && (n.includes(target) || target.includes(n));
+      });
+      return found || null;
+    }
+
     const FM_2045_SCORERS = [
       { player: 'Stephan Rennocks', team: 'Derby County', clubId: 'c_der', goals: 6 },
       { player: 'Izuchukwu Martins', team: 'Arsenal', clubId: 'c_ars', goals: 4 },
@@ -669,15 +763,44 @@
       following: []
     };
 
+    const REPLY_POOLS = {
+      bigClubCrisis: [
+        "HOCA İSTİFA! Bu kadro bu formayı hak etmiyor.",
+        "Yönetim istifa! Tarihimizin en utanç verici dönemi."
+      ],
+      surpriseSuccess: [
+        "Avrupa biletini cebimize koyduk, bu rüya gerçek olamaz! 🐏🔥",
+        "Absolute masterclass! Ligin altını üstüne getirdik."
+      ],
+      heavyDefeat: [
+        "Savunma adeta evlere şenlikti, rezalet bir gece."
+      ],
+      drawBoring: [
+        "Uyku getiren berbat bir 90 dakikaydı."
+      ],
+      generalHappy: [
+        "Harika bir galibiyet, takım tam bir aile gibi savaştı! 👏"
+      ]
+    };
+
+    const ROMANO_POOLS = [
+      (h, a, hs, as) => `🚨 EXCL: Pressure mounting heavily on @${hs > as ? a : h} board after this result. Internal meetings scheduled for tomorrow morning. #HereWeGo`
+    ];
+
+    function getRandomReply(category) {
+      const pool = REPLY_POOLS[category] || REPLY_POOLS.generalHappy;
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
     const DB = {
-      getClubs: () => JSON.parse(localStorage.getItem('bc_fm_clubs_v9')) || DEFAULT_CLUBS,
-      saveClubs: (data) => localStorage.setItem('bc_fm_clubs_v9', JSON.stringify(data)),
-      getSeason: () => localStorage.getItem('bc_fm_season_v9') || '2045/46',
-      saveSeason: (val) => localStorage.setItem('bc_fm_season_v9', val),
-      getScorers: () => JSON.parse(localStorage.getItem('bc_fm_scorers_v9')) || FM_2045_SCORERS,
-      saveScorers: (data) => localStorage.setItem('bc_fm_scorers_v9', JSON.stringify(data)),
+      getClubs: () => JSON.parse(localStorage.getItem('bc_fm_clubs_v17')) || DEFAULT_CLUBS,
+      saveClubs: (data) => localStorage.setItem('bc_fm_clubs_v17', JSON.stringify(data)),
+      getSeason: () => localStorage.getItem('bc_fm_season_v17') || '2045/46',
+      saveSeason: (val) => localStorage.setItem('bc_fm_season_v17', val),
+      getScorers: () => JSON.parse(localStorage.getItem('bc_fm_scorers_v17')) || FM_2045_SCORERS,
+      saveScorers: (data) => localStorage.setItem('bc_fm_scorers_v17', JSON.stringify(data)),
       getUsers: () => {
-        let users = JSON.parse(localStorage.getItem('bc_users_v9'));
+        let users = JSON.parse(localStorage.getItem('bc_users_v17'));
         if (!users) {
           const clubs = DB.getClubs().map(c => ({
             id: c.id,
@@ -695,12 +818,12 @@
             ...clubs,
             { id: 'user_default', username: 'fm_observer', name: 'FM Observer', password: '123', bio: `Premier League Gözlemcisi 🧠⚽`, location: 'London, UK', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=fm_observer', banner: '', following: [] }
           ];
-          localStorage.setItem('bc_users_v9', JSON.stringify(users));
+          localStorage.setItem('bc_users_v17', JSON.stringify(users));
         }
         return users;
       },
-      saveUsers: (data) => localStorage.setItem('bc_users_v9', JSON.stringify(data)),
-      getTweets: () => JSON.parse(localStorage.getItem('bc_tweets_v9')) || [
+      saveUsers: (data) => localStorage.setItem('bc_users_v17', JSON.stringify(data)),
+      getTweets: () => JSON.parse(localStorage.getItem('bc_tweets_v17')) || [
         { 
           id: 'fm_init_1', 
           userId: 'c_der', 
@@ -715,9 +838,9 @@
           timestamp: Date.now() - 7200000 
         }
       ],
-      saveTweets: (data) => localStorage.setItem('bc_tweets_v9', JSON.stringify(data)),
-      getStandings: () => JSON.parse(localStorage.getItem('bc_standings_v9')) || DEFAULT_STANDINGS,
-      saveStandings: (data) => localStorage.setItem('bc_standings_v9', JSON.stringify(data)),
+      saveTweets: (data) => localStorage.setItem('bc_tweets_v17', JSON.stringify(data)),
+      getStandings: () => JSON.parse(localStorage.getItem('bc_standings_v17')) || DEFAULT_STANDINGS,
+      saveStandings: (data) => localStorage.setItem('bc_standings_v17', JSON.stringify(data)),
       getBookmarks: () => JSON.parse(localStorage.getItem('bc_bookmarks')) || [],
       saveBookmarks: (data) => localStorage.setItem('bc_bookmarks', JSON.stringify(data)),
       getNotifications: () => JSON.parse(localStorage.getItem('bc_notifications')) || [],
@@ -741,9 +864,9 @@
 
     window.onload = () => {
       DB.getUsers();
-      if (!localStorage.getItem('bc_tweets_v9')) DB.saveTweets(DB.getTweets());
-      if (!localStorage.getItem('bc_standings_v9')) DB.saveStandings(DEFAULT_STANDINGS);
-      if (!localStorage.getItem('bc_fm_scorers_v9')) DB.saveScorers(FM_2045_SCORERS);
+      if (!localStorage.getItem('bc_tweets_v17')) DB.saveTweets(DB.getTweets());
+      if (!localStorage.getItem('bc_standings_v17')) DB.saveStandings(DEFAULT_STANDINGS);
+      if (!localStorage.getItem('bc_fm_scorers_v17')) DB.saveScorers(FM_2045_SCORERS);
       
       const session = DB.getSession();
       if (session) {
@@ -821,7 +944,6 @@
       location.reload();
     }
 
-    // --- UYGULAMA YÜKLEME ---
     function loadApp() {
       const currentUser = DB.getSession();
       const defaultImg = `https://api.dicebear.com/7.x/bottts/svg?seed=${currentUser.username}`;
@@ -840,7 +962,6 @@
       updateSeasonUI();
     }
 
-    // --- VIEW & STATS SUB-TAB YÖNETİMİ ---
     function switchView(viewName) {
       currentView = viewName;
       document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
@@ -884,7 +1005,6 @@
       }
     }
 
-    // --- TWEET KARTLARI & LIGHTBOX ---
     function openLightbox(src) {
       const modal = document.getElementById('lightbox-modal');
       const img = document.getElementById('lightbox-img');
@@ -971,7 +1091,6 @@
       });
     }
 
-    // --- ETKİLEŞİMLER ---
     function toggleLike(tweetId, btnEl) {
       const icon = btnEl.querySelector('i');
       icon.classList.add('heart-pop');
@@ -1024,11 +1143,11 @@
       if (currentView === 'feed') renderTweets();
       if (currentView === 'standings') { renderStandings(); renderScorers(); }
       if (currentView === 'explore') renderExploreTweets();
+      if (currentView === 'notifications') renderNotifications();
       if (currentView === 'bookmarks') renderBookmarks();
       if (currentView === 'profile' && viewingUserId) renderUserProfile(viewingUserId);
     }
 
-    // --- TARAFTAR YORUMLARI ---
     function openRepliesModal(tweetId) {
       const tweet = DB.getTweets().find(t => t.id === tweetId);
       const container = document.getElementById('replies-list');
@@ -1084,7 +1203,6 @@
       document.getElementById('replies-modal').classList.add('hidden');
     }
 
-    // --- PUAN TABLOSU MOTORU ---
     function sortStandings(list) {
       return list.sort((a, b) => {
         if (b.pts !== a.pts) return b.pts - a.pts;
@@ -1106,26 +1224,10 @@
           let rankColor = 'text-gray-400';
           let borderIndicator = 'border-transparent';
 
-          // 1-4: UEFA Şampiyonlar Ligi (Mavi)
-          if (rank <= 4) { 
-            rankColor = 'text-sky-400 font-bold'; 
-            borderIndicator = 'border-l-4 border-sky-500'; 
-          }
-          // 5-6: UEFA Avrupa Ligi (Sarı/Amber)
-          else if (rank === 5 || rank === 6) { 
-            rankColor = 'text-amber-400 font-bold'; 
-            borderIndicator = 'border-l-4 border-amber-400'; 
-          }
-          // 7: UEFA Konferans Ligi Play-off (Yeşil)
-          else if (rank === 7) { 
-            rankColor = 'text-emerald-400 font-bold'; 
-            borderIndicator = 'border-l-4 border-emerald-500'; 
-          }
-          // 18-20: Küme Düşme Hattı (Kırmızı)
-          else if (rank >= 18) { 
-            rankColor = 'text-red-400 font-bold'; 
-            borderIndicator = 'border-l-4 border-red-500'; 
-          }
+          if (rank <= 4) { rankColor = 'text-sky-400 font-bold'; borderIndicator = 'border-l-4 border-sky-500'; }
+          else if (rank === 5 || rank === 6) { rankColor = 'text-amber-400 font-bold'; borderIndicator = 'border-l-4 border-amber-400'; }
+          else if (rank === 7) { rankColor = 'text-emerald-400 font-bold'; borderIndicator = 'border-l-4 border-emerald-500'; }
+          else if (rank >= 18) { rankColor = 'text-red-400 font-bold'; borderIndicator = 'border-l-4 border-red-500'; }
 
           const clubUser = users.find(u => u.id === team.id);
           const avatarUrl = clubUser?.avatar || `https://api.dicebear.com/7.x/identicon/svg?seed=${team.name}`;
@@ -1182,7 +1284,6 @@
       }
     }
 
-    // --- GOL KRALLIĞI MOTORU (GERÇEK FM OYUNCULARI) ---
     function renderScorers() {
       let scorers = DB.getScorers();
       scorers.sort((a, b) => b.goals - a.goals);
@@ -1258,13 +1359,13 @@
     }
 
     function resetStandingsToDefault() {
-      if (confirm("Puan durumu ve gol krallığını orijinal 2045/46 5. hafta haline döndürmek istediğine emin misin?")) {
+      if (confirm("Puan durumu ve gol krallığını orijinal haline döndürmek istediğine emin misin?")) {
         DB.saveStandings(DEFAULT_STANDINGS);
         DB.saveClubs(DEFAULT_CLUBS);
         DB.saveScorers(FM_2045_SCORERS);
         DB.saveSeason('2045/46');
-        localStorage.removeItem('bc_users_v9');
-        localStorage.removeItem('bc_tweets_v9');
+        localStorage.removeItem('bc_users_v17');
+        localStorage.removeItem('bc_tweets_v17');
         location.reload();
       }
     }
@@ -1338,7 +1439,6 @@
       }));
       DB.saveStandings(newStandings);
 
-      // Yeni Sezonda Gol Krallığını Sıfırla
       DB.saveScorers([]);
 
       const newClubUsers = newPromotedClubs.map(c => ({
@@ -1386,7 +1486,167 @@
       alert(`Tebrikler! ${nextSeason} sezonu resmen başladı!`);
     });
 
-    // --- FM MAÇ PANELİ & PUAN / GOL KRALLIĞI GÜNCELLEME SİSTEMİ ---
+    // --- TXT DOSYASI OKUMA VE OTOMATİK İŞLEME MOTORU ---
+    function openTxtModal() {
+      document.getElementById('txt-modal').classList.remove('hidden');
+    }
+
+    function closeTxtModal() {
+      document.getElementById('txt-modal').classList.add('hidden');
+    }
+
+    function processUploadedTxt() {
+      const fileInput = document.getElementById('txt-file-input');
+      const file = fileInput.files[0];
+      if (!file) {
+        return alert('Lütfen geçerli bir .txt dosyası seçin!');
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const text = e.target.result;
+        closeTxtModal();
+
+        const confirmSync = confirm(`📂 Txt Dosyası Okundu!\n\nBu verileri onaylayıp puan tablosuna, gol krallığına ve akışa işleyeyim mi?`);
+
+        if (!confirmSync) {
+          return alert("❌ İşlem iptal edildi.");
+        }
+
+        // TXT PARSER MOTORU
+        // Bloklara ayırma artık boş satır şartına bağlı değil: her maç satırı
+        // (regex'e uyan satır) yeni bir blok başlatır, altındaki "Goller:" gibi
+        // satırlar o bloğa dahil edilir. Böylece Gemini boş satır bıraksa da
+        // bırakmasa da dosya doğru parçalanır.
+        const matchRegex = /^(.+?)\s+(\d+)\s*-\s*(\d+)\s+(.+?)$/;
+        const rawLines = text.split(/\r?\n/);
+        const blocks = [];
+        let currentBlock = null;
+        rawLines.forEach(line => {
+          const trimmed = line.trim();
+          if (!trimmed) return;
+          if (matchRegex.test(trimmed)) {
+            if (currentBlock) blocks.push(currentBlock);
+            currentBlock = [trimmed];
+          } else if (currentBlock) {
+            currentBlock.push(trimmed);
+          }
+        });
+        if (currentBlock) blocks.push(currentBlock);
+
+        let standings = DB.getStandings();
+        let clubs = DB.getClubs();
+        let tweets = DB.getTweets();
+        let now = Date.now();
+        let processedCount = 0;
+        const unmatchedTeams = [];
+
+        blocks.forEach(lines => {
+          const matchLine = lines[0]; // Örn: "Nottm Forest 0-3 Arsenal"
+
+          const matchParsed = matchLine.match(matchRegex);
+          if (!matchParsed) return;
+
+          const homeNameRaw = matchParsed[1].trim();
+          const homeScore = parseInt(matchParsed[2]);
+          const awayScore = parseInt(matchParsed[3]);
+          const awayNameRaw = matchParsed[4].trim();
+
+          // Kulüp adlarını DB ile esnek şekilde eşleştir (kısaltma/takma ad destekli)
+          const homeClub = findClubByFlexibleName(homeNameRaw, clubs);
+          const awayClub = findClubByFlexibleName(awayNameRaw, clubs);
+
+          if (!homeClub) unmatchedTeams.push(homeNameRaw);
+          if (!awayClub) unmatchedTeams.push(awayNameRaw);
+          if (!homeClub || !awayClub) return;
+
+          processedCount++;
+
+          // Puan durumunu güncelle
+          let homeStats = standings.find(t => t.id === homeClub.id);
+          let awayStats = standings.find(t => t.id === awayClub.id);
+
+          if (homeStats && awayStats) {
+            homeStats.pld += 1;
+            awayStats.pld += 1;
+            homeStats.gf += homeScore;
+            homeStats.ga += awayScore;
+            awayStats.gf += awayScore;
+            awayStats.ga += homeScore;
+
+            if (homeScore > awayScore) {
+              homeStats.w += 1; homeStats.pts += 3;
+              awayStats.l += 1;
+            } else if (awayScore > homeScore) {
+              awayStats.w += 1; awayStats.pts += 3;
+              homeStats.l += 1;
+            } else {
+              homeStats.d += 1; homeStats.pts += 1;
+              awayStats.d += 1; awayStats.pts += 1;
+            }
+
+            homeStats.gd = homeStats.gf - homeStats.ga;
+            awayStats.gd = awayStats.gf - awayStats.ga;
+          }
+
+          // Golcütleri işle ("Goller: A. Balde (21), I. Martins (57)")
+          let scorersText = '';
+          for (let i = 1; i < lines.length; i++) {
+            const line = lines[i];
+            if (line.startsWith('Goller:') || line.startsWith('Gol:') || line.toLowerCase().startsWith('goals:')) {
+              scorersText = line.replace(/^(Goller:|Gol:|Goals:)/i, '').trim();
+              
+              // Deplasman golcüler ayrı verilmişse tire ile ayrılmış olabilir
+              const parts = scorersText.split(' - ');
+              if (parts.length === 2) {
+                parseAndAddScorers(parts[0], homeClub.name, homeClub.id);
+                parseAndAddScorers(parts[1], awayClub.name, awayClub.id);
+              } else {
+                // Tek satırsa metne göre hangisi attıysa veya ortak ekle
+                parseAndAddScorers(scorersText, homeScore >= awayScore ? homeClub.name : awayClub.name, homeScore >= awayScore ? homeClub.id : awayClub.id);
+              }
+            }
+          }
+
+          // Akışa maç sonu tweeti ekle
+          const scoreHeader = `🏁 FULL-TIME (Txt Sync): ${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}`;
+          const formattedScorers = scorersText ? `\n⚽ Goller: ${scorersText}` : '';
+          const hashtag = `#${homeClub.name.replace(/\s+/g,'')}${awayClub.name.replace(/\s+/g,'')}`;
+
+          const tweet = {
+            id: 'tw_txt_' + now + '_' + Math.random(),
+            userId: homeClub.id,
+            text: `${scoreHeader}${formattedScorers}\n\nStandings and Top Scorers updated via Txt Sync! 👏 ${hashtag} #PremierLeague`,
+            image: '',
+            likes: [awayClub.id],
+            retweets: [],
+            replies: [
+              { author: `${homeClub.name}Fan`, text: 'Great game, important points secured!' }
+            ],
+            timestamp: now
+          };
+          tweets.unshift(tweet);
+        });
+
+        DB.saveStandings(standings);
+        DB.saveTweets(tweets);
+        renderStandings();
+        renderScorers();
+        switchView('standings');
+
+        if (blocks.length === 0) {
+          alert("⚠️ Dosyada tanınan formatta hiç maç satırı bulunamadı.\n\nBeklenen format: \"Takım1 2-1 Takım2\" şeklinde bir skor satırı.");
+        } else if (unmatchedTeams.length > 0) {
+          const uniqueUnmatched = [...new Set(unmatchedTeams)];
+          alert(`⚠️ ${processedCount}/${blocks.length} maç işlendi.\n\nBu takım isimleri kulüp listesiyle eşleştirilemedi, ilgili maçlar atlandı:\n- ${uniqueUnmatched.join('\n- ')}\n\nBu isimleri kulüp adı/kullanıcı adına veya bilinen kısaltmalara (Man Utd, Spurs, Wolves vb.) yakın yazdırırsan sorun çözülür.`);
+        } else {
+          alert(`✅ ${processedCount} maç ve golcüler başarıyla işlendi, puan tablosu ve akış güncellendi!`);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // --- FM MAÇ PANELİ ---
     function populateFmSelects() {
       const homeSel = document.getElementById('fm-home-team');
       const awaySel = document.getElementById('fm-away-team');
@@ -1431,6 +1691,14 @@
       const clubs = DB.getClubs();
       const homeClub = clubs.find(c => c.id === homeId);
       const awayClub = clubs.find(c => c.id === awayId);
+      
+      const stageText = stage === 'matchday' ? 'Maç Günü Paylaşımı' : 'Maç Sonu ve Puan/Gol Güncellemesi';
+      const matchConfirm = confirm(`⚽ Maç Özeti Kontrolü:\n\n• Ev Sahibi: ${homeClub.name}\n• Deplasman: ${awayClub.name}\n• Tür: ${stageText}\n\nBu maçı sisteme işleyip onaylıyor musun?`);
+
+      if (!matchConfirm) {
+        return alert("❌ İşlem iptal edildi.");
+      }
+
       const tweets = DB.getTweets();
       const now = Date.now();
       const curSeason = DB.getSeason();
@@ -1438,14 +1706,14 @@
 
       if (stage === 'matchday') {
         const homeTweet = {
-          id: 'tw_fm_' + now,
+          id: 'tw_fm_home_' + now,
           userId: homeClub.id,
-          text: `🔴 MATCHDAY IN THE PREMIER LEAGUE!\n\n🆚 @${awayClub.username}\n🏆 Season ${curSeason}\n📍 ${homeClub.stadium}\n\nLet's get the 3 points at home! 👊 ${hashtag} #${homeClub.tag}`,
+          text: `🔴 MATCHDAY AT HOME!\n\n🆚 @${awayClub.username}\n🏆 Premier League | Season ${curSeason}\n📍 ${homeClub.stadium}\n\nUnder the lights. Let's defend our turf! 👊 ${hashtag} #${homeClub.tag}`,
           image: imgBase64,
           likes: [],
           retweets: [],
           replies: [
-            { author: `${homeClub.name}Fan_01`, text: 'Big game today! We need the win!' }
+            { author: `${homeClub.name}Ultras`, text: 'Pride of London! Massive 3 points needed today!' }
           ],
           timestamp: now
         };
@@ -1453,18 +1721,18 @@
         const awayTweet = {
           id: 'tw_fm_away_' + (now - 500),
           userId: awayClub.id,
-          text: `✈️ ON THE ROAD | MATCHDAY!\n\n🆚 @${homeClub.username}\n🏆 Premier League | Season ${curSeason}\n📍 ${homeClub.stadium}\n\nTravelling in full voice. Come on you lads! 💙 ${hashtag} #${awayClub.tag}`,
+          text: `✈️ ON THE ROAD | MATCHDAY!\n\n🆚 @${homeClub.username}\n🏆 Premier League | Season ${curSeason}\n📍 ${homeClub.stadium}\n\nTravelling in full voice. Let's bring home the win! 💙 ${hashtag} #${awayClub.tag}`,
           image: '',
           likes: [],
           retweets: [],
           replies: [
-            { author: `${awayClub.name}AwayDay`, text: 'Safe travels lads, bring back the 3 points!' }
+            { author: `${awayClub.name}AwayLads`, text: 'Away end sold out! Sing your hearts out lads 🗣️' }
           ],
           timestamp: now - 500
         };
 
-        tweets.unshift(homeTweet);
         tweets.unshift(awayTweet);
+        tweets.unshift(homeTweet);
       } else {
         const homeScore = parseInt(document.getElementById('fm-home-score').value) || 0;
         const awayScore = parseInt(document.getElementById('fm-away-score').value) || 0;
@@ -1508,34 +1776,39 @@
         DB.saveStandings(standings);
         renderStandings();
 
+        let winningTeam = homeScore > awayScore ? homeClub : (awayScore > homeScore ? awayClub : null);
+        let losingTeam = homeScore > awayScore ? awayClub : (awayScore > homeScore ? homeClub : null);
+        
         let homeReplies = [];
         let awayReplies = [];
 
+        const isBigClubInCrisis = losingTeam && ['c_che', 'c_mun', 'c_tot', 'c_liv', 'c_ars'].includes(losingTeam.id);
+        const isSurpriseSuccess = winningTeam && ['c_der', 'c_whu', 'c_bha', 'c_bre'].includes(winningTeam.id);
+
         if (homeScore > awayScore) {
           homeReplies = [
-            { author: `${homeClub.name}TrueFan`, text: 'ABSOLUTE MASTERCLASS! What a performance! 🔥' },
-            { author: 'TacticalGenius_FM', text: 'Crucial 3 points in the bag.' }
+            { author: `${homeClub.name}Fan`, text: getRandomReply(isSurpriseSuccess ? 'surpriseSuccess' : 'generalHappy') },
+            { author: 'TacticalAnalyst', text: getRandomReply('generalHappy') }
           ];
           awayReplies = [
-            { author: `${awayClub.name}Crisis`, text: 'HOCA İSTİFA! Sack the manager tonight.' },
-            { author: 'FM_Fanatic', text: 'Embarrassing tactical setup. Completely outplayed.' }
+            { author: `${awayClub.name}Supporter`, text: getRandomReply(isBigClubInCrisis ? 'bigClubCrisis' : 'heavyDefeat') },
+            { author: 'AngryFan_99', text: getRandomReply('heavyDefeat') }
           ];
         } else if (awayScore > homeScore) {
           homeReplies = [
-            { author: `${homeClub.name}Ultras`, text: 'Boos at the final whistle. Unacceptable home defeat.' },
-            { author: 'AngryFan_99', text: 'Tactics were completely wrong today.' }
+            { author: `${homeClub.name}Ultras`, text: getRandomReply(isBigClubInCrisis ? 'bigClubCrisis' : 'heavyDefeat') },
+            { author: 'HomeFan_01', text: getRandomReply('heavyDefeat') }
           ];
           awayReplies = [
-            { author: `${awayClub.name}_AwayDays`, text: 'MASSIVE AWAY WIN! We are flying! ✈️🔥' },
-            { author: 'HappySupporter', text: '3 crucial points in the bag. Well played boys.' }
+            { author: `${awayClub.name}AwayDays`, text: getRandomReply(isSurpriseSuccess ? 'surpriseSuccess' : 'generalHappy') },
+            { author: 'HappyPundit', text: getRandomReply('generalHappy') }
           ];
         } else {
-          homeReplies = [{ author: 'NeutralObserver', text: 'Fair result for both sides.' }];
-          awayReplies = [{ author: 'AwayLads', text: 'We take the point on the road.' }];
+          homeReplies = [{ author: 'NeutralObserver', text: getRandomReply('drawBoring') }];
+          awayReplies = [{ author: 'AwayLads', text: getRandomReply('drawBoring') }];
         }
 
         const scoreHeader = `🏁 FULL-TIME: ${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}`;
-        
         let allScorersText = '';
         if (homeScorers || awayScorers) {
           allScorersText = `\n⚽ ${homeClub.name}: ${homeScorers || '-'}\n⚽ ${awayClub.name}: ${awayScorers || '-'}`;
@@ -1567,13 +1840,8 @@
         tweets.unshift(awayPost);
 
         if (enableRomano) {
-          let romanoText = `🚨 BREAKING: Full-time in Premier League ${curSeason}!\n\n${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}. `;
-          if (homeScore !== awayScore) {
-            const loser = homeScore > awayScore ? awayClub : homeClub;
-            romanoText += `Pressure mounting on @${loser.username} board. Table and top scorers updated! #HereWeGo #PremierLeague`;
-          } else {
-            romanoText += `Intense game finished in a draw. Both teams take 1 point! #HereWeGo`;
-          }
+          const randomRomanoGen = ROMANO_POOLS[Math.floor(Math.random() * ROMANO_POOLS.length)];
+          const romanoText = randomRomanoGen(homeScore, awayScore, homeScore, awayScore);
 
           const romanoPost = {
             id: 'tw_fm_rom_' + now,
@@ -1594,7 +1862,6 @@
       switchView('standings');
     });
 
-    // --- KEŞFET (EXPLORE) ---
     function renderExploreTrends() {
       const container = document.getElementById('explore-trends-container');
       const curSeason = DB.getSeason();
@@ -1657,7 +1924,6 @@
       }
     }
 
-    // --- BİLDİRİMLER ---
     function renderNotifications() {
       const notifs = DB.getNotifications();
       const users = DB.getUsers();
@@ -1705,7 +1971,6 @@
       if (badge) badge.classList.toggle('hidden', !hasUnread);
     }
 
-    // --- YER İŞARETLERİ ---
     function renderBookmarks() {
       const bookmarks = DB.getBookmarks();
       const tweets = DB.getTweets();
@@ -1729,7 +1994,6 @@
       }
     }
 
-    // --- PROFİL GÖRÜNÜMÜ & YÖNETİMİ ---
     function openUserProfile(userId) {
       viewingUserId = userId;
       switchView('profile');
@@ -1791,7 +2055,6 @@
       }
     }
 
-    // --- SAĞ PANEL ---
     function renderSuggestions() {
       const users = DB.getUsers();
       const currentUser = DB.getSession();
@@ -1851,7 +2114,6 @@
       renderExploreTweets();
     }
 
-    // --- YARDIMCI METOTLAR ---
     function timeAgo(timestamp) {
       const sec = Math.floor((Date.now() - timestamp) / 1000);
       if (sec < 60) return `${sec}sn`;
