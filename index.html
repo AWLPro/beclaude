@@ -19,10 +19,9 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
     }
     .border-theme { border-color: #2f3336; }
-    
     * { -webkit-tap-highlight-color: transparent; }
     
-    /* Yumuşak Buton ve Geçiş Kuralları */
+    /* Yumuşak Buton & Geçiş Kuralları */
     .smooth-transition {
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -32,11 +31,9 @@
                   box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
                   opacity 0.2s ease;
     }
-    .btn-smooth:active {
-      transform: scale(0.95);
-    }
+    .btn-smooth:active { transform: scale(0.95); }
 
-    /* Büyütülmüş Logo Animasyonları */
+    /* Logo Animasyonları */
     @keyframes logoFloat {
       0%, 100% { transform: translateY(0) rotate(0deg); filter: drop-shadow(0 0 10px rgba(0, 168, 255, 0.35)); }
       50% { transform: translateY(-4px) rotate(1deg); filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.65)); }
@@ -49,11 +46,9 @@
       transform: scale(1.08) rotate(5deg);
       filter: drop-shadow(0 0 24px rgba(0, 168, 255, 0.9));
     }
-    .logo-animated:active {
-      transform: scale(0.92) rotate(-5deg);
-    }
+    .logo-animated:active { transform: scale(0.92) rotate(-5deg); }
 
-    /* Tweet ve Etkileşim Animasyonları */
+    /* Mikro Etkileşimler */
     @keyframes tweetEnter {
       0% { opacity: 0; transform: translateY(-12px) scale(0.98); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -89,9 +84,8 @@
   <div id="auth-screen" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-md">
     <div class="w-full max-w-md bg-[#16181c] border border-theme rounded-3xl p-8 shadow-2xl modal-animate">
       <div class="flex justify-center mb-6">
-        <!-- Büyütülen Auth Logosu (w-20 h-20) -->
         <div class="w-20 h-20 logo-animated cursor-pointer">
-          <svg viewBox="0 0 512 512" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 512 512" class="w-full h-full">
             <defs>
               <linearGradient id="authLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#6366f1"/>
@@ -111,11 +105,14 @@
         <div id="register-fields" class="space-y-4 hidden">
           <input id="auth-name" type="text" placeholder="Ad Soyad" class="w-full bg-transparent border border-theme rounded-xl px-4 py-3 focus:border-sky-500 focus:outline-none text-white smooth-transition">
           <div>
-            <label class="text-xs text-gray-400 block mb-1">Profil Fotoğrafı Seç</label>
+            <label class="text-xs text-gray-400 block mb-1">Profil Fotoğrafı Seç (Dosya)</label>
             <input id="auth-avatar-file" type="file" accept="image/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-sky-500/20 file:text-sky-400 hover:file:bg-sky-500/30 cursor-pointer smooth-transition">
           </div>
         </div>
-        <input id="auth-username" type="text" placeholder="Kullanıcı Adı (@ olmadan)" required class="w-full bg-transparent border border-theme rounded-xl px-4 py-3 focus:border-sky-500 focus:outline-none text-white smooth-transition">
+        <div>
+          <input id="auth-username" type="text" placeholder="Kullanıcı Adı (@ olmadan)" required class="w-full bg-transparent border border-theme rounded-xl px-4 py-3 focus:border-sky-500 focus:outline-none text-white smooth-transition">
+          <p id="username-error" class="text-xs text-red-500 mt-1.5 hidden"></p>
+        </div>
         <input id="auth-password" type="password" placeholder="Şifre" required class="w-full bg-transparent border border-theme rounded-xl px-4 py-3 focus:border-sky-500 focus:outline-none text-white smooth-transition">
         
         <button type="submit" id="auth-submit-btn" class="btn-smooth w-full bg-white text-black font-bold py-3 rounded-full hover:bg-gray-200">Giriş Yap</button>
@@ -134,10 +131,9 @@
     <!-- SOL SIDEBAR -->
     <aside class="w-20 xl:w-64 h-full flex flex-col justify-between p-3 border-r border-theme">
       <div class="space-y-2">
-        <!-- Büyütülen Sol Sidebar Logosu (w-14 h-14 kapsayıcı ve w-11 h-11 logo) -->
         <div onclick="switchView('feed')" class="btn-smooth w-14 h-14 flex items-center justify-center hover:bg-[#181818] rounded-2xl cursor-pointer mb-2 group">
           <div class="w-11 h-11 logo-animated">
-            <svg viewBox="0 0 512 512" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 512 512" class="w-full h-full">
               <defs>
                 <linearGradient id="sideLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stop-color="#6366f1"/>
@@ -183,7 +179,7 @@
         </nav>
       </div>
 
-      <!-- Kullanıcı Mini Profil & Çıkış -->
+      <!-- Kullanıcı Kartı & Çıkış -->
       <div class="relative">
         <div onclick="logout()" class="btn-smooth flex items-center gap-3 p-2 hover:bg-[#181818] rounded-full cursor-pointer justify-between group">
           <div class="flex items-center gap-2 overflow-hidden">
@@ -198,7 +194,7 @@
       </div>
     </aside>
 
-    <!-- ORTA ALAN (FEED / PROFİL) -->
+    <!-- ORTA ALAN (GÖRÜNÜMLER) -->
     <main class="flex-1 max-w-[600px] h-full border-r border-theme flex flex-col overflow-hidden">
       
       <!-- 1. ANASAYFA (FEED) -->
@@ -209,20 +205,21 @@
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scroll">
-          <!-- Tweet Kutusu -->
+          <!-- Tweet Gönderim Kutusu -->
           <div class="p-4 border-b border-theme flex gap-3">
             <img id="tweetbox-avatar" src="" class="btn-smooth w-10 h-10 rounded-full object-cover bg-gray-700 flex-shrink-0 cursor-pointer hover:opacity-80" onclick="openUserProfile(DB.getSession().id)">
             <div class="flex-1">
               <textarea id="tweet-input" placeholder="Neler düşünüyorsun?" rows="3" maxlength="280" class="w-full bg-transparent border-none outline-none resize-none text-lg placeholder-gray-500 text-white smooth-transition"></textarea>
               
-              <div id="image-preview-container" class="hidden relative mb-2 smooth-transition">
-                <img id="image-preview" src="" class="max-h-60 rounded-2xl w-full object-cover border border-theme shadow-md">
-                <button onclick="removeTweetImage()" class="btn-smooth absolute top-2 right-2 bg-black/70 hover:bg-black/90 rounded-full w-7 h-7 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
+              <!-- Tam Boyut Görsel Önizleme -->
+              <div id="image-preview-container" class="hidden relative mb-2 rounded-2xl overflow-hidden border border-theme bg-[#050505] p-1 flex justify-center smooth-transition">
+                <img id="image-preview" src="" class="max-h-72 w-full object-contain rounded-xl">
+                <button onclick="removeTweetImage()" class="btn-smooth absolute top-3 right-3 bg-black/80 hover:bg-black rounded-full w-8 h-8 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
               </div>
 
               <div class="flex items-center justify-between pt-2 border-t border-theme">
                 <div class="flex items-center gap-2 text-sky-500 text-lg">
-                  <label class="btn-smooth cursor-pointer hover:bg-sky-500/10 p-2 rounded-full" title="Görsel Yükle">
+                  <label class="btn-smooth cursor-pointer hover:bg-sky-500/10 p-2 rounded-full" title="Fotoğraf Yükle (Tam Çözünürlük)">
                     <i class="fa-regular fa-image"></i>
                     <input type="file" id="tweet-file-input" accept="image/*" class="hidden" onchange="handleTweetFileUpload(this)">
                   </label>
@@ -235,7 +232,6 @@
             </div>
           </div>
 
-          <!-- Tweet Listesi -->
           <div id="tweet-list" class="divide-y divide-theme"></div>
         </div>
       </div>
@@ -272,7 +268,6 @@
           <h1 class="text-xl font-bold tracking-tight">Bildirimler</h1>
           <button onclick="clearNotifications()" class="btn-smooth text-xs text-gray-500 hover:text-sky-500">Temizle</button>
         </div>
-
         <div class="flex-1 overflow-y-auto custom-scroll divide-y divide-theme" id="notifications-list"></div>
       </div>
 
@@ -282,7 +277,6 @@
           <h1 class="text-xl font-bold tracking-tight">Yer İşaretleri</h1>
           <p id="bookmarks-subtitle" class="text-xs text-gray-500">@kullaniciadi</p>
         </div>
-
         <div class="flex-1 overflow-y-auto custom-scroll divide-y divide-theme" id="bookmarks-tweet-list"></div>
       </div>
 
@@ -349,7 +343,7 @@
         <div id="follow-suggestions" class="space-y-3"></div>
       </div>
 
-      <!-- Trendler Özeti -->
+      <!-- Trendler -->
       <div class="bg-[#16181c] rounded-2xl border border-theme p-4 space-y-3">
         <h2 class="font-bold text-lg">Beclaude Gündemi</h2>
         <div onclick="filterByTag('BeclaudePro')" class="btn-smooth cursor-pointer hover:bg-white/5 p-2 rounded-xl">
@@ -409,6 +403,12 @@
     </div>
   </div>
 
+  <!-- ================= LIGHTBOX (TAM EKRAN GÖRSEL GÖRÜNTÜLEYİCİ) ================= -->
+  <div id="lightbox-modal" onclick="closeLightbox()" class="fixed inset-0 bg-black/95 z-50 hidden flex items-center justify-center p-4 backdrop-blur-md cursor-zoom-out">
+    <button class="absolute top-4 right-4 text-white text-3xl hover:text-gray-400 p-2"><i class="fa-solid fa-xmark"></i></button>
+    <img id="lightbox-img" src="" class="max-w-full max-h-[92vh] object-contain rounded-lg shadow-2xl smooth-transition" alt="Tam Boyut">
+  </div>
+
   <!-- ================= JAVASCRIPT MOTORU ================= -->
   <script>
     const DB = {
@@ -418,7 +418,7 @@
       ],
       saveUsers: (data) => localStorage.setItem('bc_users', JSON.stringify(data)),
       getTweets: () => JSON.parse(localStorage.getItem('bc_tweets')) || [
-        { id: '101', userId: '1', text: 'Beclaude (D°) resmi logosu ve dinamik SVG favicon desteği yüklendi! #BeclaudePro 🚀⚡', image: '', likes: ['2'], retweets: [], timestamp: Date.now() - 3600000 }
+        { id: '101', userId: '1', text: 'Beclaude (D°) resmi logosu, tekil kullanıcı adı sistemi ve tam çözünürlüklü görsel desteği yüklendi! #BeclaudePro 🚀⚡', image: '', likes: ['2'], retweets: [], timestamp: Date.now() - 3600000 }
       ],
       saveTweets: (data) => localStorage.setItem('bc_tweets', JSON.stringify(data)),
       getBookmarks: () => JSON.parse(localStorage.getItem('bc_bookmarks')) || [],
@@ -466,10 +466,13 @@
       }
     };
 
-    // --- AUTH ---
+    // --- AUTH & TEKİL KULLANICI ADI KONTROLÜ ---
     const switchBtn = document.getElementById('auth-switch-btn');
+    const uError = document.getElementById('username-error');
+
     switchBtn.addEventListener('click', () => {
       isRegisterMode = !isRegisterMode;
+      uError.classList.add('hidden');
       document.getElementById('auth-title').innerText = isRegisterMode ? "Beclaude'a Kaydol" : "Beclaude'a Giriş Yap";
       document.getElementById('auth-submit-btn').innerText = isRegisterMode ? "Kaydol" : "Giriş Yap";
       document.getElementById('register-fields').classList.toggle('hidden', !isRegisterMode);
@@ -479,28 +482,39 @@
 
     document.getElementById('auth-form').addEventListener('submit', async (e) => {
       e.preventDefault();
+      uError.classList.add('hidden');
       const uName = document.getElementById('auth-username').value.trim().toLowerCase();
       const pass = document.getElementById('auth-password').value;
       const users = DB.getUsers();
 
       if (isRegisterMode) {
         const name = document.getElementById('auth-name').value.trim();
+        
+        // --- 1 KULLANICI ADINI SADECE 1 KİŞİ ALABİLİR ---
+        const userExists = users.some(u => u.username.toLowerCase() === uName);
+        if (userExists) {
+          uError.innerText = `@${uName} kullanıcı adı daha önce alınmış! Lütfen başka bir kullanıcı adı seç.`;
+          uError.classList.remove('hidden');
+          return;
+        }
+
         const avatarFile = document.getElementById('auth-avatar-file').files[0];
         let avatarBase64 = `https://api.dicebear.com/7.x/bottts/svg?seed=${uName}`;
-
         if (avatarFile) {
           try { avatarBase64 = await fileToBase64(avatarFile); } catch(err) { console.error(err); }
         }
-        
-        if (users.some(u => u.username === uName)) return alert('Bu kullanıcı adı zaten alınmış!');
         
         const newUser = { id: Date.now().toString(), username: uName, name, password: pass, avatar: avatarBase64, banner: '', bio: '', location: '', following: [] };
         users.push(newUser);
         DB.saveUsers(users);
         DB.setSession(newUser);
       } else {
-        const user = users.find(u => u.username === uName && u.password === pass);
-        if (!user) return alert('Geçersiz kullanıcı adı veya şifre!');
+        const user = users.find(u => u.username.toLowerCase() === uName && u.password === pass);
+        if (!user) {
+          uError.innerText = 'Geçersiz kullanıcı adı veya şifre!';
+          uError.classList.remove('hidden');
+          return;
+        }
         DB.setSession(user);
       }
 
@@ -555,7 +569,7 @@
       if (viewName === 'bookmarks') renderBookmarks();
     }
 
-    // --- TWEET INPUT & GÖNDERME ---
+    // --- TWEET INPUT & DOSYA YÜKLEME ---
     function setupTweetInput() {
       const input = document.getElementById('tweet-input');
       const btn = document.getElementById('tweet-btn');
@@ -628,7 +642,18 @@
       renderTweets(true);
     }
 
-    // --- TWEET BİLEŞENİ ---
+    // --- TAM BOYUT FOTOĞRAFLI TWEET ELEMENTİ & LIGHTBOX ---
+    function openLightbox(src) {
+      const modal = document.getElementById('lightbox-modal');
+      const img = document.getElementById('lightbox-img');
+      img.src = src;
+      modal.classList.remove('hidden');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox-modal').classList.add('hidden');
+    }
+
     function createTweetElement(t, isFirstAnimated = false) {
       const users = DB.getUsers();
       const currentUser = DB.getSession();
@@ -655,7 +680,10 @@
           
           <p class="text-sm mt-1 whitespace-pre-line break-words text-gray-200 leading-relaxed">${formatTweetText(t.text)}</p>
           
-          ${t.image ? `<img src="${t.image}" class="mt-2.5 rounded-2xl max-h-80 w-full object-cover border border-theme shadow-sm smooth-transition hover:opacity-95">` : ''}
+          ${t.image ? `
+            <div class="mt-2.5 rounded-2xl overflow-hidden border border-theme bg-[#050505] flex justify-center items-center">
+              <img src="${t.image}" onclick="openLightbox('${t.image}')" class="w-full max-h-[550px] object-contain hover:scale-[1.01] smooth-transition cursor-zoom-in" alt="Gönderi fotoğrafı">
+            </div>` : ''}
 
           <div class="flex justify-between max-w-md mt-3 text-gray-500 text-xs">
             <button class="btn-smooth hover:text-sky-500 flex items-center gap-1.5"><i class="fa-regular fa-comment"></i> 0</button>
@@ -676,10 +704,9 @@
 
     function formatTweetText(text) {
       let escaped = escapeHTML(text);
-      return escaped.replace(/#(\w+)/g, '<span onclick="filterByTag(\'$1\')" class="text-sky-500 hover:underline cursor-pointer">#$1</span>');
+      return escaped.replace(/#(\w+)/g, '<span onclick="filterByTag(\'$1\')" class="text-sky-400 hover:underline cursor-pointer">#$1</span>');
     }
 
-    // --- ANASAYFA RENDER ---
     function renderTweets(isFirstAnimated = false) {
       const tweets = DB.getTweets();
       const container = document.getElementById('tweet-list');
@@ -689,7 +716,7 @@
       });
     }
 
-    // --- ETKİLEŞİMLER ---
+    // --- ETKİLEŞİMLER (LIKE, RT, BOOKMARK, DELETE) ---
     function toggleLike(tweetId, btnEl) {
       const icon = btnEl.querySelector('i');
       icon.classList.add('heart-pop');
@@ -855,7 +882,7 @@
       }
 
       myNotifs.forEach(n => {
-        const fromUser = users.find(u => u.id === n.fromUserId) || { name: 'Biri', username: 'anon', avatar: '' };
+        const fromUser = users.find(u => u.id === n.fromUserId) || { id: '', name: 'Biri', avatar: '' };
         let iconHtml = '<i class="fa-solid fa-heart text-pink-500 text-lg"></i>';
         if (n.type === 'retweet') iconHtml = '<i class="fa-solid fa-retweet text-green-500 text-lg"></i>';
         if (n.type === 'follow') iconHtml = '<i class="fa-solid fa-user-plus text-sky-500 text-lg"></i>';
