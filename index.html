@@ -148,7 +148,7 @@
 
           <button id="nav-btn-standings" onclick="switchView('standings')" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-gray-400 hover:text-white">
             <i class="fa-solid fa-ranking-star text-lg"></i>
-            <span class="hidden xl:inline text-base font-normal">Puan Durumu</span>
+            <span class="hidden xl:inline text-base font-normal">Tablo & Krallık</span>
           </button>
           
           <button id="nav-btn-explore" onclick="switchView('explore')" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-gray-400 hover:text-white">
@@ -226,47 +226,77 @@
         </div>
       </div>
 
-      <!-- 2. PUAN DURUMU (STANDINGS) -->
+      <!-- 2. PUAN DURUMU & GOL KRALLIĞI (STANDINGS & TOP SCORERS) -->
       <div id="view-standings" class="view-panel flex flex-col h-full overflow-hidden hidden">
-        <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-4 z-10 flex justify-between items-center">
-          <div>
-            <h1 class="text-xl font-bold tracking-tight">Premier League Tablosu</h1>
-            <p id="standings-season-sub" class="text-[11px] text-gray-400">Takımlara tıklayarak profillerine gidebilirsiniz</p>
+        <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-3 z-10">
+          <div class="flex justify-between items-center mb-3">
+            <div>
+              <h1 class="text-lg font-bold tracking-tight">Premier League İstatistikleri</h1>
+              <p id="standings-season-sub" class="text-[11px] text-gray-400">Puan Durumu ve Gol Krallığı</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="openSeasonModal()" class="btn-smooth text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-3 py-1.5 rounded-full font-semibold hover:bg-indigo-500/30">Yeni Sezona Geç ⏩</button>
+              <button onclick="resetStandingsToDefault()" class="btn-smooth text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-2.5 py-1.5 rounded-full hover:bg-red-500/30">Sıfırla</button>
+            </div>
           </div>
-          <div class="flex items-center gap-2">
-            <button onclick="openSeasonModal()" class="btn-smooth text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-3 py-1.5 rounded-full font-semibold hover:bg-indigo-500/30">Yeni Sezona Geç ⏩</button>
-            <button onclick="resetStandingsToDefault()" class="btn-smooth text-xs bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-full hover:bg-red-500/30">Sıfırla</button>
+
+          <!-- Alt Sekmeler: Puan Tablosu vs Gol Krallığı -->
+          <div class="flex border-b border-theme">
+            <button id="tab-btn-table" onclick="toggleStatsSubTab('table')" class="flex-1 py-2 font-bold text-xs text-white border-b-2 border-sky-500 smooth-transition">🏆 Puan Durumu</button>
+            <button id="tab-btn-scorers" onclick="toggleStatsSubTab('scorers')" class="flex-1 py-2 font-semibold text-xs text-gray-400 hover:text-white border-b-2 border-transparent smooth-transition">⚽ Gol Krallığı</button>
           </div>
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scroll p-2">
-          <div class="bg-[#121417] border border-theme rounded-2xl overflow-hidden shadow-lg">
-            <table class="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr class="border-b border-theme text-gray-400 bg-black/40">
-                  <th class="py-2.5 px-3 w-8 text-center">#</th>
-                  <th class="py-2.5 px-2">Kulüp</th>
-                  <th class="py-2.5 px-1.5 text-center">O</th>
-                  <th class="py-2.5 px-1.5 text-center">G</th>
-                  <th class="py-2.5 px-1.5 text-center">B</th>
-                  <th class="py-2.5 px-1.5 text-center">M</th>
-                  <th class="py-2.5 px-1.5 text-center">A</th>
-                  <th class="py-2.5 px-1.5 text-center">Y</th>
-                  <th class="py-2.5 px-2 text-center">AV</th>
-                  <th class="py-2.5 px-3 text-center font-bold text-white">P</th>
-                </tr>
-              </thead>
-              <tbody id="standings-table-body" class="divide-y divide-[#202327]"></tbody>
-            </table>
+          
+          <!-- PUAN TABLOSU İÇERİĞİ -->
+          <div id="subtab-table-content" class="space-y-3">
+            <div class="bg-[#121417] border border-theme rounded-2xl overflow-hidden shadow-lg">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-theme text-gray-400 bg-black/40">
+                    <th class="py-2.5 px-3 w-8 text-center">#</th>
+                    <th class="py-2.5 px-2">Kulüp</th>
+                    <th class="py-2.5 px-1.5 text-center">O</th>
+                    <th class="py-2.5 px-1.5 text-center">G</th>
+                    <th class="py-2.5 px-1.5 text-center">B</th>
+                    <th class="py-2.5 px-1.5 text-center">M</th>
+                    <th class="py-2.5 px-1.5 text-center">A</th>
+                    <th class="py-2.5 px-1.5 text-center">Y</th>
+                    <th class="py-2.5 px-2 text-center">AV</th>
+                    <th class="py-2.5 px-3 text-center font-bold text-white">P</th>
+                  </tr>
+                </thead>
+                <tbody id="standings-table-body" class="divide-y divide-[#202327]"></tbody>
+              </table>
+            </div>
+
+            <!-- Açıklama Renkleri -->
+            <div class="p-3 bg-[#121417] rounded-xl border border-theme text-[11px] text-gray-400 space-y-1.5">
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-sky-400"></span> <span>1-4: UEFA Şampiyonlar Ligi (Mavi)</span></div>
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-amber-400"></span> <span>5-6: UEFA Avrupa Ligi (Sarı)</span></div>
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-emerald-500"></span> <span>7: UEFA Konferans Ligi Play-off (Yeşil)</span></div>
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-red-500"></span> <span>18-20: Championship'e Düşme Hattı (Kırmızı)</span></div>
+            </div>
           </div>
 
-          <!-- Güncellenmiş Avrupa Kontenjanları Açıklaması (Mavi, Sarı, Yeşil) -->
-          <div class="mt-4 p-3 bg-[#121417] rounded-xl border border-theme text-[11px] text-gray-400 space-y-1.5">
-            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-sky-400"></span> <span>1-4: UEFA Şampiyonlar Ligi (Mavi)</span></div>
-            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-amber-400"></span> <span>5-6: UEFA Avrupa Ligi (Sarı)</span></div>
-            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-emerald-500"></span> <span>7: UEFA Konferans Ligi Play-off (Yeşil)</span></div>
-            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-red-500"></span> <span>18-20: Championship'e Düşme Hattı (Kırmızı)</span></div>
+          <!-- GOL KRALLIĞI İÇERİĞİ -->
+          <div id="subtab-scorers-content" class="hidden space-y-3">
+            <div class="bg-[#121417] border border-theme rounded-2xl overflow-hidden shadow-lg">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="border-b border-theme text-gray-400 bg-black/40">
+                    <th class="py-2.5 px-3 w-8 text-center">#</th>
+                    <th class="py-2.5 px-2">Oyuncu</th>
+                    <th class="py-2.5 px-2">Kulüp</th>
+                    <th class="py-2.5 px-3 text-center font-bold text-white">Gol</th>
+                  </tr>
+                </thead>
+                <tbody id="scorers-table-body" class="divide-y divide-[#202327]"></tbody>
+              </table>
+            </div>
           </div>
+
         </div>
       </div>
 
@@ -382,13 +412,22 @@
         <div id="follow-suggestions" class="space-y-3"></div>
       </div>
 
-      <!-- Mini Puan Durumu Önizleme (Mavi, Sarı, Yeşil Renkler Dahil) -->
+      <!-- Mini Zirve Yarışı -->
       <div class="bg-[#16181c] rounded-2xl border border-theme p-4 space-y-3">
         <div class="flex justify-between items-center">
           <h2 class="font-bold text-base">Zirve Yarışı</h2>
-          <button onclick="switchView('standings')" class="text-xs text-sky-400 hover:underline">Tam Tablo</button>
+          <button onclick="switchView('standings'); toggleStatsSubTab('table');" class="text-xs text-sky-400 hover:underline">Tam Tablo</button>
         </div>
         <div id="mini-standings-container" class="space-y-2 text-xs"></div>
+      </div>
+
+      <!-- Mini Gol Krallığı -->
+      <div class="bg-[#16181c] rounded-2xl border border-theme p-4 space-y-3">
+        <div class="flex justify-between items-center">
+          <h2 class="font-bold text-base flex items-center gap-1.5"><i class="fa-solid fa-fire text-amber-400 text-xs"></i> Gol Krallığı</h2>
+          <button onclick="switchView('standings'); toggleStatsSubTab('scorers');" class="text-xs text-sky-400 hover:underline">Tümü</button>
+        </div>
+        <div id="mini-scorers-container" class="space-y-2 text-xs"></div>
       </div>
     </aside>
 
@@ -420,8 +459,8 @@
         <div>
           <label class="text-xs text-gray-400 block mb-1">Paylaşım Aşaması</label>
           <select id="fm-match-stage" onchange="toggleFmScoreInputs(this.value)" class="w-full bg-black border border-theme rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500 focus:outline-none">
-            <option value="fulltime">Maç Sonu (Puan Tablosunu Günceller & Full-Time)</option>
-            <option value="matchday">Maç Günü (Matchday Ön Paylaşım)</option>
+            <option value="fulltime">Maç Sonu (Puan & Gol Krallığını Günceller)</option>
+            <option value="matchday">Maç Günü (Ev Sahibi & Deplasman Ortak Ön Paylaşım)</option>
           </select>
         </div>
 
@@ -436,10 +475,17 @@
               <input id="fm-away-score" type="number" min="0" value="1" class="w-full bg-black border border-theme rounded-xl px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none">
             </div>
           </div>
+          
           <div>
-            <label class="text-xs text-gray-400 block mb-1">Goller & Dakikalar (Opsiyonel)</label>
-            <input id="fm-scorers" type="text" placeholder="Örn: Saka 34', Havertz 79' - Palmer 12'" class="w-full bg-black border border-theme rounded-xl px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none">
+            <label class="text-xs text-gray-400 block mb-1">Ev Sahibi Golcüler (İsim ve Dakika)</label>
+            <input id="fm-home-scorers" type="text" placeholder="Örn: Stephan Rennocks 34', Stephan Rennocks 79'" class="w-full bg-black border border-theme rounded-xl px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none">
           </div>
+
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">Deplasman Golcüler (İsim ve Dakika)</label>
+            <input id="fm-away-scorers" type="text" placeholder="Örn: Denis Höfler 12'" class="w-full bg-black border border-theme rounded-xl px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none">
+          </div>
+
           <div class="flex items-center gap-2 pt-1">
             <input id="fm-enable-romano" type="checkbox" checked class="rounded bg-black border-theme text-emerald-500 focus:ring-0">
             <label for="fm-enable-romano" class="text-xs text-gray-300">Fabrizio Romano flaş haber tweeti üretsin</label>
@@ -587,6 +633,30 @@
       { id: 'c_bol', name: 'Bolton', pld: 5, w: 0, d: 1, l: 4, gf: 4, ga: 10, gd: -6, pts: 1 }
     ];
 
+    // FM EKRAN GÖRÜNTÜSÜNDEKİ 2045/46 RESMİ GOL KRALLARI LİSTESİ
+    const FM_2045_SCORERS = [
+      { player: 'Stephan Rennocks', team: 'Derby County', clubId: 'c_der', goals: 6 },
+      { player: 'Izuchukwu Martins', team: 'Arsenal', clubId: 'c_ars', goals: 4 },
+      { player: 'Marcos Vinicius', team: 'Wolves', clubId: 'c_wol', goals: 4 },
+      { player: 'Louie Williams', team: 'Tottenham', clubId: 'c_tot', goals: 4 },
+      { player: 'Antonio Dragone', team: 'Everton', clubId: 'c_eve', goals: 4 },
+      { player: 'Mahdi Al-Nasser', team: 'Arsenal', clubId: 'c_ars', goals: 3 },
+      { player: 'Graham White', team: 'West Ham', clubId: 'c_whu', goals: 3 },
+      { player: 'Malam Gomis', team: 'Southampton', clubId: 'c_sou', goals: 3 },
+      { player: 'Job Gordillo', team: 'Newcastle', clubId: 'c_new', goals: 3 },
+      { player: 'Denis Höfler', team: 'Chelsea', clubId: 'c_che', goals: 3 },
+      { player: 'Jordon Braimbridge', team: 'Liverpool', clubId: 'c_liv', goals: 3 },
+      { player: 'Mees Heemskerk', team: 'Arsenal', clubId: 'c_ars', goals: 2 },
+      { player: 'Aaron Haley', team: 'Southampton', clubId: 'c_sou', goals: 2 },
+      { player: 'Valdo Carvalho', team: 'Fulham', clubId: 'c_ful', goals: 2 },
+      { player: 'Sebastián', team: 'Brighton', clubId: 'c_bha', goals: 2 },
+      { player: 'Paul Vallet', team: 'Chelsea', clubId: 'c_che', goals: 2 },
+      { player: 'Connor Christie', team: 'Brentford', clubId: 'c_bre', goals: 2 },
+      { player: 'José Muñoz', team: 'Man Utd', clubId: 'c_mun', goals: 2 },
+      { player: 'Maxime Conan', team: 'Man City', clubId: 'c_mci', goals: 2 },
+      { player: 'Owen Remington', team: 'Liverpool', clubId: 'c_liv', goals: 2 }
+    ];
+
     const BOT_ROMANO = {
       id: 'bot_romano',
       username: 'FabrizioRomano',
@@ -600,12 +670,14 @@
     };
 
     const DB = {
-      getClubs: () => JSON.parse(localStorage.getItem('bc_fm_clubs_v7')) || DEFAULT_CLUBS,
-      saveClubs: (data) => localStorage.setItem('bc_fm_clubs_v7', JSON.stringify(data)),
-      getSeason: () => localStorage.getItem('bc_fm_season_v7') || '2045/46',
-      saveSeason: (val) => localStorage.setItem('bc_fm_season_v7', val),
+      getClubs: () => JSON.parse(localStorage.getItem('bc_fm_clubs_v9')) || DEFAULT_CLUBS,
+      saveClubs: (data) => localStorage.setItem('bc_fm_clubs_v9', JSON.stringify(data)),
+      getSeason: () => localStorage.getItem('bc_fm_season_v9') || '2045/46',
+      saveSeason: (val) => localStorage.setItem('bc_fm_season_v9', val),
+      getScorers: () => JSON.parse(localStorage.getItem('bc_fm_scorers_v9')) || FM_2045_SCORERS,
+      saveScorers: (data) => localStorage.setItem('bc_fm_scorers_v9', JSON.stringify(data)),
       getUsers: () => {
-        let users = JSON.parse(localStorage.getItem('bc_users_v7'));
+        let users = JSON.parse(localStorage.getItem('bc_users_v9'));
         if (!users) {
           const clubs = DB.getClubs().map(c => ({
             id: c.id,
@@ -623,29 +695,29 @@
             ...clubs,
             { id: 'user_default', username: 'fm_observer', name: 'FM Observer', password: '123', bio: `Premier League Gözlemcisi 🧠⚽`, location: 'London, UK', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=fm_observer', banner: '', following: [] }
           ];
-          localStorage.setItem('bc_users_v7', JSON.stringify(users));
+          localStorage.setItem('bc_users_v9', JSON.stringify(users));
         }
         return users;
       },
-      saveUsers: (data) => localStorage.setItem('bc_users_v7', JSON.stringify(data)),
-      getTweets: () => JSON.parse(localStorage.getItem('bc_tweets_v7')) || [
+      saveUsers: (data) => localStorage.setItem('bc_users_v9', JSON.stringify(data)),
+      getTweets: () => JSON.parse(localStorage.getItem('bc_tweets_v9')) || [
         { 
           id: 'fm_init_1', 
           userId: 'c_der', 
-          text: '🔥 UNBELIEVABLE! Full-time at Pride Park.\n\nDerby County 2-0 Chelsea\n⚽ Smith 41\', Johnson 88\'\n\nWe are 3rd in the Premier League with 13 points! 🐏🖤 #DCFC #DERCHE', 
+          text: '🔥 UNBELIEVABLE! Full-time at Pride Park.\n\nDerby County 2-0 Chelsea\n⚽ Stephan Rennocks 41\', Stephan Rennocks 88\'\n\nWe are 3rd in the Premier League with 13 points! Rennocks leads the Golden Boot race with 6 goals! 🐏🖤 #DCFC #DERCHE', 
           image: '', 
           likes: ['c_ars', 'user_default'], 
           retweets: ['user_default'], 
           replies: [
-            { author: 'DerbyFan_99', text: 'EUROPE HERE WE COME! 🖤🤍' },
+            { author: 'DerbyFan_99', text: 'RENNOCKS IS ON FIRE! 6 GOALS IN 5 GAMES! 🖤🤍' },
             { author: 'CFC_BlueTrue', text: 'Sack the manager tonight. Embarrassing result.' }
           ],
           timestamp: Date.now() - 7200000 
         }
       ],
-      saveTweets: (data) => localStorage.setItem('bc_tweets_v7', JSON.stringify(data)),
-      getStandings: () => JSON.parse(localStorage.getItem('bc_standings_v7')) || DEFAULT_STANDINGS,
-      saveStandings: (data) => localStorage.setItem('bc_standings_v7', JSON.stringify(data)),
+      saveTweets: (data) => localStorage.setItem('bc_tweets_v9', JSON.stringify(data)),
+      getStandings: () => JSON.parse(localStorage.getItem('bc_standings_v9')) || DEFAULT_STANDINGS,
+      saveStandings: (data) => localStorage.setItem('bc_standings_v9', JSON.stringify(data)),
       getBookmarks: () => JSON.parse(localStorage.getItem('bc_bookmarks')) || [],
       saveBookmarks: (data) => localStorage.setItem('bc_bookmarks', JSON.stringify(data)),
       getNotifications: () => JSON.parse(localStorage.getItem('bc_notifications')) || [],
@@ -669,8 +741,9 @@
 
     window.onload = () => {
       DB.getUsers();
-      if (!localStorage.getItem('bc_tweets_v7')) DB.saveTweets(DB.getTweets());
-      if (!localStorage.getItem('bc_standings_v7')) DB.saveStandings(DEFAULT_STANDINGS);
+      if (!localStorage.getItem('bc_tweets_v9')) DB.saveTweets(DB.getTweets());
+      if (!localStorage.getItem('bc_standings_v9')) DB.saveStandings(DEFAULT_STANDINGS);
+      if (!localStorage.getItem('bc_fm_scorers_v9')) DB.saveScorers(FM_2045_SCORERS);
       
       const session = DB.getSession();
       if (session) {
@@ -679,6 +752,7 @@
       }
       populateFmSelects();
       renderStandings();
+      renderScorers();
       updateSeasonUI();
     };
 
@@ -692,7 +766,7 @@
       if (tag) tag.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Sezon ${curSeason}`;
       if (authBadge) authBadge.innerText = `Premier League ${curSeason} Kariyer Ağı`;
       if (feedSub) feedSub.innerText = `Sezon ${curSeason} · Canlı Maç ve Kulüp Bildirimleri`;
-      if (standSub) standSub.innerText = `Sezon ${curSeason} · Takımlara tıklayarak profillerine gidebilirsiniz`;
+      if (standSub) standSub.innerText = `Sezon ${curSeason} · Puan Durumu ve Gol Krallığı`;
     }
 
     // --- AUTH ---
@@ -761,11 +835,12 @@
       renderSuggestions();
       renderExploreTrends();
       renderStandings();
+      renderScorers();
       checkUnreadNotifications();
       updateSeasonUI();
     }
 
-    // --- VIEW YÖNETİMİ ---
+    // --- VIEW & STATS SUB-TAB YÖNETİMİ ---
     function switchView(viewName) {
       currentView = viewName;
       document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
@@ -784,10 +859,29 @@
       if (activeView) activeView.classList.remove('hidden');
 
       if (viewName === 'feed') renderTweets();
-      if (viewName === 'standings') renderStandings();
+      if (viewName === 'standings') { renderStandings(); renderScorers(); }
       if (viewName === 'explore') renderExploreTweets();
       if (viewName === 'notifications') renderNotifications();
       if (viewName === 'bookmarks') renderBookmarks();
+    }
+
+    function toggleStatsSubTab(tab) {
+      const tableContent = document.getElementById('subtab-table-content');
+      const scorersContent = document.getElementById('subtab-scorers-content');
+      const btnTable = document.getElementById('tab-btn-table');
+      const btnScorers = document.getElementById('tab-btn-scorers');
+
+      if (tab === 'table') {
+        tableContent.classList.remove('hidden');
+        scorersContent.classList.add('hidden');
+        btnTable.className = 'flex-1 py-2 font-bold text-xs text-white border-b-2 border-sky-500 smooth-transition';
+        btnScorers.className = 'flex-1 py-2 font-semibold text-xs text-gray-400 hover:text-white border-b-2 border-transparent smooth-transition';
+      } else {
+        tableContent.classList.add('hidden');
+        scorersContent.classList.remove('hidden');
+        btnScorers.className = 'flex-1 py-2 font-bold text-xs text-white border-b-2 border-sky-500 smooth-transition';
+        btnTable.className = 'flex-1 py-2 font-semibold text-xs text-gray-400 hover:text-white border-b-2 border-transparent smooth-transition';
+      }
     }
 
     // --- TWEET KARTLARI & LIGHTBOX ---
@@ -928,7 +1022,7 @@
 
     function refreshActiveViews() {
       if (currentView === 'feed') renderTweets();
-      if (currentView === 'standings') renderStandings();
+      if (currentView === 'standings') { renderStandings(); renderScorers(); }
       if (currentView === 'explore') renderExploreTweets();
       if (currentView === 'bookmarks') renderBookmarks();
       if (currentView === 'profile' && viewingUserId) renderUserProfile(viewingUserId);
@@ -990,7 +1084,7 @@
       document.getElementById('replies-modal').classList.add('hidden');
     }
 
-    // --- PUAN TABLOSU VE SIRALAMA MOTORU (MAVİ, SARI, YEŞİL) ---
+    // --- PUAN TABLOSU MOTORU ---
     function sortStandings(list) {
       return list.sort((a, b) => {
         if (b.pts !== a.pts) return b.pts - a.pts;
@@ -1088,13 +1182,89 @@
       }
     }
 
+    // --- GOL KRALLIĞI MOTORU (GERÇEK FM OYUNCULARI) ---
+    function renderScorers() {
+      let scorers = DB.getScorers();
+      scorers.sort((a, b) => b.goals - a.goals);
+      
+      const tableBody = document.getElementById('scorers-table-body');
+      const miniContainer = document.getElementById('mini-scorers-container');
+      const clubs = DB.getClubs();
+
+      if (tableBody) {
+        tableBody.innerHTML = '';
+        scorers.forEach((s, index) => {
+          const club = clubs.find(c => c.id === s.clubId) || { logo: '', name: s.team };
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-white/5 transition';
+          row.innerHTML = `
+            <td class="py-2.5 px-3 text-center ${index === 0 ? 'text-amber-400 font-bold' : 'text-gray-400'}">${index + 1}</td>
+            <td class="py-2.5 px-2 font-bold text-white">${s.player}</td>
+            <td class="py-2.5 px-2 text-gray-300">
+              <div class="flex items-center gap-1.5">
+                <img src="${club.logo}" class="w-4 h-4 object-contain" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${s.team}'">
+                <span>${s.team}</span>
+              </div>
+            </td>
+            <td class="py-2.5 px-3 text-center font-bold text-amber-400 text-sm bg-white/5">${s.goals}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      }
+
+      if (miniContainer) {
+        miniContainer.innerHTML = '';
+        scorers.slice(0, 5).forEach((s, index) => {
+          const club = clubs.find(c => c.id === s.clubId) || { logo: '', name: s.team };
+          const div = document.createElement('div');
+          div.className = 'flex justify-between items-center py-1 border-b border-theme/40';
+          div.innerHTML = `
+            <div class="flex items-center gap-2 truncate">
+              <span class="font-bold w-3 text-amber-400">${index+1}</span>
+              <span class="text-white font-medium truncate">${s.player}</span>
+              <span class="text-[10px] text-gray-500">(${s.team})</span>
+            </div>
+            <span class="font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">${s.goals} Gol</span>
+          `;
+          miniContainer.appendChild(div);
+        });
+      }
+    }
+
+    function parseAndAddScorers(scorerString, teamName, clubId) {
+      if (!scorerString) return;
+      let scorers = DB.getScorers();
+      const items = scorerString.split(',').map(s => s.trim()).filter(Boolean);
+
+      items.forEach(item => {
+        const playerName = item.replace(/\s*\d+['’]?/g, '').trim();
+        if (!playerName) return;
+
+        let existing = scorers.find(s => s.player.toLowerCase() === playerName.toLowerCase() && s.clubId === clubId);
+        if (existing) {
+          existing.goals += 1;
+        } else {
+          scorers.push({
+            player: playerName,
+            team: teamName,
+            clubId: clubId,
+            goals: 1
+          });
+        }
+      });
+
+      DB.saveScorers(scorers);
+      renderScorers();
+    }
+
     function resetStandingsToDefault() {
-      if (confirm("Puan durumunu kariyer başlangıcındaki 2045/46 5. hafta haline döndürmek istediğine emin misin?")) {
+      if (confirm("Puan durumu ve gol krallığını orijinal 2045/46 5. hafta haline döndürmek istediğine emin misin?")) {
         DB.saveStandings(DEFAULT_STANDINGS);
         DB.saveClubs(DEFAULT_CLUBS);
+        DB.saveScorers(FM_2045_SCORERS);
         DB.saveSeason('2045/46');
-        localStorage.removeItem('bc_users_v7');
-        localStorage.removeItem('bc_tweets_v7');
+        localStorage.removeItem('bc_users_v9');
+        localStorage.removeItem('bc_tweets_v9');
         location.reload();
       }
     }
@@ -1168,6 +1338,9 @@
       }));
       DB.saveStandings(newStandings);
 
+      // Yeni Sezonda Gol Krallığını Sıfırla
+      DB.saveScorers([]);
+
       const newClubUsers = newPromotedClubs.map(c => ({
         id: c.id,
         username: c.username,
@@ -1207,12 +1380,13 @@
       closeSeasonModal();
       populateFmSelects();
       renderStandings();
+      renderScorers();
       updateSeasonUI();
       switchView('feed');
       alert(`Tebrikler! ${nextSeason} sezonu resmen başladı!`);
     });
 
-    // --- FM MAÇ PANELİ & PUAN GÜNCELLEME SİSTEMİ ---
+    // --- FM MAÇ PANELİ & PUAN / GOL KRALLIĞI GÜNCELLEME SİSTEMİ ---
     function populateFmSelects() {
       const homeSel = document.getElementById('fm-home-team');
       const awaySel = document.getElementById('fm-away-team');
@@ -1266,22 +1440,40 @@
         const homeTweet = {
           id: 'tw_fm_' + now,
           userId: homeClub.id,
-          text: `🔴 MATCHDAY IN THE PREMIER LEAGUE!\n\n🆚 @${awayClub.username}\n🏆 Season ${curSeason}\n📍 ${homeClub.stadium}\n\nLet's get the 3 points! 👊 ${hashtag} #${homeClub.tag}`,
+          text: `🔴 MATCHDAY IN THE PREMIER LEAGUE!\n\n🆚 @${awayClub.username}\n🏆 Season ${curSeason}\n📍 ${homeClub.stadium}\n\nLet's get the 3 points at home! 👊 ${hashtag} #${homeClub.tag}`,
           image: imgBase64,
           likes: [],
           retweets: [],
           replies: [
-            { author: `${homeClub.name}Fan_01`, text: 'Big game today! We need the win!' },
-            { author: `${awayClub.name}Ultra`, text: 'Easy 3 points for us on the road.' }
+            { author: `${homeClub.name}Fan_01`, text: 'Big game today! We need the win!' }
           ],
           timestamp: now
         };
+
+        const awayTweet = {
+          id: 'tw_fm_away_' + (now - 500),
+          userId: awayClub.id,
+          text: `✈️ ON THE ROAD | MATCHDAY!\n\n🆚 @${homeClub.username}\n🏆 Premier League | Season ${curSeason}\n📍 ${homeClub.stadium}\n\nTravelling in full voice. Come on you lads! 💙 ${hashtag} #${awayClub.tag}`,
+          image: '',
+          likes: [],
+          retweets: [],
+          replies: [
+            { author: `${awayClub.name}AwayDay`, text: 'Safe travels lads, bring back the 3 points!' }
+          ],
+          timestamp: now - 500
+        };
+
         tweets.unshift(homeTweet);
+        tweets.unshift(awayTweet);
       } else {
         const homeScore = parseInt(document.getElementById('fm-home-score').value) || 0;
         const awayScore = parseInt(document.getElementById('fm-away-score').value) || 0;
-        const scorers = document.getElementById('fm-scorers').value.trim();
+        const homeScorers = document.getElementById('fm-home-scorers').value.trim();
+        const awayScorers = document.getElementById('fm-away-scorers').value.trim();
         const enableRomano = document.getElementById('fm-enable-romano').checked;
+
+        parseAndAddScorers(homeScorers, homeClub.name, homeClub.id);
+        parseAndAddScorers(awayScorers, awayClub.name, awayClub.id);
 
         let standings = DB.getStandings();
         let homeTeamStats = standings.find(t => t.id === homeId) || { id: homeId, name: homeClub.name, pld: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 };
@@ -1343,12 +1535,16 @@
         }
 
         const scoreHeader = `🏁 FULL-TIME: ${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}`;
-        const scorerText = scorers ? `\n⚽ ${scorers}` : '';
+        
+        let allScorersText = '';
+        if (homeScorers || awayScorers) {
+          allScorersText = `\n⚽ ${homeClub.name}: ${homeScorers || '-'}\n⚽ ${awayClub.name}: ${awayScorers || '-'}`;
+        }
 
         const homePost = {
           id: 'tw_fm_' + now,
           userId: homeClub.id,
-          text: `${scoreHeader}${scorerText}\n\nPoints updated in the Premier League table! Thank you for your support at ${homeClub.stadium}! 👏 ${hashtag} #PremierLeague`,
+          text: `${scoreHeader}${allScorersText}\n\nStandings and top scorers updated! Thank you for your support at ${homeClub.stadium}! 👏 ${hashtag} #PremierLeague`,
           image: imgBase64,
           likes: [awayClub.id],
           retweets: [],
@@ -1359,7 +1555,7 @@
         const awayPost = {
           id: 'tw_fm_' + (now - 1000),
           userId: awayClub.id,
-          text: `🏁 Full-time at ${homeClub.stadium}.\n\n${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}${scorerText}\n\nWe regroup and focus on the next fixture. ${hashtag}`,
+          text: `🏁 Full-time at ${homeClub.stadium}.\n\n${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}${allScorersText}\n\nWe regroup and focus on the next fixture. ${hashtag}`,
           image: '',
           likes: [],
           retweets: [],
@@ -1374,7 +1570,7 @@
           let romanoText = `🚨 BREAKING: Full-time in Premier League ${curSeason}!\n\n${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}. `;
           if (homeScore !== awayScore) {
             const loser = homeScore > awayScore ? awayClub : homeClub;
-            romanoText += `Pressure mounting on @${loser.username} board. Standings updated after this result! #HereWeGo #PremierLeague`;
+            romanoText += `Pressure mounting on @${loser.username} board. Table and top scorers updated! #HereWeGo #PremierLeague`;
           } else {
             romanoText += `Intense game finished in a draw. Both teams take 1 point! #HereWeGo`;
           }
@@ -1406,9 +1602,9 @@
       
       const seasonalTrends = [
         { tag: `#PremierLeague${curSeason.replace('/','')}`, category: 'Lig Gündemi', count: '420.5 B' },
+        { tag: '#GoldenBootRace', category: 'Gol Krallığı', count: '210.8 B' },
         { tag: '#DerbyCountyEurope', category: 'Zirve Yarışı', count: '184.2 B' },
-        { tag: '#SackTheManager', category: 'Kriz', count: '112.8 B' },
-        { tag: '#HereWeGo', category: 'Fabrizio Romano', count: '320.1 B' }
+        { tag: '#SackTheManager', category: 'Kriz', count: '112.8 B' }
       ];
 
       seasonalTrends.forEach(trend => {
