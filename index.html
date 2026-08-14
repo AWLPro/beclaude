@@ -865,6 +865,17 @@ auth.onAuthStateChanged((user) => {
         following:['@krallikayip'], followers:['@amcatarzi']
       };
     }
+
+    // F5 / yeniden açılış sonrası daha önce kaydedilen profil fotoğrafını geri yükle.
+    loadUserProfile(user);
+    if(!profiles[myHandle]){
+      profiles[myHandle] = {
+        handle: myHandle, name: uName, bio:'', avatarImg:null, bannerImg:null,
+        avatarColor:'linear-gradient(135deg,#7856ff,#1d9bf0)', editable:true, verified:false,
+        following:['@krallikayip'], followers:['@amcatarzi']
+      };
+    }
+    profiles[myHandle].editable = true;
     currentProfileHandle = myHandle;
     updateMyAvatarComposer();
     updateSidebarUserCard();
@@ -909,6 +920,50 @@ let tweets = [
 let idCounter = 5;
 let replyIdCounter = 200;
 let pendingImage = null;
+
+/* ================= PERSISTENT USER PROFILE ================= */
+// Profil fotoğrafı/banner gibi değişiklikleri tarayıcı yenilense bile koru.
+// Firebase hesabına özel anahtar kullanıyoruz; böylece farklı hesaplar birbirine karışmaz.
+function profileStorageKey(user){
+  const id = user && (user.uid || user.email);
+  return id ? 'beclaude-profile-' + id : 'beclaude-profile-local';
+}
+function saveUserProfile(user){
+  try{
+    const p = profiles[myHandle];
+    if(!p) return;
+    localStorage.setItem(profileStorageKey(user), JSON.stringify({
+      myHandle,
+      profile: p
+    }));
+  }catch(err){
+    console.warn('Profil kaydedilemedi:', err);
+    showToast('Profil kaydedilemedi. Tarayıcı depolaması dolu olabilir.');
+  }
+}
+function loadUserProfile(user){
+  try{
+    const raw = localStorage.getItem(profileStorageKey(user));
+    if(!raw) return false;
+    const saved = JSON.parse(raw);
+    if(!saved || !saved.profile) return false;
+
+    myHandle = saved.myHandle || saved.profile.handle || myHandle;
+    profiles[myHandle] = {
+      ...profiles[myHandle],
+      ...saved.profile,
+      handle: myHandle,
+      avatarImg: saved.profile.avatarImg || null,
+      bannerImg: saved.profile.bannerImg || null,
+      following: Array.isArray(saved.profile.following) ? saved.profile.following : [],
+      followers: Array.isArray(saved.profile.followers) ? saved.profile.followers : []
+    };
+    return true;
+  }catch(err){
+    console.warn('Kayıtlı profil okunamadı:', err);
+    return false;
+  }
+}
 
 let currentView = 'home';
 let motionEnabled = true;
@@ -1043,6 +1098,7 @@ function toggleFollow(handle){
     me.following.push(handle);
     target.followers.push(myHandle);
   }
+  saveUserProfile(auth.currentUser);
   renderAll();
 }
 
@@ -1500,6 +1556,8 @@ saveProfileBtn.addEventListener('click', () => {
   p.bannerImg = modalTemp.bannerImg;
   p.verified = editVerified.checked;
 
+  // Profil fotoğrafı/banner değişikliğini kalıcı olarak kaydet.
+  saveUserProfile(auth.currentUser);
   closeEditModal();
   updateMyAvatarComposer();
   updateSidebarUserCard();
