@@ -1,1622 +1,1100 @@
 <!DOCTYPE html>
-<html lang="tr" data-theme="dark">
+<html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Beclaude — Sosyal Goygoy</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop stop-color=%27%237c5cff%27/%3E%3Cstop offset=%271%27 stop-color=%2700c6ff%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%27 height=%27100%27 rx=%2726%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2750%27 y=%2768%27 text-anchor=%27middle%27 font-family=%27Arial,sans-serif%27 font-size=%2760%27 font-weight=%27900%27 font-style=%27italic%27 fill=%27white%27%3EB%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2726%27 fill=%27%237c5cff%27/%3E%3Ctext x=%2750%27 y=%2768%27 text-anchor=%27middle%27 font-family=%27Arial,sans-serif%27 font-size=%2760%27 font-weight=%27900%27 font-style=%27italic%27 fill=%27white%27%3EB%3C/text%3E%3C/svg%3E">
-
-<!-- Firebase SDK Bağlantıları -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-
-<style>
-  :root{
-    --bg:#000000;
-    --panel:#000000;
-    --hover:rgba(239,243,244,0.1);
-    --border:#2f3336;
-    --text:#e7e9ea;
-    --dim:#71767b;
-    --blue:#1d9bf0;
-    --blue-hover:#1a8cd8;
-    --red:#f91880;
-    --green:#00ba7c;
-    --gold:#ffd400;
-  }
-  html[data-theme="light"]{
-    --bg:#ffffff;
-    --panel:#ffffff;
-    --hover:rgba(15,20,25,0.1);
-    --border:#eff3f4;
-    --text:#0f1419;
-    --dim:#536471;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-    transition:background 0.2s, color 0.2s;
-  }
-  a{color:inherit;text-decoration:none;}
-  button{font-family:inherit;}
-
-  .app{
-    display:flex;
-    max-width:1280px;
-    margin:0 auto;
-    min-height:100vh;
-    align-items:flex-start;
-  }
-
-  /* ================= LEFT SIDEBAR ================= */
-  .sidebar-left{
-    width:275px;
-    flex-shrink:0;
-    position:sticky;
-    top:0;
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-    padding:8px 12px;
-    border-right:1px solid var(--border);
-  }
-  .logo{
-    font-size:28px;
-    padding:10px;
-    width:52px;
-    height:52px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    cursor:pointer;
-    font-weight:800;
-  }
-  .logo:hover{background:var(--hover);}
-  .nav-list{margin-top:6px;display:flex;flex-direction:column;gap:2px;}
-  .nav-item{
-    display:flex;
-    align-items:center;
-    gap:16px;
-    padding:12px;
-    border-radius:999px;
-    cursor:pointer;
-    font-size:20px;
-    width:fit-content;
-    max-width:100%;
-  }
-  .nav-item:hover{background:var(--hover);}
-  .nav-item.active{font-weight:800;}
-  .nav-item .icon{width:26px;text-align:center;font-size:22px;flex-shrink:0;}
-  .nav-post-btn{
-    background:var(--blue);
-    color:#fff;
-    border:none;
-    font-weight:800;
-    font-size:17px;
-    padding:14px 0;
-    border-radius:999px;
-    cursor:pointer;
-    margin:14px 8px 0 8px;
-    width:88%;
-  }
-  .nav-post-btn:hover{background:var(--blue-hover);}
-  .sidebar-bottom{margin-top:auto;display:flex;flex-direction:column;gap:6px;}
-  .theme-toggle-btn{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    padding:10px 12px;
-    border-radius:999px;
-    cursor:pointer;
-    border:1px solid var(--border);
-    background:transparent;
-    color:var(--text);
-    font-size:14px;
-    width:fit-content;
-  }
-  .theme-toggle-btn:hover{background:var(--hover);}
-  .user-card{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px;
-    border-radius:999px;
-    cursor:pointer;
-  }
-  .user-card:hover{background:var(--hover);}
-  .user-card .uc-name-wrap{flex:1;min-width:0;}
-  .user-card .uc-name{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:3px;}
-  .user-card .uc-handle{font-size:13px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .logout-btn-mini{
-    background:transparent;
-    border:none;
-    color:var(--dim);
-    font-size:16px;
-    cursor:pointer;
-    padding:6px;
-    border-radius:50%;
-  }
-  .logout-btn-mini:hover{
-    color:var(--red);
-    background:var(--hover);
-  }
-
-  /* ================= CENTER COLUMN ================= */
-  .main-col{
-    width:600px;
-    flex-shrink:0;
-    border-right:1px solid var(--border);
-    min-height:100vh;
-  }
-  header.topbar{
-    position:sticky;
-    top:0;
-    background:rgba(0,0,0,0.85);
-    backdrop-filter:blur(12px);
-    border-bottom:1px solid var(--border);
-    padding:10px 16px;
-    display:flex;
-    align-items:center;
-    z-index:20;
-    gap:20px;
-  }
-  html[data-theme="light"] header.topbar{background:rgba(255,255,255,0.85);}
-  #back-btn{
-    display:none;
-    width:34px;height:34px;
-    border-radius:50%;
-    border:none;
-    background:transparent;
-    color:var(--text);
-    font-size:18px;
-    cursor:pointer;
-    align-items:center;
-    justify-content:center;
-  }
-  #back-btn:hover{background:var(--hover);}
-  #header-title{font-size:19px;font-weight:800;line-height:1.1;}
-  #header-sub{font-size:12px;color:var(--dim);font-weight:400;margin-top:1px;}
-
-  .nav-tabs{display:flex;border-bottom:1px solid var(--border);}
-  .nav-tab{
-    flex:1;text-align:center;padding:14px 0;color:var(--dim);
-    cursor:pointer;font-weight:600;font-size:15px;position:relative;
-  }
-  .nav-tab:hover{background:var(--hover);}
-  .nav-tab.active{color:var(--text);}
-  .nav-tab.active::after{
-    content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-    width:56px;height:4px;background:var(--blue);border-radius:4px;
-  }
-
-  /* ---- Composer ---- */
-  .composer{display:flex;gap:12px;padding:16px;border-bottom:8px solid #16181c;}
-  html[data-theme="light"] .composer{border-bottom-color:#eff3f4;}
-  .avatar{
-    width:44px;height:44px;border-radius:50%;
-    background:linear-gradient(135deg,#7856ff,#1d9bf0);
-    flex-shrink:0;display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:16px;color:#fff;overflow:hidden;cursor:pointer;
-    background-size:cover;background-position:center;
-  }
-  .composer-body{flex:1;min-width:0;}
-  textarea{
-    width:100%;background:transparent;border:none;outline:none;resize:none;
-    color:var(--text);font-size:19px;font-family:inherit;min-height:60px;line-height:1.4;
-  }
-  textarea::placeholder{color:var(--dim);}
-  #img-preview-wrap{position:relative;margin-top:8px;display:none;}
-  #img-preview{max-width:100%;max-height:300px;border-radius:16px;border:1px solid var(--border);display:block;}
-  #remove-img{
-    position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#fff;
-    border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:16px;line-height:1;
-  }
-  .composer-toolbar{display:flex;align-items:center;justify-content:space-between;margin-top:12px;border-top:1px solid var(--border);padding-top:10px;}
-  .tool-icons{display:flex;gap:4px;align-items:center;}
-  .icon-btn{
-    width:36px;height:36px;border-radius:50%;border:none;background:transparent;
-    color:var(--blue);cursor:pointer;display:flex;align-items:center;justify-content:center;
-    font-size:18px;transition:background 0.15s;
-  }
-  .icon-btn:hover{background:rgba(29,155,240,0.1);}
-  .char-count{font-size:13px;color:var(--dim);min-width:34px;text-align:right;}
-  .char-count.warn{color:#ffd400;}
-  .char-count.over{color:var(--red);}
-  #post-btn{
-    background:var(--blue);color:#fff;border:none;font-weight:700;padding:8px 20px;
-    border-radius:999px;cursor:pointer;font-size:15px;transition:background 0.15s;
-  }
-  #post-btn:hover{background:var(--blue-hover);}
-  #post-btn:disabled{opacity:0.5;cursor:not-allowed;}
-  input[type="file"]{display:none;}
-
-  /* ---- Feed / tweets ---- */
-  .tweet{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);animation:fadein 0.25s ease;}
-  @keyframes fadein{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
-  .tweet-body{flex:1;min-width:0;}
-  .tweet-head{display:flex;align-items:center;gap:6px;font-size:15px;flex-wrap:wrap;}
-  .tweet-name{font-weight:700;cursor:pointer;display:flex;align-items:center;gap:3px;}
-  .tweet-name:hover{text-decoration:underline;}
-  .tweet-handle,.tweet-time{color:var(--dim);}
-  .verified-badge{color:var(--blue);font-size:14px;}
-  .tweet-text{margin:2px 0 8px 0;font-size:15px;line-height:1.4;white-space:pre-wrap;word-break:break-word;}
-  .tweet-img{max-width:100%;border-radius:16px;border:1px solid var(--border);display:block;margin-bottom:8px;}
-  .tweet-actions{display:flex;justify-content:space-between;max-width:420px;margin-top:4px;}
-  .action{
-    display:flex;align-items:center;gap:5px;color:var(--dim);font-size:13px;
-    background:none;border:none;cursor:pointer;padding:6px;border-radius:999px;transition:all 0.15s;
-  }
-  .action:hover{color:var(--blue);background:rgba(29,155,240,0.1);}
-  .action.liked{color:var(--red);}
-  .action.liked:hover{color:var(--red);background:rgba(249,24,128,0.1);}
-  .action.rt.active{color:var(--green);}
-  .action.rt:hover{color:var(--green);background:rgba(0,186,124,0.1);}
-  .action.bookmark.active{color:var(--blue);}
-  .action.del:hover{color:var(--red);background:rgba(249,24,128,0.1);}
-
-  .reply-thread{margin-top:8px;padding-left:12px;border-left:2px solid var(--border);display:flex;flex-direction:column;gap:10px;}
-  .reply-item{display:flex;gap:8px;font-size:13px;}
-  .reply-item .avatar{width:28px;height:28px;font-size:12px;}
-  .reply-item .reply-body{flex:1;}
-  .reply-item .reply-head{font-weight:700;}
-  .reply-item .reply-head span{font-weight:400;color:var(--dim);margin-left:4px;}
-  .reply-item .reply-text{color:var(--text);margin-top:1px;}
-
-  .empty{text-align:center;color:var(--dim);padding:60px 20px;font-size:15px;}
-  .empty span{font-size:40px;display:block;margin-bottom:10px;}
-
-  /* ---- Profile page ---- */
-  .profile-banner{
-    height:140px;width:100%;background:linear-gradient(135deg,#3a3f44,#16181c);
-    background-size:cover;background-position:center;position:relative;cursor:pointer;
-  }
-  .profile-banner .banner-hint{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    background:rgba(0,0,0,0);color:#fff;font-size:13px;opacity:0;transition:all 0.15s;
-  }
-  .profile-banner.editable:hover .banner-hint{opacity:1;background:rgba(0,0,0,0.35);}
-  .profile-top{padding:0 16px;position:relative;}
-  .profile-avatar-wrap{position:relative;width:88px;margin-top:-44px;}
-  .profile-avatar{
-    width:88px;height:88px;border-radius:50%;border:4px solid var(--bg);
-    background:linear-gradient(135deg,#7856ff,#1d9bf0);display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:30px;color:#fff;background-size:cover;background-position:center;overflow:hidden;
-  }
-  .profile-avatar-wrap.editable{cursor:pointer;}
-  .profile-avatar-wrap.editable .avatar-hint{
-    position:absolute;inset:4px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-    background:rgba(0,0,0,0);color:#fff;font-size:11px;opacity:0;transition:all 0.15s;text-align:center;
-  }
-  .profile-avatar-wrap.editable:hover .avatar-hint{opacity:1;background:rgba(0,0,0,0.45);}
-  .profile-actions{display:flex;justify-content:flex-end;padding:12px 0 8px 0;gap:8px;}
-  .btn-outline{
-    background:transparent;color:var(--text);border:1px solid #536471;font-weight:700;
-    padding:7px 16px;border-radius:999px;cursor:pointer;font-size:14px;
-  }
-  .btn-outline:hover{background:var(--hover);}
-  .btn-solid{
-    background:var(--text);color:var(--bg);border:none;font-weight:700;
-    padding:7px 16px;border-radius:999px;cursor:pointer;font-size:14px;
-  }
-  .btn-solid:hover{opacity:0.9;}
-  .btn-following{background:transparent;color:var(--text);border:1px solid #536471;}
-  .btn-following:hover{background:rgba(249,24,128,0.1);color:var(--red);border-color:var(--red);}
-  .profile-info{padding:2px 0 12px 0;}
-  .profile-info .pname{font-size:20px;font-weight:800;display:flex;align-items:center;gap:4px;}
-  .profile-info .phandle{color:var(--dim);font-size:15px;margin-top:1px;}
-  .profile-info .pbio{margin-top:12px;font-size:15px;line-height:1.4;white-space:pre-wrap;word-break:break-word;}
-  .profile-info .pbio.placeholder{color:var(--dim);font-style:italic;}
-  .profile-stats{display:flex;gap:18px;margin-top:12px;font-size:14px;color:var(--dim);}
-  .profile-stats b{color:var(--text);}
-  .profile-tweets-label{padding:14px 16px 0 16px;font-weight:700;font-size:15px;color:var(--dim);}
-
-  /* ---- Explore ---- */
-  .search-box{
-    display:flex;align-items:center;gap:10px;background:#202327;border-radius:999px;
-    padding:10px 16px;margin:12px 16px;
-  }
-  html[data-theme="light"] .search-box{background:#eff3f4;}
-  .search-box input{
-    flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:15px;
-  }
-  .search-box input::placeholder{color:var(--dim);}
-  .trend-item{padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--border);}
-  .trend-item:hover{background:var(--hover);}
-  .trend-cat{font-size:12px;color:var(--dim);}
-  .trend-name{font-weight:700;font-size:15px;margin-top:2px;}
-  .trend-count{font-size:12px;color:var(--dim);margin-top:2px;}
-  .section-label{padding:14px 16px 6px 16px;font-weight:800;font-size:19px;}
-  .user-row{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);}
-  .user-row .uinfo{flex:1;min-width:0;}
-  .user-row .uname{font-weight:700;font-size:14px;display:flex;align-items:center;gap:3px;}
-  .user-row .uhandle{font-size:13px;color:var(--dim);}
-  .user-row .ubio{font-size:13px;color:var(--text);margin-top:2px;}
-
-  /* ---- Notifications ---- */
-  .notif-item{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);}
-  .notif-icon{font-size:22px;width:32px;text-align:center;flex-shrink:0;}
-  .notif-icon.like{color:var(--red);}
-  .notif-icon.rt{color:var(--green);}
-  .notif-icon.follow{color:var(--blue);}
-  .notif-body{flex:1;font-size:14px;}
-  .notif-body .nb-name{font-weight:700;}
-  .notif-body .nb-text{color:var(--dim);margin-top:2px;}
-
-  /* ================= RIGHT SIDEBAR ================= */
-  .sidebar-right{
-    width:350px;flex-shrink:0;padding:8px 16px;position:sticky;top:0;
-    height:100vh;overflow-y:auto;
-  }
-  .widget{background:#16181c;border-radius:16px;margin-bottom:16px;overflow:hidden;}
-  html[data-theme="light"] .widget{background:#f7f9f9;}
-  .widget-title{font-weight:800;font-size:19px;padding:12px 16px;}
-  .widget .trend-item, .widget .user-row{border-bottom:1px solid var(--border);}
-  .widget .trend-item:last-child, .widget .user-row:last-child{border-bottom:none;}
-  .follow-btn-small{
-    background:var(--text);color:var(--bg);border:none;font-weight:700;
-    padding:6px 14px;border-radius:999px;cursor:pointer;font-size:13px;flex-shrink:0;
-  }
-  .follow-btn-small:hover{opacity:0.9;}
-  .follow-btn-small.following{background:transparent;border:1px solid #536471;color:var(--text);}
-
-  /* ---- Modals ---- */
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(91,112,131,0.6);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-  .modal-overlay.open{display:flex;}
-  .modal{background:var(--bg);border:1px solid var(--border);border-radius:16px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;margin:16px;}
-  .modal-header{display:flex;align-items:center;gap:20px;padding:12px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);}
-  .icon-close{background:transparent;border:none;color:var(--text);font-size:18px;cursor:pointer;width:34px;height:34px;border-radius:50%;}
-  .icon-close:hover{background:var(--hover);}
-  .modal-header h2{font-size:19px;margin:0;font-weight:800;}
-  .modal-header .spacer{flex:1;}
-  #save-profile-btn{background:var(--text);color:var(--bg);border:none;font-weight:700;padding:6px 16px;border-radius:999px;cursor:pointer;font-size:14px;}
-  #save-profile-btn:hover{opacity:0.9;}
-  .modal-banner{height:130px;background:linear-gradient(135deg,#3a3f44,#16181c);background-size:cover;background-position:center;position:relative;cursor:pointer;}
-  .modal-banner .banner-edit-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;gap:16px;}
-  .circle-edit-btn{width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,0.6);border:none;color:#fff;font-size:16px;cursor:pointer;}
-  .circle-edit-btn:hover{background:rgba(0,0,0,0.8);}
-  .modal-avatar-row{margin-top:-44px;padding:0 16px;}
-  .modal-avatar{
-    width:88px;height:88px;border-radius:50%;border:4px solid var(--bg);
-    background:linear-gradient(135deg,#7856ff,#1d9bf0);display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:30px;color:#fff;background-size:cover;background-position:center;position:relative;cursor:pointer;overflow:hidden;
-  }
-  .modal-avatar .avatar-edit-overlay{position:absolute;inset:4px;border-radius:50%;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;}
-  .modal-form{padding:20px 16px 30px 16px;display:flex;flex-direction:column;gap:18px;}
-  .field label{display:block;font-size:13px;color:var(--dim);margin-bottom:4px;}
-  .field input, .field textarea{
-    width:100%;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text);
-    font-size:16px;font-family:inherit;padding:10px;outline:none;
-  }
-  .field input:focus, .field textarea:focus{border-color:var(--blue);}
-  .field textarea{resize:none;min-height:70px;}
-  .field .count{text-align:right;font-size:12px;color:var(--dim);margin-top:2px;}
-  .checkbox-field{display:flex;align-items:center;gap:8px;font-size:15px;}
-
-  /* ---- Reply modal ---- */
-  .reply-parent{display:flex;gap:12px;padding:12px 16px;}
-  .reply-parent-line{width:44px;display:flex;justify-content:center;}
-  .reply-parent-line .line{width:2px;flex:1;background:var(--border);margin-top:6px;}
-  .reply-parent-body{padding-bottom:10px;font-size:15px;}
-  .reply-parent-body .rp-head{display:flex;gap:5px;align-items:center;}
-  .reply-parent-body .rp-name{font-weight:700;}
-  .reply-parent-body .rp-handle,.reply-parent-body .rp-dim{color:var(--dim);}
-  .reply-parent-body .rp-text{margin-top:2px;color:var(--text);}
-  .reply-parent-body .rp-to{color:var(--dim);margin-top:6px;font-size:14px;}
-  .reply-compose{display:flex;gap:12px;padding:8px 16px 20px 16px;}
-  .reply-compose textarea{font-size:19px;}
-  .reply-compose-footer{display:flex;justify-content:flex-end;margin-top:10px;}
-  #submit-reply-btn{
-    background:var(--blue);color:#fff;border:none;font-weight:700;padding:8px 20px;
-    border-radius:999px;cursor:pointer;font-size:15px;
-  }
-  #submit-reply-btn:hover{background:var(--blue-hover);}
-  #submit-reply-btn:disabled{opacity:0.5;cursor:not-allowed;}
-
-  /* ================= RESPONSIVE ================= */
-  @media (max-width:1100px){
-    .sidebar-right{display:none;}
-  }
-  @media (max-width:920px){
-    .sidebar-left{width:88px;padding:8px 4px;align-items:center;}
-    .sidebar-left .nav-item span.label, .sidebar-left .user-card .uc-name-wrap{display:none;}
-    .nav-item{justify-content:center;padding:12px;}
-    .nav-post-btn{width:52px;height:52px;padding:0;border-radius:50%;font-size:22px;display:flex;align-items:center;justify-content:center;}
-    .nav-post-btn .full-label{display:none;}
-    .theme-toggle-btn{justify-content:center;padding:12px;border-radius:50%;}
-    .theme-toggle-btn span.label{display:none;}
-    .user-card{justify-content:center;}
-    .main-col{width:100%;border-right:none;}
-  }
-
-/* ================= BECLAUDE UPGRADE ================= */
-:root{--accent:#7c5cff;--accent2:#00c6ff;--glow:rgba(124,92,255,.28)}
-body{overflow-x:hidden;background-image:radial-gradient(circle at 15% 10%,rgba(124,92,255,.08),transparent 28%),radial-gradient(circle at 90% 80%,rgba(0,198,255,.06),transparent 25%);}
-body::before{content:"";position:fixed;inset:-30%;pointer-events:none;z-index:-1;background:conic-gradient(from 0deg,transparent,rgba(124,92,255,.045),transparent 35%,rgba(0,198,255,.035),transparent 70%);animation:beclaudeSpin 28s linear infinite}
-@keyframes beclaudeSpin{to{transform:rotate(360deg)}}
-*{scrollbar-width:thin;scrollbar-color:var(--border) transparent}
-.logo.beclaude-logo{position:relative;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 0 22px var(--glow);font-size:0;transition:transform .3s,box-shadow .3s}
-.logo.beclaude-logo span{font-size:27px;font-weight:900;font-style:italic;text-shadow:0 2px 8px rgba(0,0,0,.25)}
-.logo.beclaude-logo:hover{transform:rotate(-7deg) scale(1.08);box-shadow:0 0 34px rgba(124,92,255,.45)}
-.auth-brand-mark{width:68px;height:68px;margin:0 auto 12px;border-radius:22px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-size:38px;font-weight:900;font-style:italic;box-shadow:0 12px 40px var(--glow)}
-.nav-item{transition:transform .2s,background .2s,color .2s}.nav-item:hover{transform:translateX(3px)}
-.nav-item.active{background:linear-gradient(90deg,rgba(124,92,255,.16),transparent)}
-.nav-item.active .icon{filter:drop-shadow(0 0 7px var(--glow))}
-.tweet,.conversation,.settings-card,.ai-msg{animation:beclaudeIn .45s cubic-bezier(.2,.8,.2,1)}
-@keyframes beclaudeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.tweet{transition:background .22s,transform .22s}.tweet:hover{background:rgba(124,92,255,.035)}
-#post-btn,.btn-solid,.follow-btn-small,.ai-compose button{background:linear-gradient(135deg,var(--accent),#5b8cff);box-shadow:0 5px 18px rgba(124,92,255,.18);transition:transform .2s,box-shadow .2s}
-#post-btn:hover,.btn-solid:hover,.follow-btn-small:hover,.ai-compose button:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,92,255,.28)}
-.widget{box-shadow:0 10px 35px rgba(0,0,0,.08);border:1px solid rgba(255,255,255,.03)}
-.ai-hero{display:flex;align-items:center;gap:16px;padding:22px 18px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(124,92,255,.13),rgba(0,198,255,.05));}
-.ai-hero h2{margin:0;font-size:24px}.ai-hero p{margin:4px 0 0;color:var(--dim)}.ai-orb{width:58px;height:58px;border-radius:20px;display:grid;place-items:center;color:#fff;font-size:28px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 0 30px var(--glow);animation:orbPulse 2.6s ease-in-out infinite}
-@keyframes orbPulse{50%{transform:scale(1.06);box-shadow:0 0 42px rgba(124,92,255,.42)}}
-.ai-chips{display:flex;gap:8px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--border)}.ai-chips button{border:1px solid var(--border);background:transparent;color:var(--text);padding:8px 12px;border-radius:999px;cursor:pointer}.ai-chips button:hover{border-color:var(--accent);background:rgba(124,92,255,.08)}
-.ai-chat{padding:18px 16px;min-height:300px;display:flex;flex-direction:column;gap:10px}.ai-msg{max-width:82%;padding:11px 14px;border-radius:16px;line-height:1.45}.ai-msg.bot{align-self:flex-start;background:rgba(124,92,255,.11);border:1px solid rgba(124,92,255,.18)}.ai-msg.user{align-self:flex-end;background:var(--text);color:var(--bg)}
-.ai-compose{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);position:sticky;bottom:0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px)}.ai-compose input{flex:1;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--text);padding:12px 15px;outline:none}.ai-compose input:focus{border-color:var(--accent)}.ai-compose button{border:0;color:#fff;border-radius:999px;padding:0 18px;cursor:pointer;font-weight:700}
-.messages-hero{padding:4px 0 12px}.messages-hero p{padding:0 16px;color:var(--dim)}.conversation{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer}.conversation:hover{background:var(--hover)}.conversation>div:nth-child(2){flex:1}.dim,.message-time{color:var(--dim);font-size:13px}.message-time{font-size:12px}
-.settings-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 16px;border-bottom:1px solid var(--border)}.settings-card span{display:block;color:var(--dim);font-size:13px;margin-top:3px}.setting-action{border:1px solid var(--border);background:transparent;color:var(--text);border-radius:999px;padding:8px 13px;cursor:pointer}.setting-action:hover{background:var(--hover)}.settings-card.danger b{color:var(--red)}
-.switch{position:relative;width:48px;height:28px}.switch input{display:none}.switch i{position:absolute;inset:0;border-radius:99px;background:var(--border);cursor:pointer;transition:.25s}.switch i:after{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;border-radius:50%;background:var(--text);transition:.25s}.switch input:checked+i{background:var(--accent)}.switch input:checked+i:after{transform:translateX(20px);background:#fff}
-.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#17191d;color:#fff;padding:12px 18px;border-radius:999px;border:1px solid #30343a;box-shadow:0 12px 35px rgba(0,0,0,.35);opacity:0;pointer-events:none;z-index:300;transition:.3s}.toast.show{opacity:1;transform:translate(-50%,0)}
-.mobile-bottom-nav{display:none}
-.no-motion *, .no-motion *::before,.no-motion *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-@media(max-width:920px){.mobile-bottom-nav{position:fixed;display:flex;bottom:0;left:0;right:0;height:60px;background:rgba(0,0,0,.9);backdrop-filter:blur(16px);border-top:1px solid var(--border);z-index:80;justify-content:space-around}.mobile-bottom-nav button{flex:1;border:0;background:transparent;color:var(--dim);font-size:21px}.mobile-bottom-nav button:hover{color:var(--text)}body{padding-bottom:60px}.ai-chat{min-height:260px}}
-html[data-theme="light"] .mobile-bottom-nav{background:rgba(255,255,255,.92)}
-
-
-/* ================= MOBILE POLISH ================= */
-@media (max-width: 700px){
-  html,body{width:100%;min-width:0;overflow-x:hidden;}
-  body{padding-bottom:68px;}
-  .sidebar-left{display:none!important;}
-  .main-col{width:100%!important;max-width:none!important;border:0!important;min-height:100vh;}
-  .topbar{padding:10px 14px!important;}
-  #header-title{font-size:18px;}
-  .nav-tabs{position:sticky;top:56px;z-index:18;background:var(--bg);}
-  .nav-tab{padding:13px 4px;font-size:14px;}
-  .composer{padding:12px;gap:9px;border-bottom-width:6px;}
-  .composer .avatar{width:38px;height:38px;font-size:14px;}
-  textarea{font-size:17px!important;min-height:54px;}
-  .tweet{padding:12px!important;}
-  .tweet-head{gap:8px!important;}
-  .tweet-actions{gap:4px!important;}
-  .tweet-actions button{padding:7px!important;}
-  .tweet-img{max-height:260px!important;border-radius:13px!important;}
-  .profile-banner{height:125px!important;}
-  .profile-header{padding:0 12px 14px!important;}
-  .profile-avatar-wrap{margin-top:-45px!important;}
-  .profile-avatar{width:84px!important;height:84px!important;}
-  .profile-actions{top:12px!important;right:12px!important;}
-  .profile-stats{gap:16px!important;flex-wrap:wrap;}
-  .search-box{margin:10px 12px!important;}
-  .section-label{padding-left:12px!important;font-size:18px!important;}
-  .trend-item,.user-row,.notif-item{padding-left:12px!important;padding-right:12px!important;}
-  .ai-hero{padding:18px 14px!important;gap:11px;}
-  .ai-hero h2{font-size:21px;}
-  .ai-orb{width:48px;height:48px;font-size:23px;border-radius:16px;}
-  .ai-chat{padding:14px 12px;min-height:280px;}
-  .ai-msg{max-width:88%;font-size:14px;}
-  .ai-compose{padding:10px 12px;bottom:68px;}
-  .ai-compose input{min-width:0;font-size:14px;}
-  .ai-compose button{padding:0 14px;}
-  .settings-card{padding:15px 12px;}
-  .modal{padding:10px!important;}
-  .modal-content{width:100%!important;max-width:100%!important;border-radius:18px!important;}
-  .mobile-bottom-nav{height:68px!important;padding-bottom:env(safe-area-inset-bottom);}
-  .mobile-bottom-nav button{font-size:20px!important;}
-}
-@media (min-width:701px) and (max-width:920px){
-  .sidebar-left{width:72px!important;}
-  .main-col{width:calc(100% - 72px)!important;}
-}
-@media (max-width:380px){
-  .composer-toolbar{gap:4px!important;}
-  #post-btn{padding:8px 13px!important;}
-  .char-count{display:none!important;}
-  .ai-compose button{padding:0 12px;}
-}
-
-</style>
-</head>
-<body>
-
-<!-- ======= FIREBASE AUTH (GİRİŞ / KAYIT) MODAL ======= -->
-<div class="modal-overlay" id="auth-modal-overlay">
-  <div class="modal" style="max-width:420px; padding:24px; text-align:center;">
-    <div class="auth-brand-mark">B</div>
-    <h2 id="auth-title" style="font-size:22px; margin-bottom:20px;">Giriş Yap</h2>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beclaude</title>
+  
+  <!-- Dinamik SVG Favicon (D° Logo) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%2300a8ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='24' y='24' width='464' height='464' rx='120' fill='%230f1419' stroke='%230f1419' stroke-width='24'/%3E%3Crect x='56' y='56' width='400' height='400' rx='96' fill='url(%23bgGrad)'/%3E%3Ccircle cx='376' cy='136' r='24' fill='%23e0f2fe'/%3E%3Cpath d='M170 170 h75 c60 0 100 35 100 86 s-40 86 -100 86 h-75 Z m60 44 v88 h15 c30 0 48 -16 48 -44 s-18 -44 -48 -44 Z' fill='%23ffffff'/%3E%3C/svg%3E">
+  
+  <!-- Tailwind CSS & FontAwesome CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    body { 
+      background-color: #000000; 
+      color: #e7e9ea; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+    }
+    .border-theme { border-color: #2f3336; }
     
-    <div class="field" style="text-align:left; margin-bottom:12px;">
-      <label for="auth-email">E-posta Adresi</label>
-      <input type="email" id="auth-email" placeholder="ornek@mail.com">
-    </div>
-    <div class="field" style="text-align:left; margin-bottom:16px;">
-      <label for="auth-pass">Şifre</label>
-      <input type="password" id="auth-pass" placeholder="En az 6 karakter">
-    </div>
-
-    <div id="auth-error" style="color:var(--red); font-size:13px; margin-bottom:14px; display:none; text-align:left;"></div>
-
-    <button id="auth-submit-btn" style="width:100%; background:var(--blue); color:#fff; border:none; font-weight:700; padding:12px 0; border-radius:999px; cursor:pointer; font-size:16px; margin-bottom:16px;">Giriş Yap</button>
-
-    <div style="font-size:14px; color:var(--dim);">
-      <span id="auth-toggle-text">Hesabın yok mu?</span>
-      <a href="#" id="auth-toggle-link" style="color:var(--blue); font-weight:700; margin-left:4px;">Kayıt Ol</a>
-    </div>
-  </div>
-</div>
-
-<!-- ======= EDIT PROFILE MODAL ======= -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal">
-    <div class="modal-header">
-      <button class="icon-close" id="close-modal">✕</button>
-      <h2>Profili düzenle</h2>
-      <div class="spacer"></div>
-      <button id="save-profile-btn">Kaydet</button>
-    </div>
-    <div class="modal-banner" id="modal-banner">
-      <div class="banner-edit-overlay">
-        <button class="circle-edit-btn" id="modal-banner-upload-btn" title="Arkaplan yükle">🖼️</button>
-        <button class="circle-edit-btn" id="modal-banner-remove-btn" title="Arkaplanı kaldır">✕</button>
-      </div>
-    </div>
-    <div class="modal-avatar-row">
-      <div class="modal-avatar" id="modal-avatar">
-        <div class="avatar-edit-overlay">
-          <button class="circle-edit-btn" id="modal-avatar-upload-btn" title="Profil fotoğrafı yükle">🖼️</button>
-        </div>
-      </div>
-    </div>
-    <div class="modal-form">
-      <div class="field">
-        <label for="edit-name">İsim</label>
-        <input type="text" id="edit-name" maxlength="50">
-      </div>
-      <div class="field">
-        <label for="edit-handle">Kullanıcı adı</label>
-        <input type="text" id="edit-handle" maxlength="30">
-      </div>
-      <div class="field">
-        <label for="edit-bio">Hakkında</label>
-        <textarea id="edit-bio" maxlength="160"></textarea>
-        <div class="count" id="bio-count">0 / 160</div>
-      </div>
-      <div class="checkbox-field">
-        <input type="checkbox" id="edit-verified">
-        <label for="edit-verified" style="margin:0;font-size:15px;color:var(--text);">Onaylı rozet göster (goygoy) ✓</label>
-      </div>
-    </div>
-  </div>
-</div>
-<input type="file" id="modal-banner-input" accept="image/*">
-<input type="file" id="modal-avatar-input" accept="image/*">
-
-<!-- ======= REPLY MODAL ======= -->
-<div class="modal-overlay" id="reply-modal-overlay">
-  <div class="modal">
-    <div class="modal-header">
-      <button class="icon-close" id="close-reply-modal">✕</button>
-      <div class="spacer"></div>
-    </div>
-    <div class="reply-parent" id="reply-parent"></div>
-    <div class="reply-compose">
-      <div class="avatar" id="reply-avatar"></div>
-      <div style="flex:1;">
-        <textarea id="reply-input" placeholder="Yanıtını gönder" maxlength="280"></textarea>
-        <div class="reply-compose-footer">
-          <button id="submit-reply-btn" disabled>Yanıtla</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="toast" class="toast"></div>
-<div class="mobile-bottom-nav"><button onclick="goHome()">⌂</button><button onclick="goToExplore()">⌕</button><button onclick="goToAI()">✦</button><button onclick="goToNotifications()">♢</button><button onclick="goToProfile(myHandle)">◉</button></div>
-
-<div class="app">
-
-  <!-- ================= LEFT SIDEBAR ================= -->
-  <nav class="sidebar-left">
-    <div class="logo beclaude-logo" onclick="goHome()" title="Beclaude"><span>B</span></div>
-    <div class="nav-list">
-      <div class="nav-item" id="nav-home" onclick="goHome()"><span class="icon">🏠</span><span class="label">Ana Sayfa</span></div>
-      <div class="nav-item" id="nav-explore" onclick="goToExplore()"><span class="icon">🔍</span><span class="label">Keşfet</span></div>
-      <div class="nav-item" id="nav-notifications" onclick="goToNotifications()"><span class="icon">🔔</span><span class="label">Bildirimler</span></div>
-      <div class="nav-item" id="nav-bookmarks" onclick="goToBookmarks()"><span class="icon">🔖</span><span class="label">Yer İşaretleri</span></div>
-      <div class="nav-item" id="nav-messages" onclick="goToMessages()"><span class="icon">💬</span><span class="label">Mesajlar</span></div>
-      <div class="nav-item" id="nav-ai" onclick="goToAI()"><span class="icon">✦</span><span class="label">Beclaude AI</span></div>
-      <div class="nav-item" id="nav-profile" onclick="goToProfile(currentProfileHandle)"><span class="icon">👤</span><span class="label">Profil</span></div>
-    </div>
-    <button class="nav-post-btn" onclick="goHome();focusComposer();"><span class="full-label">Gönder</span><span style="display:none;">✏️</span></button>
-    <div class="sidebar-bottom">
-      <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()"><span id="theme-icon">☀️</span><span class="label">Aydınlık mod</span></button><button class="theme-toggle-btn" onclick="goToSettings()"><span>⚙️</span><span class="label">Ayarlar</span></button>
-      <div class="user-card" onclick="goToProfile(myHandle)">
-        <div class="avatar" id="sidebar-avatar" style="cursor:default;"></div>
-        <div class="uc-name-wrap">
-          <div class="uc-name" id="sidebar-uc-name"></div>
-          <div class="uc-handle" id="sidebar-uc-handle"></div>
-        </div>
-        <button class="logout-btn-mini" onclick="event.stopPropagation(); logoutUser();" title="Çıkış Yap">🚪</button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- ================= CENTER COLUMN ================= -->
-  <main class="main-col">
-    <header class="topbar">
-      <button id="back-btn">←</button>
-      <div>
-        <div id="header-title">Ana Sayfa</div>
-        <div id="header-sub" style="display:none;"></div>
-      </div>
-    </header>
-
-    <!-- HOME VIEW -->
-    <div id="view-home">
-      <div class="nav-tabs">
-        <div class="nav-tab active" id="tab-foryou">Öne Çıkanlar</div>
-        <div class="nav-tab" id="tab-following">Takip Edilenler</div>
-      </div>
-      <div class="composer">
-        <div class="avatar" id="my-avatar-composer"></div>
-        <div class="composer-body">
-          <textarea id="tweet-input" placeholder="Ne oluyor goygoy dünyasında?" maxlength="280"></textarea>
-          <div id="img-preview-wrap">
-            <button id="remove-img" title="Görseli kaldır">✕</button>
-            <img id="img-preview" src="" alt="önizleme">
-          </div>
-          <div class="composer-toolbar">
-            <div class="tool-icons">
-              <button class="icon-btn" id="add-photo-btn" title="Fotoğraf ekle">🖼️</button>
-              <input type="file" id="file-input" accept="image/*">
-            </div>
-            <div style="display:flex;align-items:center;gap:12px;">
-              <span class="char-count" id="char-count"></span>
-              <button id="post-btn" disabled>Gönder</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="feed"></div>
-    </div>
-
-    <!-- PROFILE VIEW -->
-    <div id="view-profile" style="display:none;">
-      <div class="profile-banner" id="profile-banner"><div class="banner-hint">Arkaplanı düzenle</div></div>
-      <div class="profile-top">
-        <div class="profile-avatar-wrap" id="profile-avatar-wrap">
-          <div class="profile-avatar" id="profile-avatar"></div>
-          <div class="avatar-hint">Fotoğrafı<br>düzenle</div>
-        </div>
-        <div class="profile-actions" id="profile-actions"></div>
-        <div class="profile-info">
-          <div class="pname" id="profile-name"></div>
-          <div class="phandle" id="profile-handle"></div>
-          <div class="pbio" id="profile-bio"></div>
-          <div class="profile-stats">
-            <span><b id="stat-following">0</b> Takip Edilen</span>
-            <span><b id="stat-followers">0</b> Takipçi</span>
-            <span><b id="stat-tweets">0</b> Tweet</span>
-          </div>
-        </div>
-      </div>
-      <div class="profile-tweets-label">Tweetler</div>
-      <div id="profile-feed"></div>
-    </div>
-
-    <!-- EXPLORE VIEW -->
-    <div id="view-explore" style="display:none;">
-      <div class="search-box">
-        <span>🔍</span>
-        <input type="text" id="explore-search" placeholder="Ara (kullanıcı ya da tweet)">
-      </div>
-      <div id="explore-content"></div>
-    </div>
-
-    <!-- NOTIFICATIONS VIEW -->
-    <div id="view-notifications" style="display:none;">
-      <div id="notif-feed"></div>
-    </div>
-
-    <!-- BOOKMARKS VIEW -->
-    <div id="view-bookmarks" style="display:none;">
-      <div id="bookmarks-feed"></div>
-    </div>
-
-    <!-- MESSAGES VIEW -->
-    <div id="view-messages" style="display:none;">
-      <div class="messages-layout">
-        <div class="messages-hero"><div class="section-label">Mesajlar</div><p>Arkadaşlarınla konuş, fikirlerini paylaş ve goygoya devam et.</p></div>
-        <div class="conversation" onclick="showToast('Mesaj özelliği demo modunda 🚀')"><div class="avatar" style="background:linear-gradient(135deg,#00ba7c,#1d9bf0)">A</div><div><b>Amca Tarzı</b><div class="dim">Kahve hazır mı? ☕</div></div><span class="message-time">şimdi</span></div>
-        <div class="conversation" onclick="showToast('Mesaj özelliği demo modunda 🚀')"><div class="avatar" style="background:linear-gradient(135deg,#f91880,#7856ff)">D</div><div><b>Dram Kraliçesi</b><div class="dim">Bu gündem tam dizi finali...</div></div><span class="message-time">2sa</span></div>
-      </div>
-    </div>
-
-    <!-- AI VIEW -->
-    <div id="view-ai" style="display:none;">
-      <div class="ai-hero"><div class="ai-orb">✦</div><div><h2>Beclaude AI</h2><p>Goygoyunu geliştir, fikir üret, yazını parlat.</p></div></div>
-      <div class="ai-chips"><button onclick="useAIPrompt('Bana komik bir tweet fikri ver')">😂 Tweet fikri</button><button onclick="useAIPrompt('Bu metni daha havalı yap')">✨ Metni parlat</button><button onclick="useAIPrompt('Bugünün gündemini eğlenceli özetle')">🧠 Özetle</button></div>
-      <div id="ai-chat" class="ai-chat"><div class="ai-msg bot">Selam! Ben Beclaude AI. Ne üzerinde çalışalım?</div></div>
-      <div class="ai-compose"><input id="ai-input" placeholder="Beclaude'a bir şey sor..." onkeydown="if(event.key==='Enter')sendAIMessage()"><button onclick="sendAIMessage()">Gönder</button></div>
-    </div>
-
-    <!-- SETTINGS VIEW -->
-    <div id="view-settings" style="display:none;">
-      <div class="section-label">Ayarlar</div>
-      <div class="settings-card"><div><b>Görünüm</b><span> Tema tercihini değiştir</span></div><button class="setting-action" onclick="toggleTheme()">🌙 Tema</button></div>
-      <div class="settings-card"><div><b>Animasyonlar</b><span> Geçişleri aç/kapat</span></div><label class="switch"><input id="motion-toggle" type="checkbox" checked onchange="toggleMotion(this.checked)"><i></i></label></div>
-      <div class="settings-card"><div><b>Bildirimler</b><span> Beclaude bildirimleri</span></div><label class="switch"><input type="checkbox" checked onchange="showToast(this.checked?'Bildirimler açıldı':'Bildirimler kapatıldı')"><i></i></label></div>
-      <div class="settings-card danger"><div><b>Yerel verileri temizle</b><span> Tema ve arayüz tercihlerini sıfırlar</span></div><button class="setting-action" onclick="resetPreferences()">Sıfırla</button></div>
-    </div>
-  </main>
-
-  <!-- ================= RIGHT SIDEBAR ================= -->
-  <aside class="sidebar-right">
-    <div class="search-box" onclick="goToExplore()">
-      <span>🔍</span>
-      <input type="text" placeholder="Ara" id="sidebar-search" readonly style="cursor:pointer;">
-    </div>
-    <div class="widget" id="widget-trends"></div>
-    <div class="widget" id="widget-suggestions"></div>
-  </aside>
-
-</div>
-
-<script>
-/* ================= FIREBASE AUTH KURULUMU ================= */
-const firebaseConfig = {
-  apiKey: "AIzaSyAMUC3hHqUjc3KPS-oa7-sRJeIpi3PYHqo",
-  authDomain: "beclaude-5b7e5.firebaseapp.com",
-  projectId: "beclaude-5b7e5",
-  storageBucket: "beclaude-5b7e5.firebasestorage.app",
-  messagingSenderId: "781354248856",
-  appId: "1:781354248856:web:08eb90de502655edcb7eed",
-  measurementId: "G-TLVT7J4ELN"
-};
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-
-let authMode = 'login';
-let myHandle = '@ben';
-
-const authModalOverlay = document.getElementById('auth-modal-overlay');
-const authTitle = document.getElementById('auth-title');
-const authEmail = document.getElementById('auth-email');
-const authPass = document.getElementById('auth-pass');
-const authError = document.getElementById('auth-error');
-const authSubmitBtn = document.getElementById('auth-submit-btn');
-const authToggleText = document.getElementById('auth-toggle-text');
-const authToggleLink = document.getElementById('auth-toggle-link');
-
-authToggleLink.addEventListener('click', (e) => {
-  e.preventDefault();
-  authError.style.display = 'none';
-  if(authMode === 'login'){
-    authMode = 'register';
-    authTitle.textContent = 'Hesap Oluştur';
-    authSubmitBtn.textContent = 'Kayıt Ol';
-    authToggleText.textContent = 'Zaten hesabın var mı?';
-    authToggleLink.textContent = 'Giriş Yap';
-  } else {
-    authMode = 'login';
-    authTitle.textContent = 'Giriş Yap';
-    authSubmitBtn.textContent = 'Giriş Yap';
-    authToggleText.textContent = 'Hesabın yok mu?';
-    authToggleLink.textContent = 'Kayıt Ol';
-  }
-});
-
-authSubmitBtn.addEventListener('click', () => {
-  const email = authEmail.value.trim();
-  const pass = authPass.value.trim();
-  authError.style.display = 'none';
-
-  if(!email || !pass){
-    authError.textContent = 'Lütfen tüm alanları doldurun.';
-    authError.style.display = 'block';
-    return;
-  }
-
-  if(authMode === 'register'){
-    auth.createUserWithEmailAndPassword(email, pass)
-      .then((userCredential) => {
-        authModalOverlay.classList.remove('open');
-      })
-      .catch((err) => {
-        authError.textContent = 'Kayıt Hatası: ' + err.message;
-        authError.style.display = 'block';
-      });
-  } else {
-    auth.signInWithEmailAndPassword(email, pass)
-      .then((userCredential) => {
-        authModalOverlay.classList.remove('open');
-      })
-      .catch((err) => {
-        authError.textContent = 'Giriş Hatası: ' + err.message;
-        authError.style.display = 'block';
-      });
-  }
-});
-
-function logoutUser(){
-  if(confirm('Çıkış yapmak istediğine emin misin?')){
-    auth.signOut().then(() => {
-      location.reload();
-    });
-  }
-}
-
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    authModalOverlay.classList.remove('open');
-    const uName = user.email.split('@')[0];
-    myHandle = '@' + uName;
-    if(!profiles[myHandle]){
-      profiles[myHandle] = {
-        handle: myHandle, name: uName, bio:'', avatarImg:null, bannerImg:null,
-        avatarColor:'linear-gradient(135deg,#7856ff,#1d9bf0)', editable:true, verified:false,
-        following:['@krallikayip'], followers:['@amcatarzi']
-      };
+    * { -webkit-tap-highlight-color: transparent; }
+    
+    /* Yumuşak Buton ve Geçiş Kuralları */
+    .smooth-transition {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-smooth {
+      transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                  transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), 
+                  box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.2s ease;
+    }
+    .btn-smooth:active {
+      transform: scale(0.95);
     }
 
-    // F5 / yeniden açılış sonrası daha önce kaydedilen profil fotoğrafını geri yükle.
-    loadUserProfile(user);
-    if(!profiles[myHandle]){
-      profiles[myHandle] = {
-        handle: myHandle, name: uName, bio:'', avatarImg:null, bannerImg:null,
-        avatarColor:'linear-gradient(135deg,#7856ff,#1d9bf0)', editable:true, verified:false,
-        following:['@krallikayip'], followers:['@amcatarzi']
-      };
+    /* Büyütülmüş Logo Animasyonları */
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); filter: drop-shadow(0 0 10px rgba(0, 168, 255, 0.35)); }
+      50% { transform: translateY(-4px) rotate(1deg); filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.65)); }
     }
-    profiles[myHandle].editable = true;
-    currentProfileHandle = myHandle;
-    updateMyAvatarComposer();
-    updateSidebarUserCard();
-    renderAll();
-  } else {
-    authModalOverlay.classList.add('open');
-  }
-});
+    .logo-animated {
+      animation: logoFloat 4s ease-in-out infinite;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.35s ease;
+    }
+    .logo-animated:hover {
+      transform: scale(1.08) rotate(5deg);
+      filter: drop-shadow(0 0 24px rgba(0, 168, 255, 0.9));
+    }
+    .logo-animated:active {
+      transform: scale(0.92) rotate(-5deg);
+    }
 
-/* ================= APP STATE ================= */
-let profiles = {
-  '@krallikayip': {
-    handle:'@krallikayip', name:'Kral Kayıp', bio:'Sabah 6da uyanıp öğlene kadar yatakta disiplin gösteren adam.',
-    avatarImg:null, bannerImg:null, avatarColor:'linear-gradient(135deg,#f91880,#ffad1f)', editable:false, verified:true,
-    following:['@amcatarzi'], followers:['@amcatarzi']
-  },
-  '@amcatarzi': {
-    handle:'@amcatarzi', name:'Amca Tarzı', bio:'Kahvesiz konuşulmaz. Kahve de yapılmaz.',
-    avatarImg:null, bannerImg:null, avatarColor:'linear-gradient(135deg,#00ba7c,#1d9bf0)', editable:false, verified:false,
-    following:[], followers:['@krallikayip']
-  },
-  '@dramkralicesi': {
-    handle:'@dramkralicesi', name:'Dram Kraliçesi', bio:'Her şey bir dizi sahnesi gibi olmalı, yoksa yaşamıyorum sayılır.',
-    avatarImg:null, bannerImg:null, avatarColor:'linear-gradient(135deg,#f91880,#7856ff)', editable:false, verified:true,
-    following:[], followers:[]
-  },
-  '@sessizgozlemci': {
-    handle:'@sessizgozlemci', name:'Sessiz Gözlemci', bio:'Hiçbir şey söylemem ama her şeyi görürüm.',
-    avatarImg:null, bannerImg:null, avatarColor:'linear-gradient(135deg,#536471,#0f1419)', editable:false, verified:false,
-    following:[], followers:[]
-  }
-};
+    /* Tweet ve Etkileşim Animasyonları */
+    @keyframes tweetEnter {
+      0% { opacity: 0; transform: translateY(-12px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .tweet-enter { animation: tweetEnter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-let tweets = [
-  {id:1, author:'@krallikayip', time:'2s', text:'Bugün de sabah 6da uyandım, 10da hala yataktayım. Disiplin böyle bir şey işte.', image:null, likes:42, liked:false, rts:7, rted:false, bookmarked:false, replies:[
-    {id:101, author:'@amcatarzi', text:'Sen bu tweeti her gün atıyorsun kanka.', time:'1s'}
-  ]},
-  {id:2, author:'@amcatarzi', time:'5s', text:'Kahvemi içmeden konuşmayın benimle, bir de kahve yapmadım daha.', image:null, likes:128, liked:false, rts:15, rted:false, bookmarked:false, replies:[]},
-  {id:3, author:'@dramkralicesi', time:'1sa', text:'Market alışverişi yaparken kasadaki sırayı bir final sahnesi gibi yaşıyorum. Herkes ağır çekimde.', image:null, likes:301, liked:false, rts:44, rted:false, bookmarked:false, replies:[]},
-  {id:4, author:'@sessizgozlemci', time:'3sa', text:'Grup sohbetinde 3 gündür "..." yazıyorum, kimse fark etmedi.', image:null, likes:520, liked:false, rts:88, rted:false, bookmarked:false, replies:[]}
-];
-let idCounter = 5;
-let replyIdCounter = 200;
-let pendingImage = null;
+    @keyframes heartPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+    .heart-pop { animation: heartPop 0.35s ease-in-out; }
 
-/* ================= PERSISTENT USER PROFILE ================= */
-// Profil fotoğrafı/banner gibi değişiklikleri tarayıcı yenilense bile koru.
-// Firebase hesabına özel anahtar kullanıyoruz; böylece farklı hesaplar birbirine karışmaz.
-function profileStorageKey(user){
-  const id = user && (user.uid || user.email);
-  return id ? 'beclaude-profile-' + id : 'beclaude-profile-local';
-}
-function saveUserProfile(user){
-  try{
-    const p = profiles[myHandle];
-    if(!p) return;
-    localStorage.setItem(profileStorageKey(user), JSON.stringify({
-      myHandle,
-      profile: p
-    }));
-  }catch(err){
-    console.warn('Profil kaydedilemedi:', err);
-    showToast('Profil kaydedilemedi. Tarayıcı depolaması dolu olabilir.');
-  }
-}
-function loadUserProfile(user){
-  try{
-    const raw = localStorage.getItem(profileStorageKey(user));
-    if(!raw) return false;
-    const saved = JSON.parse(raw);
-    if(!saved || !saved.profile) return false;
+    @keyframes retweetSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .retweet-spin { animation: retweetSpin 0.45s cubic-bezier(0.4, 0, 0.2, 1); }
 
-    myHandle = saved.myHandle || saved.profile.handle || myHandle;
-    profiles[myHandle] = {
-      ...profiles[myHandle],
-      ...saved.profile,
-      handle: myHandle,
-      avatarImg: saved.profile.avatarImg || null,
-      bannerImg: saved.profile.bannerImg || null,
-      following: Array.isArray(saved.profile.following) ? saved.profile.following : [],
-      followers: Array.isArray(saved.profile.followers) ? saved.profile.followers : []
+    @keyframes modalFadeIn {
+      0% { opacity: 0; transform: scale(0.94); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .modal-animate { animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    .custom-scroll::-webkit-scrollbar { width: 6px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #2f3336; border-radius: 4px; }
+  </style>
+</head>
+<body class="h-screen flex justify-center overflow-hidden select-none">
+
+  <!-- ================= AUTH EKRANI ================= -->
+  <div id="auth-screen" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-md">
+    <div class="w-full max-w-md bg-[#16181c] border border-theme rounded-3xl p-8 shadow-2xl modal-animate">
+      <div class="flex justify-center mb-6">
+        <!-- Büyütülen Auth Logosu (w-20 h-20) -->
+        <div class="w-20 h-20 logo-animated cursor-pointer">
+          <svg viewBox="0 0 512 512" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="authLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#00a8ff"/>
+              </linearGradient>
+            </defs>
+            <rect x="24" y="24" width="464" height="464" rx="120" fill="#0f1419" stroke="#0f1419" stroke-width="24"/>
+            <rect x="56" y="56" width="400" height="400" rx="96" fill="url(#authLogoGrad)"/>
+            <circle cx="376" cy="136" r="24" fill="#e0f2fe"/>
+            <path d="M170 170 h75 c60 0 100 35 100 86 s-40 86 -100 86 h-75 Z m60 44 v88 h15 c30 0 48 -16 48 -44 s-18 -44 -48 -44 Z" fill="#ffffff"/>
+          </svg>
+        </div>
+      </div>
+      <h2 id="auth-title" class="text-2xl font-bold mb-6 text-center tracking-tight">Beclaude'a Giriş Yap</h2>
+      
+      <form id="auth-form" class="space-y-4">
+        <div id="register-fields" class="space-y-4 hidden">
+          <input id="auth-name" type="text" placeholder="Ad Soyad" class="w-full bg-transparent border border-theme rounded-xl px-4 py-3 focus:border-sky-500 focus:outline-none text-white smooth-transition">
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">Profil Fotoğrafı Seç</label>
+            <input id="auth-avatar-file" type="file" accept="image/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-sky-500/20 file:text-sky-400 hover:file:bg-sky-500/30 cursor-pointer smooth-transition">
+          </div>
+        </div>
+        <input id="auth-username" type="text" placeholder="Kullanıcı Adı (@ olmadan)" required class="w-full bg-transparent border border-theme rounded-xl px-4 py-3 focus:border-sky-500 focus:outline-none text-white smooth-transition">
+        <input id="auth-password" type="password" placeholder="Şifre" required class="w-full bg-transparent border border-theme rounded-xl px-4 py-3 focus:border-sky-500 focus:outline-none text-white smooth-transition">
+        
+        <button type="submit" id="auth-submit-btn" class="btn-smooth w-full bg-white text-black font-bold py-3 rounded-full hover:bg-gray-200">Giriş Yap</button>
+      </form>
+
+      <div class="mt-6 text-center text-gray-500 text-sm">
+        <span id="auth-switch-text">Hesabın yok mu?</span>
+        <button id="auth-switch-btn" class="btn-smooth text-sky-400 hover:underline font-semibold ml-1">Kaydol</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ANA UYGULAMA DÜZENİ ================= -->
+  <div class="w-full max-w-7xl h-full flex justify-between">
+    
+    <!-- SOL SIDEBAR -->
+    <aside class="w-20 xl:w-64 h-full flex flex-col justify-between p-3 border-r border-theme">
+      <div class="space-y-2">
+        <!-- Büyütülen Sol Sidebar Logosu (w-14 h-14 kapsayıcı ve w-11 h-11 logo) -->
+        <div onclick="switchView('feed')" class="btn-smooth w-14 h-14 flex items-center justify-center hover:bg-[#181818] rounded-2xl cursor-pointer mb-2 group">
+          <div class="w-11 h-11 logo-animated">
+            <svg viewBox="0 0 512 512" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sideLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#6366f1"/>
+                  <stop offset="100%" stop-color="#00a8ff"/>
+                </linearGradient>
+              </defs>
+              <rect x="24" y="24" width="464" height="464" rx="120" fill="#0f1419" stroke="#0f1419" stroke-width="24"/>
+              <rect x="56" y="56" width="400" height="400" rx="96" fill="url(#sideLogoGrad)"/>
+              <circle cx="376" cy="136" r="24" fill="#e0f2fe"/>
+              <path d="M170 170 h75 c60 0 100 35 100 86 s-40 86 -100 86 h-75 Z m60 44 v88 h15 c30 0 48 -16 48 -44 s-18 -44 -48 -44 Z" fill="#ffffff"/>
+            </svg>
+          </div>
+        </div>
+        
+        <nav class="space-y-1">
+          <button id="nav-btn-feed" onclick="switchView('feed')" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-white">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="hidden xl:inline text-base font-normal">Anasayfa</span>
+          </button>
+          
+          <button id="nav-btn-explore" onclick="switchView('explore')" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-gray-400 hover:text-white">
+            <i class="fa-solid fa-hashtag text-lg"></i>
+            <span class="hidden xl:inline text-base font-normal">Keşfet</span>
+          </button>
+
+          <button id="nav-btn-notifications" onclick="switchView('notifications')" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-gray-400 hover:text-white relative">
+            <div class="relative">
+              <i class="fa-regular fa-bell text-lg"></i>
+              <span id="notif-badge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 bg-sky-500 rounded-full smooth-transition"></span>
+            </div>
+            <span class="hidden xl:inline text-base font-normal">Bildirimler</span>
+          </button>
+
+          <button id="nav-btn-bookmarks" onclick="switchView('bookmarks')" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-gray-400 hover:text-white">
+            <i class="fa-regular fa-bookmark text-lg"></i>
+            <span class="hidden xl:inline text-base font-normal">Yer İşaretleri</span>
+          </button>
+
+          <button id="nav-btn-profile" onclick="openUserProfile(DB.getSession().id)" class="nav-item btn-smooth flex items-center gap-4 w-full p-3 hover:bg-[#181818] rounded-full text-xl font-semibold text-gray-400 hover:text-white">
+            <i class="fa-regular fa-user text-lg"></i>
+            <span class="hidden xl:inline text-base font-normal">Profil</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Kullanıcı Mini Profil & Çıkış -->
+      <div class="relative">
+        <div onclick="logout()" class="btn-smooth flex items-center gap-3 p-2 hover:bg-[#181818] rounded-full cursor-pointer justify-between group">
+          <div class="flex items-center gap-2 overflow-hidden">
+            <img id="nav-avatar" src="" class="w-10 h-10 rounded-full object-cover bg-gray-700 smooth-transition group-hover:ring-2 group-hover:ring-sky-500">
+            <div class="hidden xl:block leading-tight truncate">
+              <p id="nav-name" class="font-bold text-sm truncate smooth-transition"></p>
+              <p id="nav-username" class="text-gray-500 text-xs truncate"></p>
+            </div>
+          </div>
+          <i class="fa-solid fa-right-from-bracket text-gray-500 group-hover:text-red-500 mr-2 hidden xl:block smooth-transition"></i>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ORTA ALAN (FEED / PROFİL) -->
+    <main class="flex-1 max-w-[600px] h-full border-r border-theme flex flex-col overflow-hidden">
+      
+      <!-- 1. ANASAYFA (FEED) -->
+      <div id="view-feed" class="view-panel flex flex-col h-full overflow-hidden">
+        <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-4 z-10 flex justify-between items-center">
+          <h1 class="text-xl font-bold tracking-tight">Anasayfa</h1>
+          <span class="text-xs font-semibold px-3 py-1 bg-gradient-to-r from-indigo-500/20 to-sky-500/20 text-sky-400 rounded-full border border-sky-500/30">Beclaude Feed</span>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scroll">
+          <!-- Tweet Kutusu -->
+          <div class="p-4 border-b border-theme flex gap-3">
+            <img id="tweetbox-avatar" src="" class="btn-smooth w-10 h-10 rounded-full object-cover bg-gray-700 flex-shrink-0 cursor-pointer hover:opacity-80" onclick="openUserProfile(DB.getSession().id)">
+            <div class="flex-1">
+              <textarea id="tweet-input" placeholder="Neler düşünüyorsun?" rows="3" maxlength="280" class="w-full bg-transparent border-none outline-none resize-none text-lg placeholder-gray-500 text-white smooth-transition"></textarea>
+              
+              <div id="image-preview-container" class="hidden relative mb-2 smooth-transition">
+                <img id="image-preview" src="" class="max-h-60 rounded-2xl w-full object-cover border border-theme shadow-md">
+                <button onclick="removeTweetImage()" class="btn-smooth absolute top-2 right-2 bg-black/70 hover:bg-black/90 rounded-full w-7 h-7 flex items-center justify-center text-white"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+
+              <div class="flex items-center justify-between pt-2 border-t border-theme">
+                <div class="flex items-center gap-2 text-sky-500 text-lg">
+                  <label class="btn-smooth cursor-pointer hover:bg-sky-500/10 p-2 rounded-full" title="Görsel Yükle">
+                    <i class="fa-regular fa-image"></i>
+                    <input type="file" id="tweet-file-input" accept="image/*" class="hidden" onchange="handleTweetFileUpload(this)">
+                  </label>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span id="char-count" class="text-xs text-gray-500 smooth-transition">280</span>
+                  <button id="tweet-btn" onclick="createTweet()" class="btn-smooth bg-sky-500 hover:bg-sky-600 font-bold px-4 py-2 rounded-full text-white text-sm opacity-50 cursor-not-allowed" disabled>Paylaş</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tweet Listesi -->
+          <div id="tweet-list" class="divide-y divide-theme"></div>
+        </div>
+      </div>
+
+      <!-- 2. KEŞFET (EXPLORE) -->
+      <div id="view-explore" class="view-panel flex flex-col h-full overflow-hidden hidden">
+        <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-3 z-10">
+          <div class="flex items-center gap-3 bg-[#202327] rounded-full px-4 py-2 text-gray-400 focus-within:text-sky-500 focus-within:bg-black focus-within:ring-1 focus-within:ring-sky-500 smooth-transition">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input id="explore-search-input" type="text" oninput="handleExploreSearch(this.value)" placeholder="Beclaude'da Ara..." class="bg-transparent border-none outline-none text-white w-full text-sm">
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scroll">
+          <div class="p-4 border-b border-theme bg-gradient-to-r from-indigo-950/40 via-sky-950/30 to-black">
+            <span class="text-xs text-sky-400 font-semibold tracking-wider uppercase">Gündemde Neler Var?</span>
+            <h2 class="text-2xl font-bold text-white mt-1">#BeclaudePro</h2>
+            <p class="text-xs text-gray-400 mt-1">Türkiye genelinde 284.1 B gönderi</p>
+          </div>
+
+          <div class="p-4 border-b border-theme">
+            <h3 class="font-bold text-lg mb-3">Senin için Trendler</h3>
+            <div id="explore-trends-container" class="space-y-3"></div>
+          </div>
+
+          <div id="explore-tweets-header" class="px-4 py-3 text-sm font-bold text-gray-400 border-b border-theme bg-[#080808]">İlgili Gönderiler</div>
+          <div id="explore-tweet-list" class="divide-y divide-theme"></div>
+        </div>
+      </div>
+
+      <!-- 3. BİLDİRİMLER -->
+      <div id="view-notifications" class="view-panel flex flex-col h-full overflow-hidden hidden">
+        <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-4 z-10 flex justify-between items-center">
+          <h1 class="text-xl font-bold tracking-tight">Bildirimler</h1>
+          <button onclick="clearNotifications()" class="btn-smooth text-xs text-gray-500 hover:text-sky-500">Temizle</button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scroll divide-y divide-theme" id="notifications-list"></div>
+      </div>
+
+      <!-- 4. YER İŞARETLERİ -->
+      <div id="view-bookmarks" class="view-panel flex flex-col h-full overflow-hidden hidden">
+        <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-4 z-10">
+          <h1 class="text-xl font-bold tracking-tight">Yer İşaretleri</h1>
+          <p id="bookmarks-subtitle" class="text-xs text-gray-500">@kullaniciadi</p>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scroll divide-y divide-theme" id="bookmarks-tweet-list"></div>
+      </div>
+
+      <!-- 5. PROFİL SAYFASI -->
+      <div id="view-profile" class="view-panel flex flex-col h-full overflow-hidden hidden">
+        <div class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-theme p-3 z-10 flex items-center gap-6">
+          <button onclick="switchView('feed')" class="btn-smooth w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center">
+            <i class="fa-solid fa-arrow-left text-white"></i>
+          </button>
+          <div>
+            <h1 id="page-profile-title" class="text-lg font-bold leading-tight"></h1>
+            <p id="page-tweet-count" class="text-xs text-gray-500">0 gönderi</p>
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scroll">
+          <div id="page-banner" class="h-44 bg-gradient-to-r from-indigo-900 via-sky-900 to-slate-900 bg-cover bg-center smooth-transition"></div>
+          
+          <div class="px-4 pb-4 border-b border-theme">
+            <div class="flex justify-between items-end -mt-16 mb-3">
+              <img id="page-avatar" src="" class="w-32 h-32 rounded-full border-4 border-black object-cover bg-gray-700 shadow-lg smooth-transition">
+              <div id="profile-action-btn-container"></div>
+            </div>
+
+            <h2 id="page-name" class="font-bold text-xl leading-tight"></h2>
+            <p id="page-username" class="text-gray-500 text-sm mb-3"></p>
+            <p id="page-bio" class="text-sm text-gray-200 mb-3 whitespace-pre-line"></p>
+
+            <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
+              <div id="page-loc-box" class="flex items-center gap-1 hidden">
+                <i class="fa-solid fa-location-dot"></i>
+                <span id="page-loc"></span>
+              </div>
+              <div class="flex items-center gap-1">
+                <i class="fa-regular fa-calendar"></i>
+                <span>Katıldı: Ağustos 2026</span>
+              </div>
+            </div>
+
+            <div class="flex gap-4 text-sm text-gray-400">
+              <p><strong id="page-following" class="text-white">0</strong> Takip edilen</p>
+              <p><strong id="page-followers" class="text-white">0</strong> Takipçi</p>
+            </div>
+          </div>
+
+          <div id="profile-tweet-list" class="divide-y divide-theme"></div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- SAĞ PANEL -->
+    <aside class="hidden lg:block w-80 xl:w-96 h-full p-4 space-y-4 overflow-y-auto custom-scroll">
+      <div class="sticky top-0 bg-black pb-2">
+        <div class="flex items-center gap-3 bg-[#202327] rounded-full px-4 py-2.5 text-gray-400 focus-within:text-sky-500 focus-within:bg-black focus-within:ring-1 focus-within:ring-sky-500 smooth-transition">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="search-input" type="text" oninput="handleGlobalSearch(this.value)" placeholder="Gönderi veya kişi ara..." class="bg-transparent border-none outline-none text-white w-full text-sm">
+        </div>
+      </div>
+
+      <!-- Kimi Takip Etmeli -->
+      <div class="bg-[#16181c] rounded-2xl border border-theme p-4">
+        <h2 class="font-bold text-lg mb-3">Kimi takip etmeli</h2>
+        <div id="follow-suggestions" class="space-y-3"></div>
+      </div>
+
+      <!-- Trendler Özeti -->
+      <div class="bg-[#16181c] rounded-2xl border border-theme p-4 space-y-3">
+        <h2 class="font-bold text-lg">Beclaude Gündemi</h2>
+        <div onclick="filterByTag('BeclaudePro')" class="btn-smooth cursor-pointer hover:bg-white/5 p-2 rounded-xl">
+          <span class="text-xs text-gray-500">Platform · Popüler</span>
+          <p class="font-bold text-sm">#BeclaudePro</p>
+          <span class="text-xs text-gray-500">284.1 B Gönderi</span>
+        </div>
+        <div onclick="filterByTag('JavaScript')" class="btn-smooth cursor-pointer hover:bg-white/5 p-2 rounded-xl">
+          <span class="text-xs text-gray-500">Yazılım · Trend</span>
+          <p class="font-bold text-sm">#JavaScript</p>
+          <span class="text-xs text-gray-500">54.2 B Gönderi</span>
+        </div>
+        <div onclick="filterByTag('WebDev')" class="btn-smooth cursor-pointer hover:bg-white/5 p-2 rounded-xl">
+          <span class="text-xs text-gray-500">Geliştirici · Gündemde</span>
+          <p class="font-bold text-sm">#WebDev</p>
+          <span class="text-xs text-gray-500">32.8 B Gönderi</span>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- ================= PROFİL DÜZENLEME MODALI ================= -->
+  <div id="edit-profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-[#16181c] border border-theme rounded-2xl p-6 modal-animate shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-lg">Profili Düzenle</h3>
+        <button onclick="closeEditProfileModal()" class="btn-smooth text-gray-500 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <form id="edit-profile-form" class="space-y-3">
+        <div>
+          <label class="text-xs text-gray-400 block mb-1">Ad Soyad</label>
+          <input id="edit-name" type="text" required class="w-full bg-black border border-theme rounded-lg px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none smooth-transition">
+        </div>
+        <div>
+          <label class="text-xs text-gray-400 block mb-1">Biyografi</label>
+          <textarea id="edit-bio" rows="2" maxlength="160" class="w-full bg-black border border-theme rounded-lg px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none resize-none smooth-transition"></textarea>
+        </div>
+        <div>
+          <label class="text-xs text-gray-400 block mb-1">Konum</label>
+          <input id="edit-location" type="text" class="w-full bg-black border border-theme rounded-lg px-3 py-2 text-sm text-white focus:border-sky-500 focus:outline-none smooth-transition">
+        </div>
+        <div>
+          <label class="text-xs text-gray-400 block mb-1">Profil Fotoğrafı Yükle</label>
+          <input id="edit-avatar-file" type="file" accept="image/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-sky-500/20 file:text-sky-400 hover:file:bg-sky-500/30 cursor-pointer smooth-transition">
+        </div>
+        <div>
+          <label class="text-xs text-gray-400 block mb-1">Banner (Kapak) Fotoğrafı Yükle</label>
+          <input id="edit-banner-file" type="file" accept="image/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-sky-500/20 file:text-sky-400 hover:file:bg-sky-500/30 cursor-pointer smooth-transition">
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="btn-smooth w-full bg-white text-black font-bold py-2 rounded-full hover:bg-gray-200">Değişiklikleri Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT MOTORU ================= -->
+  <script>
+    const DB = {
+      getUsers: () => JSON.parse(localStorage.getItem('bc_users')) || [
+        { id: '1', username: 'claude', name: 'Claude', password: '123', bio: 'Beclaude platformunun resmi asistanı ✨ #BeclaudePro', location: 'San Francisco, CA', avatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100', banner: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?w=600', following: [] },
+        { id: '2', username: 'elonmusk', name: 'Elon Musk', password: '123', bio: 'Technoking of Tesla, Chief Troll Officer', location: 'Austin, TX', avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100', banner: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600', following: [] }
+      ],
+      saveUsers: (data) => localStorage.setItem('bc_users', JSON.stringify(data)),
+      getTweets: () => JSON.parse(localStorage.getItem('bc_tweets')) || [
+        { id: '101', userId: '1', text: 'Beclaude (D°) resmi logosu ve dinamik SVG favicon desteği yüklendi! #BeclaudePro 🚀⚡', image: '', likes: ['2'], retweets: [], timestamp: Date.now() - 3600000 }
+      ],
+      saveTweets: (data) => localStorage.setItem('bc_tweets', JSON.stringify(data)),
+      getBookmarks: () => JSON.parse(localStorage.getItem('bc_bookmarks')) || [],
+      saveBookmarks: (data) => localStorage.setItem('bc_bookmarks', JSON.stringify(data)),
+      getNotifications: () => JSON.parse(localStorage.getItem('bc_notifications')) || [
+        { id: 'n1', toUserId: '1', fromUserId: '2', type: 'like', text: 'gönderini beğendi.', timestamp: Date.now() - 1800000 }
+      ],
+      saveNotifications: (data) => localStorage.setItem('bc_notifications', JSON.stringify(data)),
+      getSession: () => JSON.parse(localStorage.getItem('bc_session')),
+      setSession: (user) => localStorage.setItem('bc_session', JSON.stringify(user)),
+      clearSession: () => localStorage.removeItem('bc_session')
     };
-    return true;
-  }catch(err){
-    console.warn('Kayıtlı profil okunamadı:', err);
-    return false;
-  }
-}
 
-let currentView = 'home';
-let motionEnabled = true;
-let currentHomeTab = 'foryou';
-let currentProfileHandle = myHandle;
-let currentReplyTweetId = null;
-let searchQuery = '';
-let expandedReplies = new Set();
+    let currentView = 'feed';
+    let isRegisterMode = false;
+    let currentTweetImageBase64 = '';
+    let viewingUserId = null;
+    let exploreFilterQuery = '';
 
-let modalTemp = { name:'', handle:'', bio:'', avatarImg:null, bannerImg:null, verified:false };
+    const TREND_LIST = [
+      { tag: '#BeclaudePro', category: 'Platform · Popüler', count: '284.1 B' },
+      { tag: '#JavaScript', category: 'Teknoloji · Popüler', count: '54.2 B' },
+      { tag: '#WebDev', category: 'Geliştirici · Gündemde', count: '32.8 B' },
+      { tag: '#TailwindCSS', category: 'Tasarım · Popüler', count: '12.1 B' },
+      { tag: '#Yazılım2026', category: 'Gündemdekiler', count: '145.2 B' }
+    ];
 
-const trends = [
-  {cat:'Gündem · Goygoy', name:'#PazartesiSendromu', count:'12,4B Tweet'},
-  {cat:'Gündem · Yemek', name:'Kahve Krizi', count:'8.902 Tweet'},
-  {cat:'Gündem · Yaşam', name:'#YatakDirenişi', count:'5.310 Tweet'},
-  {cat:'Gündem · Ofis', name:'Ofis Draması', count:'3.114 Tweet'},
-  {cat:'Gündem · Goygoy', name:'#GoygoyGündemi', count:'21,7B Tweet'}
-];
-
-let notifications = [
-  {id:1, type:'like', author:'@krallikayip', text:'tweetini beğendi.', time:'3s'},
-  {id:2, type:'follow', author:'@amcatarzi', text:'seni takip etmeye başladı.', time:'1sa'},
-  {id:3, type:'rt', author:'@dramkralicesi', text:'tweetini retweetledi.', time:'2sa'},
-  {id:4, type:'like', author:'@sessizgozlemci', text:'tweetini beğendi.', time:'1g'}
-];
-
-/* ================= ELEMENTS ================= */
-const feedEl = document.getElementById('feed');
-const profileFeedEl = document.getElementById('profile-feed');
-const input = document.getElementById('tweet-input');
-const postBtn = document.getElementById('post-btn');
-const charCount = document.getElementById('char-count');
-const fileInput = document.getElementById('file-input');
-const addPhotoBtn = document.getElementById('add-photo-btn');
-const previewWrap = document.getElementById('img-preview-wrap');
-const previewImg = document.getElementById('img-preview');
-const removeImgBtn = document.getElementById('remove-img');
-const myAvatarComposer = document.getElementById('my-avatar-composer');
-
-const backBtn = document.getElementById('back-btn');
-const headerTitle = document.getElementById('header-title');
-const headerSub = document.getElementById('header-sub');
-const viewHome = document.getElementById('view-home');
-const viewProfile = document.getElementById('view-profile');
-const viewExplore = document.getElementById('view-explore');
-const viewNotifications = document.getElementById('view-notifications');
-const viewBookmarks = document.getElementById('view-bookmarks');
-const viewMessages = document.getElementById('view-messages');
-const viewAI = document.getElementById('view-ai');
-const viewSettings = document.getElementById('view-settings');
-const tabForYou = document.getElementById('tab-foryou');
-const tabFollowing = document.getElementById('tab-following');
-
-const navHome = document.getElementById('nav-home');
-const navExplore = document.getElementById('nav-explore');
-const navNotifications = document.getElementById('nav-notifications');
-const navBookmarks = document.getElementById('nav-bookmarks');
-const navProfile = document.getElementById('nav-profile');
-const navMessages = document.getElementById('nav-messages');
-const navAI = document.getElementById('nav-ai');
-
-const profileBanner = document.getElementById('profile-banner');
-const profileAvatarWrap = document.getElementById('profile-avatar-wrap');
-const profileAvatar = document.getElementById('profile-avatar');
-const profileActions = document.getElementById('profile-actions');
-const profileName = document.getElementById('profile-name');
-const profileHandleEl = document.getElementById('profile-handle');
-const profileBio = document.getElementById('profile-bio');
-const statTweets = document.getElementById('stat-tweets');
-const statFollowing = document.getElementById('stat-following');
-const statFollowers = document.getElementById('stat-followers');
-
-const modalOverlay = document.getElementById('modal-overlay');
-const closeModalBtn = document.getElementById('close-modal');
-const saveProfileBtn = document.getElementById('save-profile-btn');
-const modalBanner = document.getElementById('modal-banner');
-const modalAvatar = document.getElementById('modal-avatar');
-const modalBannerInput = document.getElementById('modal-banner-input');
-const modalAvatarInput = document.getElementById('modal-avatar-input');
-const modalBannerUploadBtn = document.getElementById('modal-banner-upload-btn');
-const modalBannerRemoveBtn = document.getElementById('modal-banner-remove-btn');
-const modalAvatarUploadBtn = document.getElementById('modal-avatar-upload-btn');
-const editName = document.getElementById('edit-name');
-const editHandle = document.getElementById('edit-handle');
-const editBio = document.getElementById('edit-bio');
-const editVerified = document.getElementById('edit-verified');
-const bioCount = document.getElementById('bio-count');
-
-const replyModalOverlay = document.getElementById('reply-modal-overlay');
-const closeReplyModalBtn = document.getElementById('close-reply-modal');
-const replyParent = document.getElementById('reply-parent');
-const replyAvatar = document.getElementById('reply-avatar');
-const replyInput = document.getElementById('reply-input');
-const submitReplyBtn = document.getElementById('submit-reply-btn');
-
-const sidebarAvatar = document.getElementById('sidebar-avatar');
-const sidebarUcName = document.getElementById('sidebar-uc-name');
-const sidebarUcHandle = document.getElementById('sidebar-uc-handle');
-const themeToggleBtn = document.getElementById('theme-toggle-btn');
-const themeIcon = document.getElementById('theme-icon');
-
-const exploreSearch = document.getElementById('explore-search');
-const exploreContent = document.getElementById('explore-content');
-const sidebarSearch = document.getElementById('sidebar-search');
-
-/* ================= HELPERS ================= */
-function escapeHtml(str){
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-function avatarStyle(profile){
-  if(!profile) return `background:linear-gradient(135deg,#7856ff,#1d9bf0);`;
-  if(profile.avatarImg) return `background-image:url('${profile.avatarImg}');`;
-  return `background:${profile.avatarColor};`;
-}
-function verifiedBadge(profile){
-  return (profile && profile.verified) ? '<span class="verified-badge" title="Onaylı hesap (goygoy)">✔️</span>' : '';
-}
-function isFollowing(handle){
-  const me = profiles[myHandle];
-  return me && me.following ? me.following.includes(handle) : false;
-}
-function toggleFollow(handle){
-  const me = profiles[myHandle];
-  const target = profiles[handle];
-  if(!me || !target) return;
-  if(me.following.includes(handle)){
-    me.following = me.following.filter(h => h !== handle);
-    target.followers = target.followers.filter(h => h !== myHandle);
-  } else {
-    me.following.push(handle);
-    target.followers.push(myHandle);
-  }
-  saveUserProfile(auth.currentUser);
-  renderAll();
-}
-
-/* ================= THEME ================= */
-function toggleTheme(){
-  const html = document.documentElement;
-  const isLight = html.getAttribute('data-theme') === 'light';
-  const next = isLight ? 'dark' : 'light';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('beclaude-theme', next);
-  themeIcon.textContent = next === 'light' ? '☀️' : '🌙';
-  themeToggleBtn.querySelector('.label').textContent = next === 'light' ? 'Aydınlık mod' : 'Karanlık mod';
-  showToast(next === 'light' ? 'Aydınlık moda geçildi ☀️' : 'Karanlık moda geçildi 🌙');
-}
-
-/* ================= NAVIGATION ================= */
-
-function showToast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.remove('show'),2400)}
-function toggleMotion(enabled){motionEnabled=enabled;document.documentElement.classList.toggle('no-motion',!enabled);localStorage.setItem('beclaude-motion',enabled?'1':'0');showToast(enabled?'Animasyonlar açıldı ✨':'Animasyonlar kapatıldı')}
-function resetPreferences(){localStorage.removeItem('beclaude-theme');localStorage.removeItem('beclaude-motion');document.documentElement.setAttribute('data-theme','dark');motionEnabled=true;document.documentElement.classList.remove('no-motion');themeIcon.textContent='☀️';themeToggleBtn.querySelector('.label').textContent='Aydınlık mod';showToast('Tercihler sıfırlandı')}
-function goToMessages(){currentView='messages';hideViews();viewMessages.style.display='block';headerTitle.textContent='Mesajlar';headerSub.style.display='none';clearNavActive();navMessages.classList.add('active')}
-function goToAI(){currentView='ai';hideViews();viewAI.style.display='block';headerTitle.textContent='Beclaude AI';headerSub.textContent='Akıllı yardımcı';headerSub.style.display='block';clearNavActive();navAI.classList.add('active')}
-function goToSettings(){currentView='settings';hideViews();viewSettings.style.display='block';headerTitle.textContent='Ayarlar';headerSub.style.display='none';clearNavActive()}
-function hideViews(){[viewHome,viewProfile,viewExplore,viewNotifications,viewBookmarks,viewMessages,viewAI,viewSettings].forEach(v=>v.style.display='none');backBtn.style.display='none'}
-function useAIPrompt(text){document.getElementById('ai-input').value=text;sendAIMessage()}
-function sendAIMessage(){const input=document.getElementById('ai-input');const text=input.value.trim();if(!text)return;const chat=document.getElementById('ai-chat');chat.insertAdjacentHTML('beforeend',`<div class="ai-msg user">${escapeHtml(text)}</div>`);input.value='';setTimeout(()=>{let reply='Bunu daha yaratıcı, kısa ve goygoy bir hale getirebiliriz 😎';if(/tweet|paylaş|fikir/i.test(text))reply='Fikir: “Bugün hiçbir şey yapmadım ama günün sonunda yine de yoruldum. Profesyonellik.”';else if(/parlat|havalı|düzelt/i.test(text))reply='Öneri: Cümleyi daha kısa tut, güçlü bir kelimeyle bitir ve tek bir emoji kullan. ✨';else if(/özet|gündem/i.test(text))reply='Beclaude özeti: Gündem hızlı, kahve sıcak, yatak hâlâ kazanıyor. ☕';chat.insertAdjacentHTML('beforeend',`<div class="ai-msg bot">${escapeHtml(reply)}</div>`);chat.scrollTop=chat.scrollHeight},450)}
-
-function clearNavActive(){
-  [navHome,navExplore,navNotifications,navBookmarks,navMessages,navAI,navProfile].forEach(n => n.classList.remove('active'));
-}
-
-function goHome(){
-  currentView = 'home';
-  viewHome.style.display='block'; viewProfile.style.display='none';
-  viewExplore.style.display='none'; viewNotifications.style.display='none'; viewBookmarks.style.display='none';
-  [viewMessages,viewAI,viewSettings].forEach(v=>v.style.display="none");
-  backBtn.style.display='none';
-  headerTitle.textContent = 'Ana Sayfa';
-  headerSub.style.display='none';
-  clearNavActive(); navHome.classList.add('active');
-  renderFeed();
-}
-
-function focusComposer(){ setTimeout(()=>input.focus(), 50); }
-
-function goToProfile(handle){
-  currentView='profile'; currentProfileHandle=handle || myHandle;
-  viewHome.style.display='none'; viewProfile.style.display='block';
-  viewExplore.style.display='none'; viewNotifications.style.display='none'; viewBookmarks.style.display='none';
-  [viewMessages,viewAI,viewSettings].forEach(v=>v.style.display="none");
-  backBtn.style.display='flex'; backBtn.style.alignItems='center'; backBtn.style.justifyContent='center';
-  headerSub.style.display='block';
-  clearNavActive(); if(handle===myHandle) navProfile.classList.add('active');
-  renderProfile();
-}
-
-function goToExplore(){
-  currentView='explore';
-  viewHome.style.display='none'; viewProfile.style.display='none';
-  viewExplore.style.display='block'; viewNotifications.style.display='none'; viewBookmarks.style.display='none';
-  [viewMessages,viewAI,viewSettings].forEach(v=>v.style.display="none");
-  backBtn.style.display='none';
-  headerTitle.textContent='Keşfet';
-  headerSub.style.display='none';
-  clearNavActive(); navExplore.classList.add('active');
-  exploreSearch.value = searchQuery;
-  renderExplore();
-  setTimeout(()=>exploreSearch.focus(), 50);
-}
-
-function goToNotifications(){
-  currentView='notifications';
-  viewHome.style.display='none'; viewProfile.style.display='none';
-  viewExplore.style.display='none'; viewNotifications.style.display='block'; viewBookmarks.style.display='none';
-  [viewMessages,viewAI,viewSettings].forEach(v=>v.style.display="none");
-  backBtn.style.display='none';
-  headerTitle.textContent='Bildirimler';
-  headerSub.style.display='none';
-  clearNavActive(); navNotifications.classList.add('active');
-  renderNotifications();
-}
-
-function goToBookmarks(){
-  currentView='bookmarks';
-  viewHome.style.display='none'; viewProfile.style.display='none';
-  viewExplore.style.display='none'; viewNotifications.style.display='none'; viewBookmarks.style.display='block';
-  [viewMessages,viewAI,viewSettings].forEach(v=>v.style.display="none");
-  backBtn.style.display='none';
-  headerTitle.textContent='Yer İşaretleri';
-  headerSub.style.display='none';
-  clearNavActive(); navBookmarks.classList.add('active');
-  renderBookmarks();
-}
-
-backBtn.addEventListener('click', () => {
-  if(currentView === 'profile' && currentProfileHandle !== myHandle){ goToExplore(); }
-  else goHome();
-});
-
-tabForYou.addEventListener('click', () => { currentHomeTab='foryou'; tabForYou.classList.add('active'); tabFollowing.classList.remove('active'); renderFeed(); });
-tabFollowing.addEventListener('click', () => { currentHomeTab='following'; tabFollowing.classList.add('active'); tabForYou.classList.remove('active'); renderFeed(); });
-
-/* ================= RENDER: FEED ================= */
-function renderTweetHtml(t){
-  const p = profiles[t.author] || { name:t.author, handle:t.author, avatarColor:'linear-gradient(135deg,#888,#555)', avatarImg:null, verified:false };
-  const expanded = expandedReplies.has(t.id);
-  const replyCount = t.replies.length;
-  return `
-    <div class="tweet">
-      <div class="avatar" style="${avatarStyle(p)}" onclick="goToProfile('${p.handle}')">${p.avatarImg ? '' : escapeHtml((p.name||'?')[0].toUpperCase())}</div>
-      <div class="tweet-body">
-        <div class="tweet-head">
-          <span class="tweet-name" onclick="goToProfile('${p.handle}')">${escapeHtml(p.name)} ${verifiedBadge(p)}</span>
-          <span class="tweet-handle">${escapeHtml(p.handle)}</span>
-          <span class="tweet-time">· ${escapeHtml(t.time)}</span>
-        </div>
-        ${t.text ? `<div class="tweet-text">${escapeHtml(t.text)}</div>` : ''}
-        ${t.image ? `<img class="tweet-img" src="${t.image}" alt="tweet görseli">` : ''}
-        <div class="tweet-actions">
-          <button class="action" onclick="openReplyModal(${t.id})">💬 ${replyCount}</button>
-          <button class="action rt ${t.rted ? 'active' : ''}" onclick="toggleRt(${t.id})">🔁 ${t.rts}</button>
-          <button class="action ${t.liked ? 'liked' : ''}" onclick="toggleLike(${t.id})">${t.liked ? '❤️' : '🤍'} ${t.likes}</button>
-          <button class="action bookmark ${t.bookmarked ? 'active' : ''}" onclick="toggleBookmark(${t.id})">${t.bookmarked ? '🔖' : '🏷️'}</button>
-          <button class="action" onclick="shareTweet(${t.id})">📤</button>
-          ${t.author === myHandle ? `<button class="action del" onclick="deleteTweet(${t.id})">🗑️</button>` : ''}
-        </div>
-        ${replyCount > 0 ? `<div style="margin-top:6px;"><span style="color:var(--blue);font-size:13px;cursor:pointer;" onclick="toggleExpandReplies(${t.id})">${expanded ? 'Yanıtları gizle' : replyCount + ' yanıtı gör'}</span></div>` : ''}
-        ${expanded ? `<div class="reply-thread">${t.replies.map(r => renderReplyHtml(r)).join('')}</div>` : ''}
-      </div>
-    </div>
-  `;
-}
-function renderReplyHtml(r){
-  const p = profiles[r.author] || { name:r.author, handle:r.author, avatarColor:'linear-gradient(135deg,#888,#555)', avatarImg:null, verified:false };
-  return `
-    <div class="reply-item">
-      <div class="avatar" style="${avatarStyle(p)}" onclick="goToProfile('${p.handle}')">${p.avatarImg ? '' : escapeHtml((p.name||'?')[0].toUpperCase())}</div>
-      <div class="reply-body">
-        <div class="reply-head">${escapeHtml(p.name)}${verifiedBadge(p)}<span>${escapeHtml(p.handle)} · ${escapeHtml(r.time)}</span></div>
-        <div class="reply-text">${escapeHtml(r.text)}</div>
-      </div>
-    </div>
-  `;
-}
-
-function renderFeed(){
-  let list = tweets;
-  if(currentHomeTab === 'following'){
-    const me = profiles[myHandle];
-    const following = me ? me.following : [];
-    list = tweets.filter(t => following.includes(t.author) || t.author === myHandle);
-  }
-  if(list.length === 0){
-    feedEl.innerHTML = currentHomeTab === 'following'
-      ? '<div class="empty"><span>🕊️</span>Takip ettiklerinden henüz tweet yok. Keşfet\'ten birilerini takip et.</div>'
-      : '<div class="empty"><span>🕊️</span>Henüz goygoy yok. İlk paylaşımı sen yap.</div>';
-    return;
-  }
-  feedEl.innerHTML = list.map(t => renderTweetHtml(t)).join('');
-}
-
-function toggleExpandReplies(id){
-  if(expandedReplies.has(id)) expandedReplies.delete(id); else expandedReplies.add(id);
-  rerenderCurrent();
-}
-
-/* ================= RENDER: PROFILE ================= */
-function renderProfile(){
-  const p = profiles[currentProfileHandle] || { name:'Kullanıcı', handle:currentProfileHandle, bio:'', followers:[], following:[] };
-  headerTitle.innerHTML = escapeHtml(p.name) + ' ' + verifiedBadge(p);
-  const count = tweets.filter(t => t.author === currentProfileHandle).length;
-  headerSub.textContent = count + ' Tweet';
-
-  if(p.bannerImg){
-    profileBanner.style.backgroundImage = `url('${p.bannerImg}')`;
-  } else {
-    profileBanner.style.backgroundImage = '';
-    profileBanner.style.background = 'linear-gradient(135deg,#3a3f44,#16181c)';
-  }
-
-  profileAvatar.style.cssText = avatarStyle(p);
-  profileAvatar.textContent = p.avatarImg ? '' : (p.name ? p.name[0].toUpperCase() : '?');
-
-  profileName.innerHTML = escapeHtml(p.name) + ' ' + verifiedBadge(p);
-  profileHandleEl.textContent = p.handle;
-
-  if(p.bio && p.bio.trim().length > 0){
-    profileBio.textContent = p.bio; profileBio.classList.remove('placeholder');
-  } else {
-    profileBio.textContent = p.editable ? 'Henüz bir açıklama eklenmemiş. "Profili düzenle" ile ekleyebilirsin.' : 'Bu kullanıcı henüz kendinden bahsetmemiş.';
-    profileBio.classList.add('placeholder');
-  }
-
-  statTweets.textContent = count;
-  statFollowing.textContent = p.following ? p.following.length : 0;
-  statFollowers.textContent = p.followers ? p.followers.length : 0;
-
-  if(p.editable || p.handle === myHandle){
-    profileActions.innerHTML = `<button class="btn-outline" onclick="openEditModal()">Profili düzenle</button>`;
-    profileBanner.classList.add('editable');
-    profileAvatarWrap.classList.add('editable');
-  } else {
-    const following = isFollowing(p.handle);
-    profileActions.innerHTML = `<button class="btn-solid ${following ? 'btn-following' : ''}" onclick="toggleFollow('${p.handle}')">${following ? 'Takip ediliyor' : 'Takip et'}</button>`;
-    profileBanner.classList.remove('editable');
-    profileAvatarWrap.classList.remove('editable');
-  }
-
-  const ptweets = tweets.filter(t => t.author === currentProfileHandle);
-  profileFeedEl.innerHTML = ptweets.length ? ptweets.map(t => renderTweetHtml(t)).join('') :
-    '<div class="empty"><span>🕊️</span>Bu kullanıcı henüz tweet atmamış.</div>';
-}
-
-profileBanner.addEventListener('click', () => { if(profiles[currentProfileHandle] && profiles[currentProfileHandle].editable) openEditModal(); });
-profileAvatarWrap.addEventListener('click', () => { if(profiles[currentProfileHandle] && profiles[currentProfileHandle].editable) openEditModal(); });
-
-/* ================= RENDER: EXPLORE ================= */
-function renderExplore(){
-  const q = searchQuery.trim().toLowerCase();
-  if(!q){
-    exploreContent.innerHTML = `
-      <div class="section-label">Gündemdekiler</div>
-      ${trends.map(tr => `<div class="trend-item" onclick="searchFor('${tr.name.replace(/'/g,"\\'")}')">
-        <div class="trend-cat">${escapeHtml(tr.cat)}</div>
-        <div class="trend-name">${escapeHtml(tr.name)}</div>
-        <div class="trend-count">${escapeHtml(tr.count)}</div>
-      </div>`).join('')}
-      <div class="section-label">Kimi takip etmeli</div>
-      ${Object.values(profiles).filter(p => p.handle !== myHandle).map(p => renderUserRow(p)).join('')}
-    `;
-    return;
-  }
-  const matchedUsers = Object.values(profiles).filter(p =>
-    p.handle !== myHandle && (p.name.toLowerCase().includes(q) || p.handle.toLowerCase().includes(q))
-  );
-  const matchedTweets = tweets.filter(t => t.text.toLowerCase().includes(q));
-  let html = '';
-  html += `<div class="section-label">Kullanıcılar</div>`;
-  html += matchedUsers.length ? matchedUsers.map(p => renderUserRow(p)).join('') : '<div class="empty" style="padding:20px;">Eşleşen kullanıcı yok.</div>';
-  html += `<div class="section-label">Tweetler</div>`;
-  html += matchedTweets.length ? matchedTweets.map(t => renderTweetHtml(t)).join('') : '<div class="empty" style="padding:20px;">Eşleşen tweet yok.</div>';
-  exploreContent.innerHTML = html;
-}
-function renderUserRow(p){
-  const following = isFollowing(p.handle);
-  return `
-    <div class="user-row">
-      <div class="avatar" style="${avatarStyle(p)};cursor:pointer;" onclick="goToProfile('${p.handle}')">${p.avatarImg ? '' : escapeHtml((p.name||'?')[0].toUpperCase())}</div>
-      <div class="uinfo" onclick="goToProfile('${p.handle}')" style="cursor:pointer;">
-        <div class="uname">${escapeHtml(p.name)} ${verifiedBadge(p)}</div>
-        <div class="uhandle">${escapeHtml(p.handle)}</div>
-        <div class="ubio">${escapeHtml(p.bio || '')}</div>
-      </div>
-      <button class="follow-btn-small ${following ? 'following' : ''}" onclick="event.stopPropagation();toggleFollow('${p.handle}')">${following ? 'Takipte' : 'Takip et'}</button>
-    </div>
-  `;
-}
-function searchFor(text){
-  searchQuery = text;
-  goToExplore();
-}
-exploreSearch.addEventListener('input', () => { searchQuery = exploreSearch.value; renderExplore(); });
-
-/* ================= RENDER: NOTIFICATIONS ================= */
-function renderNotifications(){
-  const notifFeed = document.getElementById('notif-feed');
-  notifFeed.innerHTML = notifications.map(n => {
-    const p = profiles[n.author] || {name:n.author, avatarColor:'linear-gradient(135deg,#888,#555)', avatarImg:null, verified:false};
-    const icon = n.type === 'like' ? '❤️' : n.type === 'rt' ? '🔁' : '👤';
-    const iconClass = n.type === 'like' ? 'like' : n.type === 'rt' ? 'rt' : 'follow';
-    return `
-      <div class="notif-item">
-        <div class="notif-icon ${iconClass}">${icon}</div>
-        <div class="avatar" style="${avatarStyle(p)};width:36px;height:36px;font-size:14px;cursor:pointer;" onclick="goToProfile('${p.handle}')"></div>
-        <div class="notif-body">
-          <div class="nb-name">${escapeHtml(p.name)} ${verifiedBadge(p)}</div>
-          <div class="nb-text">${escapeHtml(n.text)} · ${escapeHtml(n.time)}</div>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-/* ================= RENDER: BOOKMARKS ================= */
-function renderBookmarks(){
-  const bookmarksFeed = document.getElementById('bookmarks-feed');
-  const list = tweets.filter(t => t.bookmarked);
-  bookmarksFeed.innerHTML = list.length ? list.map(t => renderTweetHtml(t)).join('') :
-    '<div class="empty"><span>🔖</span>Henüz yer işareti eklemedin.</div>';
-}
-
-/* ================= RENDER: RIGHT SIDEBAR ================= */
-function renderRightSidebar(){
-  const trendsWidget = document.getElementById('widget-trends');
-  trendsWidget.innerHTML = `<div class="widget-title">Gündemdekiler</div>` +
-    trends.slice(0,4).map(tr => `<div class="trend-item" onclick="searchFor('${tr.name.replace(/'/g,"\\'")}');goToExplore();">
-      <div class="trend-cat">${escapeHtml(tr.cat)}</div>
-      <div class="trend-name">${escapeHtml(tr.name)}</div>
-      <div class="trend-count">${escapeHtml(tr.count)}</div>
-    </div>`).join('');
-
-  const suggWidget = document.getElementById('widget-suggestions');
-  const suggestions = Object.values(profiles).filter(p => p.handle !== myHandle && !isFollowing(p.handle)).slice(0,3);
-  suggWidget.innerHTML = `<div class="widget-title">Kimi takip etmeli</div>` +
-    (suggestions.length ? suggestions.map(p => renderUserRow(p)).join('') : '<div style="padding:16px;color:var(--dim);font-size:14px;">Herkesi zaten takip ediyorsun 🎉</div>');
-}
-
-/* ================= TWEET ACTIONS ================= */
-function toggleLike(id){
-  const t = tweets.find(x => x.id === id); if(!t) return;
-  t.liked = !t.liked; t.likes += t.liked ? 1 : -1;
-  rerenderCurrent();
-}
-function toggleRt(id){
-  const t = tweets.find(x => x.id === id); if(!t) return;
-  t.rted = !t.rted; t.rts += t.rted ? 1 : -1;
-  rerenderCurrent();
-}
-function toggleBookmark(id){
-  const t = tweets.find(x => x.id === id); if(!t) return;
-  t.bookmarked = !t.bookmarked;
-  rerenderCurrent();
-}
-function deleteTweet(id){
-  tweets = tweets.filter(x => x.id !== id);
-  rerenderCurrent();
-}
-function shareTweet(id){
-  alert('Bağlantı kopyalandı!');
-}
-function rerenderCurrent(){
-  if(currentView === 'home') renderFeed();
-  else if(currentView === 'profile') renderProfile();
-  else if(currentView === 'explore') renderExplore();
-  else if(currentView === 'bookmarks') renderBookmarks();
-  renderRightSidebar();
-}
-function renderAll(){
-  updateSidebarUserCard();
-  rerenderCurrent();
-}
-
-/* ================= REPLY MODAL ================= */
-function openReplyModal(tweetId){
-  currentReplyTweetId = tweetId;
-  const t = tweets.find(x => x.id === tweetId);
-  const p = profiles[t.author] || { name:t.author, handle:t.author, avatarColor:'linear-gradient(135deg,#888,#555)', avatarImg:null, verified:false };
-  replyParent.innerHTML = `
-    <div class="reply-parent-line"><div class="avatar" style="${avatarStyle(p)}">${p.avatarImg ? '' : escapeHtml((p.name||'?')[0].toUpperCase())}</div><div class="line"></div></div>
-    <div class="reply-parent-body">
-      <div class="rp-head"><span class="rp-name">${escapeHtml(p.name)}</span>${verifiedBadge(p)}<span class="rp-handle">${escapeHtml(p.handle)}</span><span class="rp-dim">· ${escapeHtml(t.time)}</span></div>
-      <div class="rp-text">${escapeHtml(t.text)}</div>
-      <div class="rp-to">Yanıt veriliyor: <span style="color:var(--blue);">${escapeHtml(p.handle)}</span></div>
-    </div>
-  `;
-  const me = profiles[myHandle];
-  replyAvatar.style.cssText = avatarStyle(me);
-  replyAvatar.textContent = (me && me.avatarImg) ? '' : ((me && me.name) ? me.name[0].toUpperCase() : 'B');
-  replyInput.value = '';
-  submitReplyBtn.disabled = true;
-  replyModalOverlay.classList.add('open');
-  setTimeout(()=>replyInput.focus(), 50);
-}
-function closeReplyModal(){ replyModalOverlay.classList.remove('open'); currentReplyTweetId = null; }
-closeReplyModalBtn.addEventListener('click', closeReplyModal);
-replyModalOverlay.addEventListener('click', (e) => { if(e.target === replyModalOverlay) closeReplyModal(); });
-replyInput.addEventListener('input', () => { submitReplyBtn.disabled = replyInput.value.trim().length === 0; });
-submitReplyBtn.addEventListener('click', () => {
-  const text = replyInput.value.trim();
-  if(!text || currentReplyTweetId === null) return;
-  const t = tweets.find(x => x.id === currentReplyTweetId);
-  if(!t) return;
-  t.replies.push({id: replyIdCounter++, author:myHandle, text, time:'şimdi'});
-  expandedReplies.add(t.id);
-  closeReplyModal();
-  rerenderCurrent();
-});
-
-/* ================= EDIT PROFILE MODAL ================= */
-function openEditModal(){
-  const p = profiles[myHandle];
-  if(!p) return;
-  modalTemp = { name:p.name, handle:p.handle, bio:p.bio, avatarImg:p.avatarImg, bannerImg:p.bannerImg, verified:p.verified };
-  editName.value = p.name;
-  editHandle.value = p.handle.replace('@','');
-  editBio.value = p.bio;
-  editVerified.checked = p.verified;
-  bioCount.textContent = p.bio.length + ' / 160';
-  renderModalPreview();
-  modalOverlay.classList.add('open');
-}
-function closeEditModal(){ modalOverlay.classList.remove('open'); }
-closeModalBtn.addEventListener('click', closeEditModal);
-modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) closeEditModal(); });
-
-function renderModalPreview(){
-  if(modalTemp.bannerImg){
-    modalBanner.style.backgroundImage = `url('${modalTemp.bannerImg}')`;
-  } else {
-    modalBanner.style.backgroundImage = '';
-    modalBanner.style.background = 'linear-gradient(135deg,#3a3f44,#16181c)';
-  }
-  if(modalTemp.avatarImg){
-    modalAvatar.style.backgroundImage = `url('${modalTemp.avatarImg}')`;
-    modalAvatar.querySelector('.avatar-edit-overlay').style.opacity = '0';
-  } else {
-    modalAvatar.style.backgroundImage = '';
-    modalAvatar.style.background = profiles[myHandle] ? profiles[myHandle].avatarColor : 'linear-gradient(135deg,#7856ff,#1d9bf0)';
-    modalAvatar.querySelector('.avatar-edit-overlay').style.opacity = '1';
-  }
-}
-modalBannerUploadBtn.addEventListener('click', (e) => { e.stopPropagation(); modalBannerInput.click(); });
-modalBanner.addEventListener('click', () => modalBannerInput.click());
-modalBannerRemoveBtn.addEventListener('click', (e) => { e.stopPropagation(); modalTemp.bannerImg = null; renderModalPreview(); });
-modalBannerInput.addEventListener('change', (e) => {
-  const file = e.target.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => { modalTemp.bannerImg = ev.target.result; renderModalPreview(); };
-  reader.readAsDataURL(file);
-});
-modalAvatarUploadBtn.addEventListener('click', (e) => { e.stopPropagation(); modalAvatarInput.click(); });
-modalAvatar.addEventListener('click', () => modalAvatarInput.click());
-modalAvatarInput.addEventListener('change', (e) => {
-  const file = e.target.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => { modalTemp.avatarImg = ev.target.result; renderModalPreview(); };
-  reader.readAsDataURL(file);
-});
-editBio.addEventListener('input', () => { bioCount.textContent = editBio.value.length + ' / 160'; });
-
-saveProfileBtn.addEventListener('click', () => {
-  const p = profiles[myHandle];
-  if(!p) return;
-  const newName = editName.value.trim() || 'Sen';
-  let newHandleRaw = editHandle.value.trim().replace(/^@/,'').replace(/\s+/g,'');
-  if(!newHandleRaw) newHandleRaw = 'ben';
-  const newHandle = '@' + newHandleRaw;
-
-  if(newHandle !== p.handle && !profiles[newHandle]){
-    tweets.forEach(t => { if(t.author === p.handle) t.author = newHandle; t.replies.forEach(r => { if(r.author === p.handle) r.author = newHandle; }); });
-    Object.values(profiles).forEach(other => {
-      if(other.following) other.following = other.following.map(h => h === p.handle ? newHandle : h);
-      if(other.followers) other.followers = other.followers.map(h => h === p.handle ? newHandle : h);
+    const fileToBase64 = (file) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
     });
-    delete profiles[p.handle];
-    p.handle = newHandle;
-    profiles[newHandle] = p;
-    myHandle = newHandle;
-    currentProfileHandle = newHandle;
-  }
 
-  p.name = newName;
-  p.bio = editBio.value.trim();
-  p.avatarImg = modalTemp.avatarImg;
-  p.bannerImg = modalTemp.bannerImg;
-  p.verified = editVerified.checked;
+    window.onload = () => {
+      if (!localStorage.getItem('bc_users')) DB.saveUsers(DB.getUsers());
+      if (!localStorage.getItem('bc_tweets')) DB.saveTweets(DB.getTweets());
+      if (!localStorage.getItem('bc_bookmarks')) DB.saveBookmarks(DB.getBookmarks());
+      if (!localStorage.getItem('bc_notifications')) DB.saveNotifications(DB.getNotifications());
+      
+      const session = DB.getSession();
+      if (session) {
+        document.getElementById('auth-screen').classList.add('hidden');
+        loadApp();
+      }
+    };
 
-  // Profil fotoğrafı/banner değişikliğini kalıcı olarak kaydet.
-  saveUserProfile(auth.currentUser);
-  closeEditModal();
-  updateMyAvatarComposer();
-  updateSidebarUserCard();
-  rerenderCurrent();
-});
+    // --- AUTH ---
+    const switchBtn = document.getElementById('auth-switch-btn');
+    switchBtn.addEventListener('click', () => {
+      isRegisterMode = !isRegisterMode;
+      document.getElementById('auth-title').innerText = isRegisterMode ? "Beclaude'a Kaydol" : "Beclaude'a Giriş Yap";
+      document.getElementById('auth-submit-btn').innerText = isRegisterMode ? "Kaydol" : "Giriş Yap";
+      document.getElementById('register-fields').classList.toggle('hidden', !isRegisterMode);
+      document.getElementById('auth-switch-text').innerText = isRegisterMode ? "Zaten hesabın var mı?" : "Hesabın yok mu?";
+      switchBtn.innerText = isRegisterMode ? "Giriş Yap" : "Kaydol";
+    });
 
-/* ================= SIDEBAR / COMPOSER MINI-STATE ================= */
-function updateMyAvatarComposer(){
-  const p = profiles[myHandle];
-  myAvatarComposer.style.cssText = avatarStyle(p);
-  myAvatarComposer.textContent = (p && p.avatarImg) ? '' : ((p && p.name) ? p.name[0].toUpperCase() : 'B');
-}
-myAvatarComposer.addEventListener('click', () => goToProfile(myHandle));
+    document.getElementById('auth-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const uName = document.getElementById('auth-username').value.trim().toLowerCase();
+      const pass = document.getElementById('auth-password').value;
+      const users = DB.getUsers();
 
-function updateSidebarUserCard(){
-  const p = profiles[myHandle];
-  if(!p) return;
-  sidebarAvatar.style.cssText = avatarStyle(p);
-  sidebarAvatar.textContent = p.avatarImg ? '' : (p.name ? p.name[0].toUpperCase() : 'B');
-  sidebarUcName.innerHTML = escapeHtml(p.name) + ' ' + verifiedBadge(p);
-  sidebarUcHandle.textContent = p.handle;
-}
+      if (isRegisterMode) {
+        const name = document.getElementById('auth-name').value.trim();
+        const avatarFile = document.getElementById('auth-avatar-file').files[0];
+        let avatarBase64 = `https://api.dicebear.com/7.x/bottts/svg?seed=${uName}`;
 
-/* ================= COMPOSER ================= */
-function updatePostBtn(){
-  const len = input.value.length;
-  postBtn.disabled = !(input.value.trim().length > 0 || pendingImage) || len > 280;
-  if(len === 0){ charCount.textContent = ''; charCount.className='char-count'; }
-  else {
-    charCount.textContent = (280-len);
-    charCount.className = 'char-count' + (len > 280 ? ' over' : len > 260 ? ' warn' : '');
-  }
-}
-input.addEventListener('input', updatePostBtn);
-addPhotoBtn.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', (e) => {
-  const file = e.target.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => { pendingImage = ev.target.result; previewImg.src = pendingImage; previewWrap.style.display='block'; updatePostBtn(); };
-  reader.readAsDataURL(file);
-});
-removeImgBtn.addEventListener('click', () => { pendingImage=null; previewWrap.style.display='none'; fileInput.value=''; updatePostBtn(); });
+        if (avatarFile) {
+          try { avatarBase64 = await fileToBase64(avatarFile); } catch(err) { console.error(err); }
+        }
+        
+        if (users.some(u => u.username === uName)) return alert('Bu kullanıcı adı zaten alınmış!');
+        
+        const newUser = { id: Date.now().toString(), username: uName, name, password: pass, avatar: avatarBase64, banner: '', bio: '', location: '', following: [] };
+        users.push(newUser);
+        DB.saveUsers(users);
+        DB.setSession(newUser);
+      } else {
+        const user = users.find(u => u.username === uName && u.password === pass);
+        if (!user) return alert('Geçersiz kullanıcı adı veya şifre!');
+        DB.setSession(user);
+      }
 
-postBtn.addEventListener('click', () => {
-  const text = input.value.trim();
-  if((!text && !pendingImage) || text.length > 280) return;
-  tweets.unshift({ id: idCounter++, author:myHandle, time:'şimdi', text, image:pendingImage, likes:0, liked:false, rts:0, rted:false, bookmarked:false, replies:[] });
-  input.value=''; pendingImage=null; previewWrap.style.display='none'; fileInput.value='';
-  updatePostBtn();
-  renderFeed();
-  renderRightSidebar();
-});
+      document.getElementById('auth-screen').classList.add('hidden');
+      loadApp();
+    });
 
-/* ================= INIT ================= */
-updateMyAvatarComposer();
-updateSidebarUserCard();
-updatePostBtn();
-renderRightSidebar();
-goHome();
-</script>
+    function logout() {
+      DB.clearSession();
+      location.reload();
+    }
+
+    // --- UYGULAMA YÜKLEME ---
+    function loadApp() {
+      const currentUser = DB.getSession();
+      const defaultImg = `https://api.dicebear.com/7.x/bottts/svg?seed=${currentUser.username}`;
+      
+      document.getElementById('nav-avatar').src = currentUser.avatar || defaultImg;
+      document.getElementById('nav-name').innerText = currentUser.name;
+      document.getElementById('nav-username').innerText = `@${currentUser.username}`;
+      document.getElementById('tweetbox-avatar').src = currentUser.avatar || defaultImg;
+      document.getElementById('bookmarks-subtitle').innerText = `@${currentUser.username}`;
+
+      setupTweetInput();
+      renderTweets();
+      renderSuggestions();
+      renderExploreTrends();
+      checkUnreadNotifications();
+    }
+
+    // --- VIEW YÖNETİMİ ---
+    function switchView(viewName) {
+      currentView = viewName;
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('text-white');
+        el.classList.add('text-gray-400');
+      });
+
+      const activeNavBtn = document.getElementById(`nav-btn-${viewName}`);
+      if (activeNavBtn) {
+        activeNavBtn.classList.remove('text-gray-400');
+        activeNavBtn.classList.add('text-white');
+      }
+
+      const activeView = document.getElementById(`view-${viewName}`);
+      if (activeView) activeView.classList.remove('hidden');
+
+      if (viewName === 'feed') renderTweets();
+      if (viewName === 'explore') renderExploreTweets();
+      if (viewName === 'notifications') renderNotifications();
+      if (viewName === 'bookmarks') renderBookmarks();
+    }
+
+    // --- TWEET INPUT & GÖNDERME ---
+    function setupTweetInput() {
+      const input = document.getElementById('tweet-input');
+      const btn = document.getElementById('tweet-btn');
+      const counter = document.getElementById('char-count');
+
+      input.addEventListener('input', () => {
+        const rem = 280 - input.value.length;
+        counter.innerText = rem;
+        counter.classList.toggle('text-red-500', rem < 20);
+        
+        if (input.value.trim().length > 0 || currentTweetImageBase64) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+          btn.disabled = true;
+          btn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+      });
+    }
+
+    async function handleTweetFileUpload(input) {
+      if (input.files && input.files[0]) {
+        currentTweetImageBase64 = await fileToBase64(input.files[0]);
+        document.getElementById('image-preview').src = currentTweetImageBase64;
+        document.getElementById('image-preview-container').classList.remove('hidden');
+        
+        const btn = document.getElementById('tweet-btn');
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function removeTweetImage() {
+      currentTweetImageBase64 = '';
+      document.getElementById('tweet-file-input').value = '';
+      document.getElementById('image-preview-container').classList.add('hidden');
+      
+      const input = document.getElementById('tweet-input');
+      if (!input.value.trim()) {
+        const btn = document.getElementById('tweet-btn');
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function createTweet() {
+      const input = document.getElementById('tweet-input');
+      const text = input.value.trim();
+      if (!text && !currentTweetImageBase64) return;
+
+      const user = DB.getSession();
+      const tweets = DB.getTweets();
+
+      const newTweet = {
+        id: Date.now().toString(),
+        userId: user.id,
+        text,
+        image: currentTweetImageBase64,
+        likes: [],
+        retweets: [],
+        timestamp: Date.now()
+      };
+
+      tweets.unshift(newTweet);
+      DB.saveTweets(tweets);
+
+      input.value = '';
+      removeTweetImage();
+      document.getElementById('char-count').innerText = 280;
+      renderTweets(true);
+    }
+
+    // --- TWEET BİLEŞENİ ---
+    function createTweetElement(t, isFirstAnimated = false) {
+      const users = DB.getUsers();
+      const currentUser = DB.getSession();
+      const bookmarks = DB.getBookmarks();
+      const author = users.find(u => u.id === t.userId) || { name: 'Bilinmeyen', username: 'anon', avatar: '' };
+      const isLiked = t.likes.includes(currentUser.id);
+      const isRetweeted = t.retweets.includes(currentUser.id);
+      const isBookmarked = bookmarks.some(b => b.userId === currentUser.id && b.tweetId === t.id);
+      const isOwner = t.userId === currentUser.id;
+
+      const el = document.createElement('div');
+      el.className = `p-4 hover:bg-[#080808] flex gap-3 border-b border-theme smooth-transition ${isFirstAnimated ? 'tweet-enter' : ''}`;
+      el.innerHTML = `
+        <img onclick="openUserProfile('${author.id}')" src="${author.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${author.username}`}" class="btn-smooth w-10 h-10 rounded-full object-cover bg-gray-700 flex-shrink-0 cursor-pointer hover:opacity-80">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <div onclick="openUserProfile('${author.id}')" class="flex items-center gap-1.5 truncate cursor-pointer group">
+              <span class="font-bold text-sm truncate group-hover:underline">${author.name}</span>
+              <span class="text-gray-500 text-xs truncate">@${author.username}</span>
+              <span class="text-gray-500 text-xs">· ${timeAgo(t.timestamp)}</span>
+            </div>
+            ${isOwner ? `<button onclick="deleteTweet('${t.id}')" class="btn-smooth text-gray-500 hover:text-red-500 text-xs p-1.5 rounded-full hover:bg-red-500/10"><i class="fa-regular fa-trash-can"></i></button>` : ''}
+          </div>
+          
+          <p class="text-sm mt-1 whitespace-pre-line break-words text-gray-200 leading-relaxed">${formatTweetText(t.text)}</p>
+          
+          ${t.image ? `<img src="${t.image}" class="mt-2.5 rounded-2xl max-h-80 w-full object-cover border border-theme shadow-sm smooth-transition hover:opacity-95">` : ''}
+
+          <div class="flex justify-between max-w-md mt-3 text-gray-500 text-xs">
+            <button class="btn-smooth hover:text-sky-500 flex items-center gap-1.5"><i class="fa-regular fa-comment"></i> 0</button>
+            <button onclick="toggleRetweet('${t.id}', this)" class="btn-smooth hover:text-green-500 flex items-center gap-1.5 ${isRetweeted ? 'text-green-500 font-bold' : ''}">
+              <i class="fa-solid fa-retweet"></i> <span>${t.retweets.length}</span>
+            </button>
+            <button onclick="toggleLike('${t.id}', this)" class="btn-smooth hover:text-pink-500 flex items-center gap-1.5 ${isLiked ? 'text-pink-500 font-bold' : ''}">
+              <i class="${isLiked ? 'fa-solid text-pink-500' : 'fa-regular'} fa-heart"></i> <span>${t.likes.length}</span>
+            </button>
+            <button onclick="toggleBookmark('${t.id}', this)" class="btn-smooth hover:text-sky-500 flex items-center gap-1.5 ${isBookmarked ? 'text-sky-500' : ''}">
+              <i class="${isBookmarked ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+      `;
+      return el;
+    }
+
+    function formatTweetText(text) {
+      let escaped = escapeHTML(text);
+      return escaped.replace(/#(\w+)/g, '<span onclick="filterByTag(\'$1\')" class="text-sky-500 hover:underline cursor-pointer">#$1</span>');
+    }
+
+    // --- ANASAYFA RENDER ---
+    function renderTweets(isFirstAnimated = false) {
+      const tweets = DB.getTweets();
+      const container = document.getElementById('tweet-list');
+      container.innerHTML = '';
+      tweets.forEach((t, index) => {
+        container.appendChild(createTweetElement(t, isFirstAnimated && index === 0));
+      });
+    }
+
+    // --- ETKİLEŞİMLER ---
+    function toggleLike(tweetId, btnEl) {
+      const icon = btnEl.querySelector('i');
+      icon.classList.add('heart-pop');
+      setTimeout(() => icon.classList.remove('heart-pop'), 350);
+
+      const tweets = DB.getTweets();
+      const currentUser = DB.getSession();
+      const tweet = tweets.find(t => t.id === tweetId);
+      if (!tweet) return;
+
+      const idx = tweet.likes.indexOf(currentUser.id);
+      if (idx > -1) {
+        tweet.likes.splice(idx, 1);
+      } else {
+        tweet.likes.push(currentUser.id);
+        if (tweet.userId !== currentUser.id) {
+          sendNotification(tweet.userId, currentUser.id, 'like', 'gönderini beğendi.');
+        }
+      }
+
+      DB.saveTweets(tweets);
+      refreshActiveViews();
+    }
+
+    function toggleRetweet(tweetId, btnEl) {
+      const icon = btnEl.querySelector('i');
+      icon.classList.add('retweet-spin');
+      setTimeout(() => icon.classList.remove('retweet-spin'), 450);
+
+      const tweets = DB.getTweets();
+      const currentUser = DB.getSession();
+      const tweet = tweets.find(t => t.id === tweetId);
+      if (!tweet) return;
+
+      const idx = tweet.retweets.indexOf(currentUser.id);
+      if (idx > -1) {
+        tweet.retweets.splice(idx, 1);
+      } else {
+        tweet.retweets.push(currentUser.id);
+        if (tweet.userId !== currentUser.id) {
+          sendNotification(tweet.userId, currentUser.id, 'retweet', 'gönderini yeniden paylaştı.');
+        }
+      }
+
+      DB.saveTweets(tweets);
+      refreshActiveViews();
+    }
+
+    function toggleBookmark(tweetId, btnEl) {
+      let bookmarks = DB.getBookmarks();
+      const currentUser = DB.getSession();
+      const idx = bookmarks.findIndex(b => b.userId === currentUser.id && b.tweetId === tweetId);
+
+      if (idx > -1) {
+        bookmarks.splice(idx, 1);
+      } else {
+        bookmarks.push({ id: Date.now().toString(), userId: currentUser.id, tweetId });
+      }
+
+      DB.saveBookmarks(bookmarks);
+      refreshActiveViews();
+    }
+
+    function deleteTweet(tweetId) {
+      let tweets = DB.getTweets();
+      tweets = tweets.filter(t => t.id !== tweetId);
+      DB.saveTweets(tweets);
+      
+      let bookmarks = DB.getBookmarks();
+      bookmarks = bookmarks.filter(b => b.tweetId !== tweetId);
+      DB.saveBookmarks(bookmarks);
+
+      refreshActiveViews();
+    }
+
+    function refreshActiveViews() {
+      if (currentView === 'feed') renderTweets();
+      if (currentView === 'explore') renderExploreTweets();
+      if (currentView === 'bookmarks') renderBookmarks();
+      if (currentView === 'profile' && viewingUserId) renderUserProfile(viewingUserId);
+    }
+
+    // --- KEŞFET ---
+    function renderExploreTrends() {
+      const container = document.getElementById('explore-trends-container');
+      container.innerHTML = '';
+      TREND_LIST.forEach(trend => {
+        const div = document.createElement('div');
+        div.className = 'btn-smooth flex justify-between items-center cursor-pointer hover:bg-white/5 p-2 rounded-xl';
+        div.onclick = () => filterByTag(trend.tag.replace('#', ''));
+        div.innerHTML = `
+          <div>
+            <span class="text-xs text-gray-500">${trend.category}</span>
+            <p class="font-bold text-sm text-white">${trend.tag}</p>
+            <span class="text-xs text-gray-500">${trend.count} Gönderi</span>
+          </div>
+          <i class="fa-solid fa-arrow-trend-up text-gray-600"></i>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function handleExploreSearch(val) {
+      exploreFilterQuery = val.trim().toLowerCase();
+      renderExploreTweets();
+    }
+
+    function filterByTag(tag) {
+      exploreFilterQuery = tag.toLowerCase();
+      switchView('explore');
+      const input = document.getElementById('explore-search-input');
+      if (input) input.value = `#${tag}`;
+      renderExploreTweets();
+    }
+
+    function renderExploreTweets() {
+      const tweets = DB.getTweets();
+      const users = DB.getUsers();
+      const container = document.getElementById('explore-tweet-list');
+      container.innerHTML = '';
+
+      const filtered = tweets.filter(t => {
+        if (!exploreFilterQuery) return true;
+        const author = users.find(u => u.id === t.userId) || { name: '', username: '' };
+        return t.text.toLowerCase().includes(exploreFilterQuery) ||
+               author.name.toLowerCase().includes(exploreFilterQuery) ||
+               author.username.toLowerCase().includes(exploreFilterQuery);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-gray-500 text-sm">Aramanızla eşleşen gönderi bulunamadı.</div>`;
+      } else {
+        filtered.forEach(t => container.appendChild(createTweetElement(t)));
+      }
+    }
+
+    // --- BİLDİRİMLER ---
+    function sendNotification(toUserId, fromUserId, type, text) {
+      let notifs = DB.getNotifications();
+      notifs.unshift({
+        id: Date.now().toString(),
+        toUserId,
+        fromUserId,
+        type,
+        text,
+        timestamp: Date.now()
+      });
+      DB.saveNotifications(notifs);
+    }
+
+    function renderNotifications() {
+      const notifs = DB.getNotifications();
+      const users = DB.getUsers();
+      const currentUser = DB.getSession();
+      const container = document.getElementById('notifications-list');
+      container.innerHTML = '';
+
+      const myNotifs = notifs.filter(n => n.toUserId === currentUser.id);
+
+      if (myNotifs.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-gray-500 text-sm">Henüz bir bildirim yok.</div>`;
+        return;
+      }
+
+      myNotifs.forEach(n => {
+        const fromUser = users.find(u => u.id === n.fromUserId) || { name: 'Biri', username: 'anon', avatar: '' };
+        let iconHtml = '<i class="fa-solid fa-heart text-pink-500 text-lg"></i>';
+        if (n.type === 'retweet') iconHtml = '<i class="fa-solid fa-retweet text-green-500 text-lg"></i>';
+        if (n.type === 'follow') iconHtml = '<i class="fa-solid fa-user-plus text-sky-500 text-lg"></i>';
+
+        const div = document.createElement('div');
+        div.className = 'p-4 hover:bg-[#080808] flex gap-4 items-start smooth-transition';
+        div.innerHTML = `
+          <div class="mt-1">${iconHtml}</div>
+          <div class="flex-1">
+            <img onclick="openUserProfile('${fromUser.id}')" src="${fromUser.avatar}" class="btn-smooth w-8 h-8 rounded-full object-cover mb-2 cursor-pointer">
+            <p class="text-sm"><strong onclick="openUserProfile('${fromUser.id}')" class="hover:underline cursor-pointer">${fromUser.name}</strong> ${escapeHTML(n.text)}</p>
+            <span class="text-xs text-gray-500">${timeAgo(n.timestamp)}</span>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function clearNotifications() {
+      let notifs = DB.getNotifications();
+      const currentUser = DB.getSession();
+      notifs = notifs.filter(n => n.toUserId !== currentUser.id);
+      DB.saveNotifications(notifs);
+      renderNotifications();
+    }
+
+    function checkUnreadNotifications() {
+      const notifs = DB.getNotifications();
+      const currentUser = DB.getSession();
+      const hasUnread = notifs.some(n => n.toUserId === currentUser.id);
+      const badge = document.getElementById('notif-badge');
+      if (badge) badge.classList.toggle('hidden', !hasUnread);
+    }
+
+    // --- YER İŞARETLERİ ---
+    function renderBookmarks() {
+      const bookmarks = DB.getBookmarks();
+      const tweets = DB.getTweets();
+      const currentUser = DB.getSession();
+      const container = document.getElementById('bookmarks-tweet-list');
+      container.innerHTML = '';
+
+      const myBookmarkedTweetIds = bookmarks.filter(b => b.userId === currentUser.id).map(b => b.tweetId);
+      const bookmarkedTweets = tweets.filter(t => myBookmarkedTweetIds.includes(t.id));
+
+      if (bookmarkedTweets.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-gray-500">
+            <i class="fa-regular fa-bookmark text-4xl mb-3 block"></i>
+            <h3 class="text-white font-bold mb-1">Daha sonra okumak için gönderileri kaydet</h3>
+            <p class="text-sm">Gelecekte kolayca bulmak için gönderilerin altındaki yer işareti simgesine tıkla.</p>
+          </div>
+        `;
+      } else {
+        bookmarkedTweets.forEach(t => container.appendChild(createTweetElement(t)));
+      }
+    }
+
+    // --- PROFİL GÖRÜNÜMÜ & YÖNETİMİ ---
+    function openUserProfile(userId) {
+      viewingUserId = userId;
+      switchView('profile');
+      renderUserProfile(userId);
+    }
+
+    function renderUserProfile(userId) {
+      const users = DB.getUsers();
+      const currentUser = DB.getSession();
+      const user = users.find(u => u.id === userId);
+      if (!user) return switchView('feed');
+
+      const userTweets = DB.getTweets().filter(t => t.userId === user.id);
+      const isOwner = currentUser.id === user.id;
+      const isFollowing = currentUser.following?.includes(user.id);
+      const followersCount = users.filter(u => u.following?.includes(user.id)).length;
+
+      document.getElementById('page-profile-title').innerText = user.name;
+      document.getElementById('page-tweet-count').innerText = `${userTweets.length} gönderi`;
+      document.getElementById('page-name').innerText = user.name;
+      document.getElementById('page-username').innerText = `@${user.username}`;
+      document.getElementById('page-avatar').src = user.avatar;
+      document.getElementById('page-bio').innerText = user.bio || 'Henüz bir biyografi eklenmedi.';
+      
+      const banner = document.getElementById('page-banner');
+      if (user.banner) {
+        banner.style.backgroundImage = `url('${user.banner}')`;
+      } else {
+        banner.style.backgroundImage = 'linear-gradient(to right, #4338ca, #0369a1, #0f172a)';
+      }
+
+      const locBox = document.getElementById('page-loc-box');
+      if (user.location) {
+        document.getElementById('page-loc').innerText = user.location;
+        locBox.classList.remove('hidden');
+      } else {
+        locBox.classList.add('hidden');
+      }
+
+      document.getElementById('page-following').innerText = user.following?.length || 0;
+      document.getElementById('page-followers').innerText = followersCount;
+
+      const actionContainer = document.getElementById('profile-action-btn-container');
+      if (isOwner) {
+        actionContainer.innerHTML = `<button onclick="openEditProfileModal()" class="btn-smooth border border-gray-600 hover:bg-white/10 text-white font-bold px-4 py-1.5 rounded-full text-sm">Profili Düzenle</button>`;
+      } else {
+        actionContainer.innerHTML = `
+          <button onclick="toggleFollow('${user.id}')" class="btn-smooth px-4 py-1.5 rounded-full text-sm font-bold ${isFollowing ? 'border border-gray-500 text-white hover:bg-red-500/10 hover:border-red-500 hover:text-red-500' : 'bg-white text-black hover:bg-gray-200'}">
+            ${isFollowing ? 'Takip Ediliyor' : 'Takip Et'}
+          </button>
+        `;
+      }
+
+      const tweetList = document.getElementById('profile-tweet-list');
+      tweetList.innerHTML = '';
+      if (userTweets.length === 0) {
+        tweetList.innerHTML = `<div class="p-8 text-center text-gray-500 text-sm">Henüz hiç gönderi paylaşılmamış.</div>`;
+      } else {
+        userTweets.forEach(t => tweetList.appendChild(createTweetElement(t)));
+      }
+    }
+
+    // --- PROFİL DÜZENLEME MODAL ---
+    function openEditProfileModal() {
+      const user = DB.getSession();
+      document.getElementById('edit-name').value = user.name || '';
+      document.getElementById('edit-bio').value = user.bio || '';
+      document.getElementById('edit-location').value = user.location || '';
+      document.getElementById('edit-avatar-file').value = '';
+      document.getElementById('edit-banner-file').value = '';
+
+      document.getElementById('edit-profile-modal').classList.remove('hidden');
+    }
+
+    function closeEditProfileModal() {
+      document.getElementById('edit-profile-modal').classList.add('hidden');
+    }
+
+    document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let users = DB.getUsers();
+      let currentUser = DB.getSession();
+
+      currentUser.name = document.getElementById('edit-name').value.trim();
+      currentUser.bio = document.getElementById('edit-bio').value.trim();
+      currentUser.location = document.getElementById('edit-location').value.trim();
+
+      const avatarFile = document.getElementById('edit-avatar-file').files[0];
+      if (avatarFile) {
+        try { currentUser.avatar = await fileToBase64(avatarFile); } catch(err) { console.error(err); }
+      }
+
+      const bannerFile = document.getElementById('edit-banner-file').files[0];
+      if (bannerFile) {
+        try { currentUser.banner = await fileToBase64(bannerFile); } catch(err) { console.error(err); }
+      }
+
+      users = users.map(u => u.id === currentUser.id ? currentUser : u);
+      DB.saveUsers(users);
+      DB.setSession(currentUser);
+
+      closeEditProfileModal();
+      loadApp();
+      if (viewingUserId) renderUserProfile(viewingUserId);
+    });
+
+    // --- SAĞ PANEL & ARAMA ---
+    function renderSuggestions() {
+      const users = DB.getUsers();
+      const currentUser = DB.getSession();
+      const container = document.getElementById('follow-suggestions');
+      container.innerHTML = '';
+
+      const others = users.filter(u => u.id !== currentUser.id);
+      others.slice(0, 3).forEach(u => {
+        const isFollowing = currentUser.following?.includes(u.id);
+        const div = document.createElement('div');
+        div.className = 'btn-smooth flex items-center justify-between p-1 rounded-xl';
+        div.innerHTML = `
+          <div onclick="openUserProfile('${u.id}')" class="flex items-center gap-2 overflow-hidden cursor-pointer group">
+            <img src="${u.avatar}" class="w-9 h-9 rounded-full object-cover bg-gray-700 smooth-transition group-hover:scale-105">
+            <div class="truncate">
+              <p class="font-bold text-sm truncate group-hover:underline">${u.name}</p>
+              <p class="text-gray-500 text-xs truncate">@${u.username}</p>
+            </div>
+          </div>
+          <button onclick="toggleFollow('${u.id}')" class="btn-smooth px-3.5 py-1 rounded-full text-xs font-bold ${isFollowing ? 'border border-gray-500 text-white' : 'bg-white text-black hover:bg-gray-200'}">
+            ${isFollowing ? 'Takip Ediliyor' : 'Takip Et'}
+          </button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function toggleFollow(targetUserId) {
+      let users = DB.getUsers();
+      let currentUser = DB.getSession();
+      
+      currentUser.following = currentUser.following || [];
+      const idx = currentUser.following.indexOf(targetUserId);
+
+      if (idx > -1) {
+        currentUser.following.splice(idx, 1);
+      } else {
+        currentUser.following.push(targetUserId);
+        sendNotification(targetUserId, currentUser.id, 'follow', 'seni takip etmeye başladı.');
+      }
+
+      users = users.map(u => u.id === currentUser.id ? currentUser : u);
+      DB.saveUsers(users);
+      DB.setSession(currentUser);
+      
+      renderSuggestions();
+      if (currentView === 'profile' && viewingUserId) renderUserProfile(viewingUserId);
+    }
+
+    function handleGlobalSearch(val) {
+      exploreFilterQuery = val.trim().toLowerCase();
+      switchView('explore');
+      const input = document.getElementById('explore-search-input');
+      if (input) input.value = val;
+      renderExploreTweets();
+    }
+
+    // --- YARDIMCI METOTLAR ---
+    function timeAgo(timestamp) {
+      const sec = Math.floor((Date.now() - timestamp) / 1000);
+      if (sec < 60) return `${sec}sn`;
+      const min = Math.floor(sec / 60);
+      if (min < 60) return `${min}dk`;
+      const hr = Math.floor(min / 60);
+      if (hr < 24) return `${hr}sa`;
+      return new Date(timestamp).toLocaleDateString('tr-TR');
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      }[tag] || tag));
+    }
+  </script>
 </body>
 </html>
