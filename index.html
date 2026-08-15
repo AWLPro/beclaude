@@ -792,6 +792,77 @@
       return pool[Math.floor(Math.random() * pool.length)];
     }
 
+    // --- TWEET METİN VARYASYONLARI ---
+    // Her taraf (ev sahibi / deplasman) için birden fazla şablon havuzu.
+    // Her paylaşım oluşturulurken havuzdan rastgele bir şablon seçilir,
+    // böylece aynı tip paylaşım hep aynı cümlelerle tekrarlanmaz.
+    function pickFrom(pool, ctx) {
+      const fn = pool[Math.floor(Math.random() * pool.length)];
+      return fn(ctx);
+    }
+
+    const MATCHDAY_HOME_TEMPLATES = [
+      ctx => `🔴 MATCHDAY AT HOME!\n\n🆚 @${ctx.oppUsername}\n🏆 Premier League | Season ${ctx.season}\n📍 ${ctx.stadium}\n\nUnder the lights. Let's defend our turf! 👊 ${ctx.hashtag} #${ctx.selfTag}`,
+      ctx => `🏟️ Game day! We host @${ctx.oppUsername} today.\n\n📍 ${ctx.stadium}\n🏆 Premier League | Season ${ctx.season}\n\nFull voice, home advantage. Let's get the job done! 💪 ${ctx.hashtag} #${ctx.selfTag}`,
+      ctx => `⏰ Kickoff approaching. Welcoming @${ctx.oppUsername} to ${ctx.stadium}.\n\nThree points stay here today. 🔒 ${ctx.hashtag} #${ctx.selfTag}`,
+      ctx => `📢 MATCHDAY!\n\n🆚 @${ctx.oppUsername}\n📍 ${ctx.stadium} | Season ${ctx.season}\n\nOur fortress awaits. Let's roar! 🦁 ${ctx.hashtag} #${ctx.selfTag}`,
+      ctx => `🎟️ Doors open, home crowd building at ${ctx.stadium}.\n\n🆚 @${ctx.oppUsername} | Premier League\n\nOne mission today: three points. 🔥 ${ctx.hashtag} #${ctx.selfTag}`
+    ];
+
+    const MATCHDAY_AWAY_TEMPLATES = [
+      ctx => `✈️ ON THE ROAD | MATCHDAY!\n\n🆚 @${ctx.oppUsername}\n🏆 Premier League | Season ${ctx.season}\n📍 ${ctx.stadium}\n\nTravelling in full voice. Let's bring home the win! 💙 ${ctx.hashtag} #${ctx.selfTag}`,
+      ctx => `🚌 On our way to ${ctx.stadium}.\n\n🆚 @${ctx.oppUsername} | Season ${ctx.season}\n\nAway day energy. Let's go! 🔥 ${ctx.hashtag} #${ctx.selfTag}`,
+      ctx => `🧳 Matchday, away colours on.\n\n📍 ${ctx.stadium}\n🏆 Premier League | Season ${ctx.season}\n\nSupport travelling with us today! 💙 ${ctx.hashtag} #${ctx.selfTag}`,
+      ctx => `📢 AWAY DAY!\n\n🆚 @${ctx.oppUsername}\n📍 ${ctx.stadium}\n\nGrind mode on. Let's take something from this one. 👊 ${ctx.hashtag} #${ctx.selfTag}`,
+      ctx => `🗺️ Long trip, same belief. Kickoff at ${ctx.stadium} soon.\n\n🆚 @${ctx.oppUsername} | Premier League\n\nHere for the three points. 💪 ${ctx.hashtag} #${ctx.selfTag}`
+    ];
+
+    const FULLTIME_WIN_TEMPLATES = [
+      ctx => `🏁 FULL-TIME: ${ctx.selfName} ${ctx.selfScore}-${ctx.oppScore} ${ctx.oppName}${ctx.scorersLine}\n\n${ctx.isHome ? `Three points stay at ${ctx.stadium}!` : 'Massive three points on the road!'} 👏 ${ctx.hashtag} #PremierLeague`,
+      ctx => `✅ Job done. ${ctx.selfName} beat ${ctx.oppName} ${ctx.selfScore}-${ctx.oppScore}.${ctx.scorersLine}\n\n${ctx.isHome ? 'Home fortress holds strong.' : 'Backed by our travelling fans all game.'} 🔥 ${ctx.hashtag}`,
+      ctx => `🎉 WHAT A WIN! ${ctx.selfScore}-${ctx.oppScore} vs ${ctx.oppName}.${ctx.scorersLine}\n\n${ctx.isHome ? `Thank you for the support at ${ctx.stadium}!` : 'Bringing the win back home!'} 💪 ${ctx.hashtag} #PremierLeague`,
+      ctx => `📈 Big statement result. ${ctx.selfName} ${ctx.selfScore}-${ctx.oppScore} ${ctx.oppName}.${ctx.scorersLine}\n\nOnto the next one. ${ctx.hashtag}`,
+      ctx => `💥 Dominant performance today. Full-time ${ctx.selfScore}-${ctx.oppScore} against ${ctx.oppName}.${ctx.scorersLine}\n\n${ctx.isHome ? `${ctx.stadium} was rocking!` : 'Silenced the home crowd!'} ${ctx.hashtag} #PremierLeague`
+    ];
+
+    const FULLTIME_LOSS_TEMPLATES = [
+      ctx => `🏁 FULL-TIME: ${ctx.selfName} ${ctx.selfScore}-${ctx.oppScore} ${ctx.oppName}${ctx.scorersLine}\n\nTough result to take. We regroup and focus on the next fixture. ${ctx.hashtag}`,
+      ctx => `😔 Not our day. Fell short ${ctx.selfScore}-${ctx.oppScore} against ${ctx.oppName}.${ctx.scorersLine}\n\nHeads up, next week is a new chance. ${ctx.hashtag}`,
+      ctx => `🔻 Full-time: ${ctx.selfName} ${ctx.selfScore}-${ctx.oppScore} ${ctx.oppName}.${ctx.scorersLine}\n\n${ctx.isHome ? `Disappointing at ${ctx.stadium}.` : 'Long trip home tonight.'} We'll be back stronger. ${ctx.hashtag}`,
+      ctx => `📉 Result didn't go our way today (${ctx.selfScore}-${ctx.oppScore} vs ${ctx.oppName}).${ctx.scorersLine}\n\nBack to work on the training ground. ${ctx.hashtag}`,
+      ctx => `😤 Frustrating afternoon. ${ctx.selfName} ${ctx.selfScore}-${ctx.oppScore} ${ctx.oppName}.${ctx.scorersLine}\n\nPlenty to work on before the next one. ${ctx.hashtag}`
+    ];
+
+    const FULLTIME_DRAW_TEMPLATES = [
+      ctx => `🏁 FULL-TIME: ${ctx.selfName} ${ctx.selfScore}-${ctx.oppScore} ${ctx.oppName}${ctx.scorersLine}\n\nA point shared today. ${ctx.hashtag} #PremierLeague`,
+      ctx => `⚖️ Honours even. ${ctx.selfScore}-${ctx.oppScore} vs ${ctx.oppName}.${ctx.scorersLine}\n\nOnwards to the next challenge. ${ctx.hashtag}`,
+      ctx => `🤝 Shared the points ${ctx.isHome ? `at ${ctx.stadium}` : 'on the road'} today. Final score ${ctx.selfScore}-${ctx.oppScore}.${ctx.scorersLine}\n\n${ctx.hashtag}`,
+      ctx => `➖ A draw against ${ctx.oppName}, ${ctx.selfScore}-${ctx.oppScore}.${ctx.scorersLine}\n\nTakeable positives, room to improve. ${ctx.hashtag}`
+    ];
+
+    function buildMatchdayTweets(homeClub, awayClub, season, hashtag) {
+      const homeCtx = { oppUsername: awayClub.username, season, stadium: homeClub.stadium, hashtag, selfTag: homeClub.tag };
+      const awayCtx = { oppUsername: homeClub.username, season, stadium: homeClub.stadium, hashtag, selfTag: awayClub.tag };
+      return {
+        homeText: pickFrom(MATCHDAY_HOME_TEMPLATES, homeCtx),
+        awayText: pickFrom(MATCHDAY_AWAY_TEMPLATES, awayCtx)
+      };
+    }
+
+    function buildFulltimeTweets(homeClub, awayClub, homeScore, awayScore, hashtag, scorersLine) {
+      const homePool = homeScore > awayScore ? FULLTIME_WIN_TEMPLATES : (homeScore < awayScore ? FULLTIME_LOSS_TEMPLATES : FULLTIME_DRAW_TEMPLATES);
+      const awayPool = awayScore > homeScore ? FULLTIME_WIN_TEMPLATES : (awayScore < homeScore ? FULLTIME_LOSS_TEMPLATES : FULLTIME_DRAW_TEMPLATES);
+
+      const homeCtx = { selfName: homeClub.name, oppName: awayClub.name, selfScore: homeScore, oppScore: awayScore, isHome: true, stadium: homeClub.stadium, hashtag, scorersLine: scorersLine || '' };
+      const awayCtx = { selfName: awayClub.name, oppName: homeClub.name, selfScore: awayScore, oppScore: homeScore, isHome: false, stadium: homeClub.stadium, hashtag, scorersLine: scorersLine || '' };
+
+      return {
+        homeText: pickFrom(homePool, homeCtx),
+        awayText: pickFrom(awayPool, awayCtx)
+      };
+    }
+
+
     const DB = {
       getClubs: () => JSON.parse(localStorage.getItem('bc_fm_clubs_v17')) || DEFAULT_CLUBS,
       saveClubs: (data) => localStorage.setItem('bc_fm_clubs_v17', JSON.stringify(data)),
@@ -1608,24 +1679,40 @@
             }
           }
 
-          // Akışa maç sonu tweeti ekle
-          const scoreHeader = `🏁 FULL-TIME (Txt Sync): ${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}`;
+          // Akışa maç sonu tweetlerini ekle (hem ev sahibi hem deplasman kendi hesabından paylaşır)
           const formattedScorers = scorersText ? `\n⚽ Goller: ${scorersText}` : '';
           const hashtag = `#${homeClub.name.replace(/\s+/g,'')}${awayClub.name.replace(/\s+/g,'')}`;
 
-          const tweet = {
-            id: 'tw_txt_' + now + '_' + Math.random(),
+          const { homeText, awayText } = buildFulltimeTweets(homeClub, awayClub, homeScore, awayScore, hashtag, formattedScorers);
+
+          const homeTweet = {
+            id: 'tw_txt_home_' + now + '_' + Math.random(),
             userId: homeClub.id,
-            text: `${scoreHeader}${formattedScorers}\n\nStandings and Top Scorers updated via Txt Sync! 👏 ${hashtag} #PremierLeague`,
+            text: homeText,
             image: '',
             likes: [awayClub.id],
             retweets: [],
             replies: [
-              { author: `${homeClub.name}Fan`, text: 'Great game, important points secured!' }
+              { author: `${homeClub.name}Fan`, text: getRandomReply(homeScore > awayScore ? 'generalHappy' : (homeScore < awayScore ? 'heavyDefeat' : 'drawBoring')) }
             ],
             timestamp: now
           };
-          tweets.unshift(tweet);
+
+          const awayTweet = {
+            id: 'tw_txt_away_' + (now - 300) + '_' + Math.random(),
+            userId: awayClub.id,
+            text: awayText,
+            image: '',
+            likes: [homeClub.id],
+            retweets: [],
+            replies: [
+              { author: `${awayClub.name}Fan`, text: getRandomReply(awayScore > homeScore ? 'generalHappy' : (awayScore < homeScore ? 'heavyDefeat' : 'drawBoring')) }
+            ],
+            timestamp: now - 300
+          };
+
+          tweets.unshift(awayTweet);
+          tweets.unshift(homeTweet);
         });
 
         DB.saveStandings(standings);
@@ -1705,10 +1792,12 @@
       const hashtag = `#${homeClub.name.replace(/\s+/g,'')}${awayClub.name.replace(/\s+/g,'')}`;
 
       if (stage === 'matchday') {
+        const { homeText, awayText } = buildMatchdayTweets(homeClub, awayClub, curSeason, hashtag);
+
         const homeTweet = {
           id: 'tw_fm_home_' + now,
           userId: homeClub.id,
-          text: `🔴 MATCHDAY AT HOME!\n\n🆚 @${awayClub.username}\n🏆 Premier League | Season ${curSeason}\n📍 ${homeClub.stadium}\n\nUnder the lights. Let's defend our turf! 👊 ${hashtag} #${homeClub.tag}`,
+          text: homeText,
           image: imgBase64,
           likes: [],
           retweets: [],
@@ -1721,7 +1810,7 @@
         const awayTweet = {
           id: 'tw_fm_away_' + (now - 500),
           userId: awayClub.id,
-          text: `✈️ ON THE ROAD | MATCHDAY!\n\n🆚 @${homeClub.username}\n🏆 Premier League | Season ${curSeason}\n📍 ${homeClub.stadium}\n\nTravelling in full voice. Let's bring home the win! 💙 ${hashtag} #${awayClub.tag}`,
+          text: awayText,
           image: '',
           likes: [],
           retweets: [],
@@ -1808,16 +1897,17 @@
           awayReplies = [{ author: 'AwayLads', text: getRandomReply('drawBoring') }];
         }
 
-        const scoreHeader = `🏁 FULL-TIME: ${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}`;
         let allScorersText = '';
         if (homeScorers || awayScorers) {
           allScorersText = `\n⚽ ${homeClub.name}: ${homeScorers || '-'}\n⚽ ${awayClub.name}: ${awayScorers || '-'}`;
         }
 
+        const { homeText: ftHomeText, awayText: ftAwayText } = buildFulltimeTweets(homeClub, awayClub, homeScore, awayScore, hashtag, allScorersText);
+
         const homePost = {
           id: 'tw_fm_' + now,
           userId: homeClub.id,
-          text: `${scoreHeader}${allScorersText}\n\nStandings and top scorers updated! Thank you for your support at ${homeClub.stadium}! 👏 ${hashtag} #PremierLeague`,
+          text: ftHomeText,
           image: imgBase64,
           likes: [awayClub.id],
           retweets: [],
@@ -1828,7 +1918,7 @@
         const awayPost = {
           id: 'tw_fm_' + (now - 1000),
           userId: awayClub.id,
-          text: `🏁 Full-time at ${homeClub.stadium}.\n\n${homeClub.name} ${homeScore}-${awayScore} ${awayClub.name}${allScorersText}\n\nWe regroup and focus on the next fixture. ${hashtag}`,
+          text: ftAwayText,
           image: '',
           likes: [],
           retweets: [],
