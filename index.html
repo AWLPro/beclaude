@@ -618,26 +618,26 @@
   <!-- ================= JAVASCRIPT MOTORU ================= -->
   <script>
     const DEFAULT_CLUBS = [
-      { id: 'c_ars', username: 'Arsenal', name: 'Arsenal', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9825.png', stadium: 'Emirates Stadium', tag: 'COYG' },
-      { id: 'c_whu', username: 'WestHam', name: 'West Ham United', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8654.png', stadium: 'London Stadium', tag: 'COYI' },
-      { id: 'c_der', username: 'dcfcofficial', name: 'Derby County', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9796.png', stadium: 'Pride Park Stadium', tag: 'DCFC' },
-      { id: 'c_bha', username: 'OfficialBHAFC', name: 'Brighton & Hove Albion', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10204.png', stadium: 'Amex Stadium', tag: 'BHAFC' },
-      { id: 'c_tot', username: 'SpursOfficial', name: 'Tottenham Hotspur', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8586.png', stadium: 'Tottenham Hotspur Stadium', tag: 'COYS' },
-      { id: 'c_liv', username: 'LFC', name: 'Liverpool FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8650.png', stadium: 'Anfield', tag: 'YNWA' },
-      { id: 'c_mci', username: 'ManCity', name: 'Manchester City', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8456.png', stadium: 'Etihad Stadium', tag: 'ManCity' },
-      { id: 'c_bre', username: 'BrentfordFC', name: 'Brentford FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9937.png', stadium: 'Gtech Community Stadium', tag: 'BrentfordFC' },
-      { id: 'c_nor', username: 'NorwichCityFC', name: 'Norwich City', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9850.png', stadium: 'Carrow Road', tag: 'NCFC' },
-      { id: 'c_new', username: 'NUFC', name: 'Newcastle United', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10261.png', stadium: "St. James' Park", tag: 'NUFC' },
-      { id: 'c_bou', username: 'afcbournemouth', name: 'AFC Bournemouth', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8678.png', stadium: 'Vitality Stadium', tag: 'AFCB' },
-      { id: 'c_eve', username: 'Everton', name: 'Everton', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8668.png', stadium: 'Goodison Park', tag: 'EFC' },
-      { id: 'c_che', username: 'ChelseaFC', name: 'Chelsea FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8455.png', stadium: 'Stamford Bridge', tag: 'CFC' },
-      { id: 'c_wol', username: 'Wolves', name: 'Wolverhampton Wanderers', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8602.png', stadium: 'Molineux Stadium', tag: 'WWFC' },
-      { id: 'c_mun', username: 'ManUtd', name: 'Manchester United', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10260.png', stadium: 'Old Trafford', tag: 'MUFC' },
-      { id: 'c_ful', username: 'FulhamFC', name: 'Fulham FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9879.png', stadium: 'Craven Cottage', tag: 'FFC' },
-      { id: 'c_sou', username: 'SouthamptonFC', name: 'Southampton FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8466.png', stadium: "St Mary's Stadium", tag: 'SaintsFC' },
-      { id: 'c_nfo', username: 'NFFC', name: 'Nottingham Forest', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10203.png', stadium: 'City Ground', tag: 'NFFC' },
-      { id: 'c_sun', username: 'SunderlandAFC', name: 'Sunderland AFC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8472.png', stadium: 'Stadium of Light', tag: 'SAFC' },
-      { id: 'c_bol', username: 'OfficialBWFC', name: 'Bolton Wanderers', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8559.png', stadium: 'Toughsheet Community Stadium', tag: 'BWFC' }
+      { id: 'c_ars', username: 'Arsenal', name: 'Arsenal', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9825.png', stadium: 'Emirates Stadium', tag: 'COYG', followersBase: 29800000, followingBase: 178 },
+      { id: 'c_whu', username: 'WestHam', name: 'West Ham United', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8654.png', stadium: 'London Stadium', tag: 'COYI', followersBase: 6100000, followingBase: 214 },
+      { id: 'c_der', username: 'dcfcofficial', name: 'Derby County', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9796.png', stadium: 'Pride Park Stadium', tag: 'DCFC', followersBase: 680000, followingBase: 312 },
+      { id: 'c_bha', username: 'OfficialBHAFC', name: 'Brighton & Hove Albion', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10204.png', stadium: 'Amex Stadium', tag: 'BHAFC', followersBase: 3400000, followingBase: 236 },
+      { id: 'c_tot', username: 'SpursOfficial', name: 'Tottenham Hotspur', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8586.png', stadium: 'Tottenham Hotspur Stadium', tag: 'COYS', followersBase: 21500000, followingBase: 152 },
+      { id: 'c_liv', username: 'LFC', name: 'Liverpool FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8650.png', stadium: 'Anfield', tag: 'YNWA', followersBase: 41200000, followingBase: 168 },
+      { id: 'c_mci', username: 'ManCity', name: 'Manchester City', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8456.png', stadium: 'Etihad Stadium', tag: 'ManCity', followersBase: 27600000, followingBase: 159 },
+      { id: 'c_bre', username: 'BrentfordFC', name: 'Brentford FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9937.png', stadium: 'Gtech Community Stadium', tag: 'BrentfordFC', followersBase: 2000000, followingBase: 264 },
+      { id: 'c_nor', username: 'NorwichCityFC', name: 'Norwich City', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9850.png', stadium: 'Carrow Road', tag: 'NCFC', followersBase: 1100000, followingBase: 288 },
+      { id: 'c_new', username: 'NUFC', name: 'Newcastle United', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10261.png', stadium: "St. James' Park", tag: 'NUFC', followersBase: 7300000, followingBase: 198 },
+      { id: 'c_bou', username: 'afcbournemouth', name: 'AFC Bournemouth', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8678.png', stadium: 'Vitality Stadium', tag: 'AFCB', followersBase: 2300000, followingBase: 256 },
+      { id: 'c_eve', username: 'Everton', name: 'Everton', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8668.png', stadium: 'Goodison Park', tag: 'EFC', followersBase: 5900000, followingBase: 209 },
+      { id: 'c_che', username: 'ChelseaFC', name: 'Chelsea FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8455.png', stadium: 'Stamford Bridge', tag: 'CFC', followersBase: 32100000, followingBase: 194 },
+      { id: 'c_wol', username: 'Wolves', name: 'Wolverhampton Wanderers', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8602.png', stadium: 'Molineux Stadium', tag: 'WWFC', followersBase: 4200000, followingBase: 227 },
+      { id: 'c_mun', username: 'ManUtd', name: 'Manchester United', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10260.png', stadium: 'Old Trafford', tag: 'MUFC', followersBase: 46800000, followingBase: 183 },
+      { id: 'c_ful', username: 'FulhamFC', name: 'Fulham FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/9879.png', stadium: 'Craven Cottage', tag: 'FFC', followersBase: 2900000, followingBase: 248 },
+      { id: 'c_sou', username: 'SouthamptonFC', name: 'Southampton FC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8466.png', stadium: "St Mary's Stadium", tag: 'SaintsFC', followersBase: 3200000, followingBase: 231 },
+      { id: 'c_nfo', username: 'NFFC', name: 'Nottingham Forest', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/10203.png', stadium: 'City Ground', tag: 'NFFC', followersBase: 3900000, followingBase: 221 },
+      { id: 'c_sun', username: 'SunderlandAFC', name: 'Sunderland AFC', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8472.png', stadium: 'Stadium of Light', tag: 'SAFC', followersBase: 960000, followingBase: 297 },
+      { id: 'c_bol', username: 'OfficialBWFC', name: 'Bolton Wanderers', logo: 'https://images.fotmob.com/image_resources/logo/teamlogo/8559.png', stadium: 'Toughsheet Community Stadium', tag: 'BWFC', followersBase: 420000, followingBase: 341 }
     ];
 
     const DEFAULT_STANDINGS = [
@@ -760,37 +760,136 @@
       bio: 'Here we go! 🚨 Official Football Journalist covering verified transfer news & breaking FM stories.',
       location: 'Milan, Italy',
       badge: true,
+      followersBase: 21400000,
+      followingBase: 891,
       following: []
     };
 
     const REPLY_POOLS = {
       bigClubCrisis: [
         "HOCA İSTİFA! Bu kadro bu formayı hak etmiyor.",
-        "Yönetim istifa! Tarihimizin en utanç verici dönemi."
+        "Yönetim istifa! Tarihimizin en utanç verici dönemi.",
+        "Bu seviye bize yakışmıyor, ciddi bir hesap sorma zamanı geldi.",
+        "Transfer politikası baştan sona başarısız, sorumlular hesap versin.",
+        "Taraftar olarak bu tabloyu izlemek çok zor, bir açıklama bekliyoruz.",
+        "Başkan konuşsun artık, sessizlik daha çok kızdırıyor.",
+        "Bu kulübün tarihine yakışmayan bir dönemden geçiyoruz."
       ],
       surpriseSuccess: [
         "Avrupa biletini cebimize koyduk, bu rüya gerçek olamaz! 🐏🔥",
-        "Absolute masterclass! Ligin altını üstüne getirdik."
+        "Absolute masterclass! Ligin altını üstüne getirdik.",
+        "Kimse bizden bunu beklemiyordu, ne büyük bir gurur! 🙌",
+        "Bütçemiz küçük ama yüreğimiz kocaman, harika iş!",
+        "Bu takımı izlemek büyük keyif, hocaya sonsuz saygı.",
+        "Devler ligi hayali artık çok da uzak değil! ✨"
       ],
       heavyDefeat: [
-        "Savunma adeta evlere şenlikti, rezalet bir gece."
+        "Savunma adeta evlere şenlikti, rezalet bir gece.",
+        "Bu kadar kötü bir performansı görmek gerçekten üzücü.",
+        "90 dakika boyunca hiçbir şey doğru gitmedi, unutmaya çalışacağız.",
+        "Kaleci hariç kimseyi geçer not veremiyorum bu maçta.",
+        "Toparlanmamız lazım, bu gidişle sıkıntı büyür.",
+        "Moral bozucu bir sonuç ama bir sonraki maça odaklanalım.",
+        "Bu skoru hazmetmek gerçekten kolay değil."
       ],
       drawBoring: [
-        "Uyku getiren berbat bir 90 dakikaydı."
+        "Uyku getiren berbat bir 90 dakikaydı.",
+        "İki takım da bir şey üretemedi, sıkıcı geçti.",
+        "Puan kaybı gibi hissettiren bir beraberlik oldu.",
+        "En azından yenilmedik, ama bu oyunla yol almak zor.",
+        "Sahada pek bir şey görmedik, bir dahaki maça bakalım."
       ],
       generalHappy: [
-        "Harika bir galibiyet, takım tam bir aile gibi savaştı! 👏"
+        "Harika bir galibiyet, takım tam bir aile gibi savaştı! 👏",
+        "Bugün herkes üstüne düşeni fazlasıyla yaptı, tebrikler! 🔥",
+        "Bu enerjiyle devam edersek çok güzel şeyler bizi bekliyor.",
+        "Muhteşem bir performans, taraftar olarak gurur duyduk!",
+        "Takımın mücadelesi görülmeye değerdi, tam 3 puan! 💪",
+        "Bu galibiyeti uzun süre konuşacağız, harikaydı!"
       ]
     };
 
+    // Genel (kulüpten bağımsız) yorumcu/gözlemci hesap isimleri; her seferinde
+    // aynı üç-beş isim tekrar etmesin diye geniş bir havuzdan seçiliyor.
+    const GENERIC_COMMENTATOR_HANDLES = [
+      'TacticalAnalyst', 'FootballFanatic', 'PLInsider', 'MatchdayCentral',
+      'StatsGuruFM', 'TheFootballTruth', 'PunditCorner', 'TransferWatchHQ',
+      'GegenpressGio', 'OldTraffordDiaries', 'AwayEndChronicles', 'FullTimeTakes',
+      'TouchlineTalk', 'BootroomBanter', 'ScoutedByTom', 'NinetyMinNews'
+    ];
+
+    // Kulüp taraftar hesabı isimleri için şablon havuzu; her çağrıda rastgele
+    // biri seçilerek her seferinde farklı ama o kulübe özgü hisseden bir
+    // kullanıcı adı üretilir (ör. NFFC_Faithful42, TrueMUFC, Loyal_COYG).
+    const FAN_HANDLE_TEMPLATES = [
+      c => `${c.tag}_Faithful${Math.floor(Math.random() * 89 + 10)}`,
+      c => `True${c.tag}`,
+      c => `${c.username}Fan_${Math.floor(Math.random() * 899 + 100)}`,
+      c => `${c.tag}Ultras`,
+      c => `Loyal_${c.tag}`,
+      c => `${c.tag}TilIDie`,
+      c => `${c.username}_Faithful`,
+      c => `${c.tag}ForLife`,
+      c => `${c.username}Row_${Math.floor(Math.random() * 40 + 1)}`,
+      c => `${c.tag}_Since${Math.floor(Math.random() * 40 + 1985)}`
+    ];
+
+    function randomFanHandle(club) {
+      const fn = FAN_HANDLE_TEMPLATES[Math.floor(Math.random() * FAN_HANDLE_TEMPLATES.length)];
+      return fn(club);
+    }
+
+    function randomCommentatorHandle() {
+      return GENERIC_COMMENTATOR_HANDLES[Math.floor(Math.random() * GENERIC_COMMENTATOR_HANDLES.length)];
+    }
+
+    const MATCHDAY_HOME_HYPE_REPLIES = [
+      "Pride of London! Massive 3 points needed today!",
+      "Stadium is bouncing already, let's go! 🔥",
+      "Full house today, we carry them over the line! 👊",
+      "Home advantage today, no excuses. COME ON! 🔴",
+      "Been waiting all week for this one, let's roar!"
+    ];
+
+    const MATCHDAY_AWAY_HYPE_REPLIES = [
+      "Away end sold out! Sing your hearts out lads 🗣️",
+      "On the road again, bringing the noise with us today! 🚌",
+      "Away days hit different, let's cause an upset! 💙",
+      "Travelled hours for this, give us something to sing about!",
+      "Small end, loud voices. Here we go! 🔥"
+    ];
+
+    const ROMANO_REPLY_TEXTS = [
+      "Table is getting crazy! 📈",
+      "Here we go moment loading... 👀",
+      "Romano never misses, book it. ✅",
+      "This transfer window is going to be wild.",
+      "Boardroom drama incoming, can't wait for more details."
+    ];
+
+    function getRandomRomanoReply() {
+      return ROMANO_REPLY_TEXTS[Math.floor(Math.random() * ROMANO_REPLY_TEXTS.length)];
+    }
+
     const ROMANO_POOLS = [
-      (h, a, hs, as) => `🚨 EXCL: Pressure mounting heavily on @${hs > as ? a : h} board after this result. Internal meetings scheduled for tomorrow morning. #HereWeGo`
+      (h, a, hs, as) => `🚨 EXCL: Pressure mounting heavily on @${hs > as ? a : h} board after this result. Internal meetings scheduled for tomorrow morning. #HereWeGo`,
+      (h, a, hs, as) => `🚨 Understand there's growing frustration behind the scenes at @${hs > as ? a : h} tonight. Board will review the situation this week. Here we go soon? #HereWeGo`,
+      (h, a, hs, as) => `🚨 Sources close to @${hs > as ? h : a} tell me confidence is high after tonight's result — expect an ambitious transfer window ahead. #HereWeGo`,
+      (h, a, hs, as) => `🔴 Big talking points after ${h} ${hs}-${as} ${a} tonight. Some important conversations expected at boardroom level in the coming days. Stay tuned. #HereWeGo`
     ];
 
     function getRandomReply(category) {
       const pool = REPLY_POOLS[category] || REPLY_POOLS.generalHappy;
       return pool[Math.floor(Math.random() * pool.length)];
     }
+
+    function formatCount(n) {
+      n = Number(n) || 0;
+      if (n >= 1000000) return (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1).replace(/\.0$/, '') + 'M';
+      if (n >= 1000) return (n / 1000).toFixed(n % 1000 === 0 ? 0 : 1).replace(/\.0$/, '') + 'K';
+      return String(n);
+    }
+
 
     // --- TWEET METİN VARYASYONLARI ---
     // Her taraf (ev sahibi / deplasman) için birden fazla şablon havuzu.
@@ -882,12 +981,14 @@
             bio: `Official X account of ${c.name}. Premier League ${DB.getSeason()} Campaign. #${c.tag}`,
             location: c.stadium,
             badge: true,
+            followersBase: c.followersBase || 0,
+            followingBase: c.followingBase || 0,
             following: []
           }));
           users = [
             BOT_ROMANO,
             ...clubs,
-            { id: 'user_default', username: 'fm_observer', name: 'FM Observer', password: '123', bio: `Premier League Gözlemcisi 🧠⚽`, location: 'London, UK', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=fm_observer', banner: '', following: [] }
+            { id: 'user_default', username: 'fm_observer', name: 'FM Observer', password: '123', bio: `Premier League Gözlemcisi 🧠⚽`, location: 'London, UK', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=fm_observer', banner: '', followersBase: 143, followingBase: 62, following: [] }
           ];
           localStorage.setItem('bc_users_v17', JSON.stringify(users));
         }
@@ -1693,7 +1794,7 @@
             likes: [awayClub.id],
             retweets: [],
             replies: [
-              { author: `${homeClub.name}Fan`, text: getRandomReply(homeScore > awayScore ? 'generalHappy' : (homeScore < awayScore ? 'heavyDefeat' : 'drawBoring')) }
+              { author: randomFanHandle(homeClub), text: getRandomReply(homeScore > awayScore ? 'generalHappy' : (homeScore < awayScore ? 'heavyDefeat' : 'drawBoring')) }
             ],
             timestamp: now
           };
@@ -1706,7 +1807,7 @@
             likes: [homeClub.id],
             retweets: [],
             replies: [
-              { author: `${awayClub.name}Fan`, text: getRandomReply(awayScore > homeScore ? 'generalHappy' : (awayScore < homeScore ? 'heavyDefeat' : 'drawBoring')) }
+              { author: randomFanHandle(awayClub), text: getRandomReply(awayScore > homeScore ? 'generalHappy' : (awayScore < homeScore ? 'heavyDefeat' : 'drawBoring')) }
             ],
             timestamp: now - 300
           };
@@ -1802,7 +1903,7 @@
           likes: [],
           retweets: [],
           replies: [
-            { author: `${homeClub.name}Ultras`, text: 'Pride of London! Massive 3 points needed today!' }
+            { author: randomFanHandle(homeClub), text: pickFrom(MATCHDAY_HOME_HYPE_REPLIES, {}) }
           ],
           timestamp: now
         };
@@ -1815,7 +1916,7 @@
           likes: [],
           retweets: [],
           replies: [
-            { author: `${awayClub.name}AwayLads`, text: 'Away end sold out! Sing your hearts out lads 🗣️' }
+            { author: randomFanHandle(awayClub), text: pickFrom(MATCHDAY_AWAY_HYPE_REPLIES, {}) }
           ],
           timestamp: now - 500
         };
@@ -1876,25 +1977,25 @@
 
         if (homeScore > awayScore) {
           homeReplies = [
-            { author: `${homeClub.name}Fan`, text: getRandomReply(isSurpriseSuccess ? 'surpriseSuccess' : 'generalHappy') },
-            { author: 'TacticalAnalyst', text: getRandomReply('generalHappy') }
+            { author: randomFanHandle(homeClub), text: getRandomReply(isSurpriseSuccess ? 'surpriseSuccess' : 'generalHappy') },
+            { author: randomCommentatorHandle(), text: getRandomReply('generalHappy') }
           ];
           awayReplies = [
-            { author: `${awayClub.name}Supporter`, text: getRandomReply(isBigClubInCrisis ? 'bigClubCrisis' : 'heavyDefeat') },
-            { author: 'AngryFan_99', text: getRandomReply('heavyDefeat') }
+            { author: randomFanHandle(awayClub), text: getRandomReply(isBigClubInCrisis ? 'bigClubCrisis' : 'heavyDefeat') },
+            { author: randomCommentatorHandle(), text: getRandomReply('heavyDefeat') }
           ];
         } else if (awayScore > homeScore) {
           homeReplies = [
-            { author: `${homeClub.name}Ultras`, text: getRandomReply(isBigClubInCrisis ? 'bigClubCrisis' : 'heavyDefeat') },
-            { author: 'HomeFan_01', text: getRandomReply('heavyDefeat') }
+            { author: randomFanHandle(homeClub), text: getRandomReply(isBigClubInCrisis ? 'bigClubCrisis' : 'heavyDefeat') },
+            { author: randomCommentatorHandle(), text: getRandomReply('heavyDefeat') }
           ];
           awayReplies = [
-            { author: `${awayClub.name}AwayDays`, text: getRandomReply(isSurpriseSuccess ? 'surpriseSuccess' : 'generalHappy') },
-            { author: 'HappyPundit', text: getRandomReply('generalHappy') }
+            { author: randomFanHandle(awayClub), text: getRandomReply(isSurpriseSuccess ? 'surpriseSuccess' : 'generalHappy') },
+            { author: randomCommentatorHandle(), text: getRandomReply('generalHappy') }
           ];
         } else {
-          homeReplies = [{ author: 'NeutralObserver', text: getRandomReply('drawBoring') }];
-          awayReplies = [{ author: 'AwayLads', text: getRandomReply('drawBoring') }];
+          homeReplies = [{ author: randomFanHandle(homeClub), text: getRandomReply('drawBoring') }];
+          awayReplies = [{ author: randomFanHandle(awayClub), text: getRandomReply('drawBoring') }];
         }
 
         let allScorersText = '';
@@ -1940,7 +2041,7 @@
             image: '',
             likes: [homeClub.id, awayClub.id],
             retweets: [homeClub.id],
-            replies: [{ author: 'FootballFanatic', text: 'Table is getting crazy! 📈' }],
+            replies: [{ author: randomCommentatorHandle(), text: getRandomRomanoReply() }],
             timestamp: now + 500
           };
           tweets.unshift(romanoPost);
@@ -2099,7 +2200,9 @@
       const userTweets = DB.getTweets().filter(t => t.userId === user.id);
       const isOwner = currentUser.id === user.id;
       const isFollowing = currentUser.following?.includes(user.id);
-      const followersCount = users.filter(u => u.following?.includes(user.id)).length;
+      const dynamicFollowers = users.filter(u => u.following?.includes(user.id)).length;
+      const totalFollowers = (user.followersBase || 0) + dynamicFollowers;
+      const totalFollowing = (user.followingBase || 0) + (user.following?.length || 0);
 
       document.getElementById('page-profile-title').innerText = user.name;
       document.getElementById('page-tweet-count').innerText = `${userTweets.length} gönderi`;
@@ -2122,8 +2225,8 @@
         locBox.classList.remove('hidden');
       } else locBox.classList.add('hidden');
 
-      document.getElementById('page-following').innerText = user.following?.length || 0;
-      document.getElementById('page-followers').innerText = followersCount;
+      document.getElementById('page-following').innerText = formatCount(totalFollowing);
+      document.getElementById('page-followers').innerText = formatCount(totalFollowers);
 
       const actionContainer = document.getElementById('profile-action-btn-container');
       if (isOwner) {
